@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gird_text"
+    android:layout_width="match_parent"
+    android:maxWidth="140dp"
+    android:layout_height="wrap_content"
+    android:ellipsize="end"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center"
+    android:padding="8dp"
+    android:singleLine="true"
+    android:textColor="#000"
+    android:background="#fff"
+    android:textSize="16dp">
+
+</TextView>

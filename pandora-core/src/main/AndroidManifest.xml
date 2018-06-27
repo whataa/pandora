@@ -1,0 +1,19 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tech.linjiang.pandora.core" >
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <application>
+        <activity android:name="tech.linjiang.pandora.ui.Dispatcher"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/TransTheme"/>
+
+        <provider
+            android:name="tech.linjiang.pandora.util.PdFileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_path" />
+        </provider>
+    </application>
+</manifest>

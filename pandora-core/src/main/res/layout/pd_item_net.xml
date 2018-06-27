@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingRight="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    tools:background="#eff1f2">
+
+    <ImageView
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:visibility="visible"
+        android:id="@+id/item_net_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/pd_error" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_net_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="#000"
+            android:textSize="17dp"
+            tools:text="apk/res/android" />
+
+        <TextView
+            android:id="@+id/item_net_host"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#707070"
+            android:textSize="12dp"
+            tools:text="http://schemas.android.com/" />
+
+        <TextView
+            android:id="@+id/item_net_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/pd_label_dark"
+            android:textSize="12dp"
+            tools:text="19:30:55    GET    200    1234B    149ms" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/item_net_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/pd_right" />
+</LinearLayout>

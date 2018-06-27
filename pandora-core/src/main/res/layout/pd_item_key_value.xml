@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/pd_divider" />
+
+    <TextView
+        android:id="@+id/item_key"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:background="@color/pd_item_key"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textSize="14dp" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/pd_divider" />
+    <TextView
+        android:foreground="?attr/selectableItemBackground"
+        android:id="@+id/item_value"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:gravity="center_vertical"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textColor="#000"
+        android:textSize="14dp" />
+    <tech.linjiang.pandora.ui.view.ExtraEditTextView
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="beforeDescendants"
+        android:lines="1"
+        android:singleLine="true"
+        android:visibility="gone"
+        android:foreground="?attr/selectableItemBackground"
+        android:id="@+id/item_edit"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:gravity="center_vertical"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textColor="#000"
+        android:textSize="14dp" />
+    <ImageView
+        android:background="#fff"
+        android:paddingRight="12dp"
+        tools:visibility="visible"
+        android:visibility="invisible"
+        android:id="@+id/item_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/pd_right" />
+</LinearLayout>

@@ -1,0 +1,14 @@
+<resources>
+    <string name="pd_lib_name">pandora</string>
+    <string name="pd_error_msg">EMPTY</string>
+    <!--toast-->
+    <string name="pd_not_support">not support file type</string>
+    <string name="pd_success">success</string>
+    <string name="pd_failed">failed</string>
+    <string name="pd_copy_2_clipboard">copied to clipboard</string>
+    <string name="pd_no_change">no change</string>
+    <string name="pd_search_hint">condition, like id=1</string>
+    <string name="pd_net_search_hint">query url</string>
+    <string name="pd_can_not_edit">can not edit</string>
+    <string name="pd_please_open_net_log">TURN ON THE SWITCH TO LOG</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="open with"
+        app:showAsAction="never"
+        android:id="@+id/menu_open"/>
+
+    <item android:title="open as text"
+        app:showAsAction="never"
+        android:id="@+id/menu_open_txt"/>
+
+    <item android:title="rename"
+        app:showAsAction="never"
+        android:id="@+id/menu_rename"/>
+    <item android:title="delete"
+        app:showAsAction="never"
+        android:id="@+id/menu_delete"/>
+</menu>

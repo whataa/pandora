@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--fragment container-->
+    <item name="pd_fragment_container_id" type="id"/>
+    <!--click event's tag-->
+    <item name="pd_recycler_adapter_id" type="id"/>
+    <!--toolbar-->
+    <item name="pd_toolbar_id" type="id"/>
+    <!--The view needs to be specified when it is passed between fragments in case of NO_ID-->
+    <item name="pd_view_default_id" type="id"/>
+</resources>
