@@ -46,6 +46,11 @@ public class NetSummaryFragment extends BaseListFragment {
                             bundle.putLong(PARAM2, id);
                             launch(NetContentFragment.class, bundle);
                         }
+                    } else {
+                        String value = ((String[])item.data)[1];
+                        if (!TextUtils.isEmpty(value)) {
+                            Utils.copy2ClipBoard(value);
+                        }
                     }
                 }
             }
@@ -82,6 +87,10 @@ public class NetSummaryFragment extends BaseListFragment {
                 data.add(new KeyValueItem(Utils.newArray("request_size", Utils.formatSize(summary.request_size))));
                 data.add(new KeyValueItem(Utils.newArray("response_size", Utils.formatSize(summary.response_size))));
 
+                if (!TextUtils.isEmpty(summary.query)) {
+                    data.add(new TitleItem(""));
+                    data.add(new KeyValueItem(Utils.newArray("query", summary.query)));
+                }
 
                 data.add(new TitleItem("BODY"));
                 KeyValueItem request = new KeyValueItem(Utils.newArray("request body", "tap to view"), false, true);

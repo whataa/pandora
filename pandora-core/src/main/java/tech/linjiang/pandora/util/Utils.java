@@ -148,6 +148,7 @@ public class Utils {
     public static boolean checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(CONTEXT)) {
+                Utils.toast(R.string.pd_please_allow_permission);
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
                 intent.setData(Uri.parse("package:" + CONTEXT.getPackageName()));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

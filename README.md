@@ -31,7 +31,7 @@ The display pictures are: network, database, UI, file
 
 ![image](https://note.youdao.com/yws/api/personal/file/WEB46cceded39144f21327bbc113938eb42?method=download&shareKey=6a7a0a7e863a4c75a5f62fcd62d5092a) ![image](https://note.youdao.com/yws/api/personal/file/WEB710b73c107e189afab614b00428b4f7a?method=download&shareKey=d53c1f09302225d6aa293ae023f40d13)
 
-## Set-up [![Release](https://jitpack.io/v/whataa/pandora.svg)](https://jitpack.io/#whataa/pandora)
+## Set-up
 
 1. Add the JitPack repository to your root build file：
 ```
@@ -42,7 +42,7 @@ allprojects {
     }
 }
 ```
-2. Add the dependency to your app build.gradle中：
+2. Add the dependency to your app build.gradle (please use the latest version)：
 ```
 dependencies {
     ...
@@ -50,6 +50,14 @@ dependencies {
     releaseImplementation 'com.github.whataa:pandora-no-op:v1.0.1'
 }  
 ```
+
+> the latest version doc
+
+library name | release version
+---|---
+pandora | [![Release](https://jitpack.io/v/whataa/pandora.svg)](https://jitpack.io/#whataa/pandora)
+pandora-no-op | [![Release](https://jitpack.io/v/whataa/pandora-no-op.svg)](https://jitpack.io/#whataa/pandora-no-op)
+
 
 ## Usage
 

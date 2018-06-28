@@ -41,7 +41,7 @@ allprojects {
     }
 }
 ```
-2. 在app's build.gradle中：
+2. 在app's build.gradle中（请使用最新版本）：
 ```
 dependencies {
     ...
@@ -49,6 +49,13 @@ dependencies {
     releaseImplementation 'com.github.whataa:pandora-no-op:v1.0.1'
 }  
 ```
+
+> 最新库版本说明
+
+library name | release version
+---|---
+pandora | [![Release](https://jitpack.io/v/whataa/pandora.svg)](https://jitpack.io/#whataa/pandora)
+pandora-no-op | [![Release](https://jitpack.io/v/whataa/pandora-no-op.svg)](https://jitpack.io/#whataa/pandora-no-op)
 
 ## 使用
 

@@ -25,7 +25,7 @@ import tech.linjiang.pandora.util.Utils;
 
 public class CacheDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "pd_cache.db";
 
     private CacheDbHelper(Context context) {
@@ -93,6 +93,7 @@ public class CacheDbHelper extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_STATUS = "status";
         public static final String COLUMN_NAME_CODE = "code";
         public static final String COLUMN_NAME_URL = "url";
+        public static final String COLUMN_NAME_QUERY = "query";
         public static final String COLUMN_NAME_HOST = "host";
         public static final String COLUMN_NAME_METHOD = "method";
         public static final String COLUMN_NAME_PROTOCOL = "protocol";
@@ -112,6 +113,7 @@ public class CacheDbHelper extends SQLiteOpenHelper {
                         SummaryEntry.COLUMN_NAME_STATUS + " INTEGER," +
                         SummaryEntry.COLUMN_NAME_CODE + " INTEGER," +
                         SummaryEntry.COLUMN_NAME_URL + " TEXT," +
+                        SummaryEntry.COLUMN_NAME_QUERY + " TEXT," +
                         SummaryEntry.COLUMN_NAME_HOST + " TEXT," +
                         SummaryEntry.COLUMN_NAME_METHOD + " TEXT," +
                         SummaryEntry.COLUMN_NAME_PROTOCOL + " TEXT," +
@@ -193,6 +195,7 @@ public class CacheDbHelper extends SQLiteOpenHelper {
             summary.status = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_STATUS));
             summary.code = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_CODE));
             summary.url = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_URL));
+            summary.query = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_QUERY));
             summary.host = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_HOST));
             summary.method = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_METHOD));
             summary.protocol = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_PROTOCOL));

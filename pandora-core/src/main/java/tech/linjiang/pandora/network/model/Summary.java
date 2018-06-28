@@ -14,6 +14,7 @@ public class Summary {
     public int status;
     public int code;
     public String url;
+    public String query;
     public String host;
     public String method;
     public String protocol;

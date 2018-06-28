@@ -1,6 +1,7 @@
 package tech.linjiang.pandora.network;
 
 import android.content.ContentValues;
+import android.text.TextUtils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -79,6 +80,11 @@ public class OkHttpInterceptor implements Interceptor {
         values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_TIME_START, System.currentTimeMillis());
         values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_HEADER_REQUEST, JsonUtil.formatHeaders(request.headers()));
 
+        String query = request.url().encodedQuery();
+        if (!TextUtils.isEmpty(query)) {
+            values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_QUERY, query);
+        }
+
         RequestBody requestBody = request.body();
         if (requestBody != null) {
             try {
@@ -87,6 +93,7 @@ public class OkHttpInterceptor implements Interceptor {
                 e.printStackTrace();
             }
         }
+
         boolean canRecognize = checkContentEncoding(request.header("Content-Encoding"));
         if (canRecognize) {
             contentValues.put(CacheDbHelper.ContentEntry.COLUMN_NAME_REQUEST, requestBodyAsStr(request));
