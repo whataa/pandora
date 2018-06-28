@@ -1,7 +1,6 @@
 package tech.linjiang.pandora;
 
 import android.app.Application;
-import android.view.View;
 
 import tech.linjiang.pandora.database.Databases;
 import tech.linjiang.pandora.inspector.attribute.AttrFactory;
@@ -35,6 +34,10 @@ public class Pandora {
 
     public SharedPref getSharedPref() {
         return new SharedPref();
+    }
+
+    public Pandora enableShakeOpen() {
+        return this;
     }
 
     public AttrFactory getAttrFactory() {

@@ -77,6 +77,7 @@ public class Pandora {
         return attrFactory;
     }
 
+    // hide
     public View getViewRoot() {
         if (bottomActivity != null) {
             return bottomActivity.getWindow().peekDecorView();
@@ -84,6 +85,7 @@ public class Pandora {
         return null;
     }
 
+    // hide
     public Activity getBottomActivity() {
         return bottomActivity;
     }
