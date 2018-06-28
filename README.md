@@ -46,7 +46,7 @@ allprojects {
 ```
 dependencies {
     ...
-    debugImplementation 'com.github.whataa:pandora:1.0.0'
+    debugImplementation 'com.github.whataa:pandora:v1.0.0'
     releaseImplementation 'com.github.whataa:pandora-no-op:v1.0.0'
 }  
 ```
