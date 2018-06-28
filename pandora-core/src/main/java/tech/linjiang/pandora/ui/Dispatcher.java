@@ -36,7 +36,7 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
     public static void start(Context context, @Type int type) {
         Intent intent = new Intent(context, Dispatcher.class)
                 .putExtra(PARAM1, type);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         context.startActivity(intent);

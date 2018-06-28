@@ -30,7 +30,7 @@ Pandora 是一款无需ROOT、可以直接在 **应用内** 查看和修改包�
 
 
  
-## 集成 [![Release](https://jitpack.io/v/whataa/pandora-no-op.svg)](https://jitpack.io/#whataa/pandora-no-op)
+## 集成 [![Release](https://jitpack.io/v/whataa/pandora.svg)](https://jitpack.io/#whataa/pandora)
 
 1. 在root's build.gradle中加入Jitpack仓库：
 ```
@@ -45,8 +45,8 @@ allprojects {
 ```
 dependencies {
     ...
-    debugImplementation 'com.github.whataa:pandora:v1.0.0'
-    releaseImplementation 'com.github.whataa:pandora-no-op:v1.0.0'
+    debugImplementation 'com.github.whataa:pandora:v1.0.1'
+    releaseImplementation 'com.github.whataa:pandora-no-op:v1.0.1'
 }  
 ```
 
@@ -78,6 +78,9 @@ Pandora.get().close();
 ```
 
 如果你的项目中使用了OKHttp作为底层网络库，可以为其添加以下拦截器开启网络调试模块的功能：
+
+> 注意：请将Pandora作为最后一个拦截器，以防request-headers, request-params获取不到；
+
 ```
 new OkHttpClient.Builder()
     ...

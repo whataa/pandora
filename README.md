@@ -31,7 +31,7 @@ The display pictures are: network, database, UI, file
 
 ![image](https://note.youdao.com/yws/api/personal/file/WEB46cceded39144f21327bbc113938eb42?method=download&shareKey=6a7a0a7e863a4c75a5f62fcd62d5092a) ![image](https://note.youdao.com/yws/api/personal/file/WEB710b73c107e189afab614b00428b4f7a?method=download&shareKey=d53c1f09302225d6aa293ae023f40d13)
 
-## Set-up [![Release](https://jitpack.io/v/whataa/pandora-no-op.svg)](https://jitpack.io/#whataa/pandora)
+## Set-up [![Release](https://jitpack.io/v/whataa/pandora.svg)](https://jitpack.io/#whataa/pandora)
 
 1. Add the JitPack repository to your root build file：
 ```
@@ -46,8 +46,8 @@ allprojects {
 ```
 dependencies {
     ...
-    debugImplementation 'com.github.whataa:pandora:v1.0.0'
-    releaseImplementation 'com.github.whataa:pandora-no-op:v1.0.0'
+    debugImplementation 'com.github.whataa:pandora:v1.0.1'
+    releaseImplementation 'com.github.whataa:pandora-no-op:v1.0.1'
 }  
 ```
 
@@ -79,6 +79,8 @@ Pandora.get().close();
 ```
 
 If your project uses OKHttp as the underlying network library, you can add the following interceptor to enable the function of the network debugging module：
+
+> Note: Please use Pandora as the last interceptor to prevent request-headers and request-params from getting;
 ```
 new OkHttpClient.Builder()
     ...
