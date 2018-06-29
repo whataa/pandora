@@ -13,7 +13,8 @@ import tech.linjiang.pandora.preference.SharedPref;
 public class Pandora {
 
 
-    public static void init(Application application) {
+    public static Pandora init(Application application) {
+        return new Pandora();
     }
 
     public static Pandora get() {
