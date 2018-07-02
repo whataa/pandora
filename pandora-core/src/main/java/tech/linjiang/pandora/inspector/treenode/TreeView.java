@@ -10,7 +10,6 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -276,7 +275,6 @@ public class TreeView extends RelativeLayout {
     };
 
     private void cancelAllAnim() {
-        Log.d(TAG, "cancelAllAnim: ");
         scroller.abortAnimation();
     }
 

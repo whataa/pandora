@@ -39,20 +39,13 @@ public class ViewAttrFragment extends BaseListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int id = getArguments().getInt(PARAM1, View.NO_ID);
-        if (id == View.NO_ID) {
-            throw new IllegalArgumentException("nee provide a valid id");
-        }
         if (Pandora.get().getViewRoot() != null) {
-            targetView = Pandora.get().getViewRoot().findViewById(id);
+            targetView = findViewByDefaultTag(Pandora.get().getViewRoot());
             if (targetView == null) {
                 onBackPressed();
             } else {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    if (targetView.getId() == R.id.pd_view_default_id) {
-                        targetView.setId(View.NO_ID);
-                    }
-                }
+                // clear flag
+                targetView.setTag(R.id.pd_view_tag_for_unique, null);
             }
         } else {
             onBackPressed();
@@ -83,6 +76,22 @@ public class ViewAttrFragment extends BaseListFragment {
         });
 
         loadData();
+    }
+
+    private View findViewByDefaultTag(View root) {
+        if (root.getTag(R.id.pd_view_tag_for_unique) != null) {
+            return root;
+        }
+        if (root instanceof ViewGroup) {
+            ViewGroup parent = (ViewGroup) root;
+            for (int i = 0; i < parent.getChildCount(); i++) {
+                View view = findViewByDefaultTag(parent.getChildAt(i));
+                if (view != null) {
+                    return view;
+                }
+            }
+        }
+        return null;
     }
 
     private void loadData() {

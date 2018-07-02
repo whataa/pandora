@@ -69,17 +69,8 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
-        if (id == View.NO_ID) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                id = View.generateViewId();
-            } else {
-                id = R.id.pd_view_default_id;
-            }
-            v.setId(id);
-        }
-        Bundle bundle = new Bundle();
-        bundle.putInt(PARAM1, id);
-        launch(ViewAttrFragment.class, bundle);
+        // add flag
+        v.setTag(R.id.pd_view_tag_for_unique, new Object());
+        launch(ViewAttrFragment.class, null);
     }
 }

@@ -6,6 +6,6 @@
     <item name="pd_recycler_adapter_id" type="id"/>
     <!--toolbar-->
     <item name="pd_toolbar_id" type="id"/>
-    <!--The view needs to be specified when it is passed between fragments in case of NO_ID-->
-    <item name="pd_view_default_id" type="id"/>
+    <!--To identify the uniqueness of view temporarily when launching to other fragments-->
+    <item name="pd_view_tag_for_unique" type="id"/>
 </resources>
