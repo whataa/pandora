@@ -7,7 +7,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_delete"
-        android:title="delete row"
+        android:title="delete key"
         app:showAsAction="never" />
 
 </menu>
