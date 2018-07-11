@@ -46,6 +46,11 @@ public class UniversalAdapter
         notifyDataSetChanged();
     }
 
+    public void removeItem(int index) {
+        data.remove(index);
+        notifyItemRemoved(index);
+    }
+
     public List<BaseItem> getItems() {
         return data;
     }

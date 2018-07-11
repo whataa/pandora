@@ -2,8 +2,6 @@ package tech.linjiang.pandora.preference;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.ArrayMap;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +51,11 @@ public class SharedPrefDriver {
         editor.apply();
     }
 
+    public void removeSharedPrefKey(File file, String key) {
+        SharedPreferences prefs = getSharedPreferences(file);
+        prefs.edit().remove(key).apply();
+    }
+
     private SharedPreferences getSharedPreferences(File file) {
         return context.getSharedPreferences(removeSuffix(file.getName()), Context.MODE_PRIVATE);
     }
@@ -78,7 +81,7 @@ public class SharedPrefDriver {
     }
 
     private static void fillEditor(SharedPreferences.Editor editor,
-                                  String key, String newValue, Object existingValue) {
+                                   String key, String newValue, Object existingValue) {
         if (existingValue instanceof Integer) {
             editor.putInt(key, Integer.parseInt(newValue));
         } else if (existingValue instanceof Long) {
