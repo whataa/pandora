@@ -45,4 +45,14 @@ public final class SharedPref {
             return t.getMessage();
         }
     }
+
+    public String removeSharedPrefKey(File descriptor, String key) {
+        try {
+            driver.removeSharedPrefKey(descriptor, key);
+            return null;
+        } catch (Throwable t) {
+            t.printStackTrace();
+            return t.getMessage();
+        }
+    }
 }

@@ -2,11 +2,11 @@ package tech.linjiang.pandora.ui.fragment;
 
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
+import tech.linjiang.pandora.ui.view.MenuRecyclerView;
 import tech.linjiang.pandora.util.ViewKnife;
 
 /**
@@ -22,7 +22,7 @@ public class BaseListFragment extends BaseFragment {
     @Override
     protected View getLayoutView() {
         adapter = new UniversalAdapter();
-        recyclerView = new RecyclerView(getContext());
+        recyclerView = new MenuRecyclerView(getContext());
         recyclerView.setBackgroundColor(ViewKnife.getColor(R.color.pd_main_bg));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
@@ -32,10 +32,10 @@ public class BaseListFragment extends BaseFragment {
         return recyclerView;
     }
 
-    private RecyclerView recyclerView;
+    private MenuRecyclerView recyclerView;
     private UniversalAdapter adapter;
 
-    protected final RecyclerView getRecyclerView() {
+    protected final MenuRecyclerView getRecyclerView() {
         return recyclerView;
     }
 
