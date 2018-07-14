@@ -49,6 +49,7 @@ public class UniversalAdapter
     public void removeItem(int index) {
         data.remove(index);
         notifyItemRemoved(index);
+        notifyItemRangeChanged(index, getItemCount() - index);
     }
 
     public List<BaseItem> getItems() {

@@ -1,5 +1,6 @@
 package tech.linjiang.android.pandora;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -38,6 +39,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Pandora.get().close();
+            }
+        });
+        findViewById(R.id.another_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TransActivity.class));
+            }
+        });
+        findViewById(R.id.toast).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "click", Toast.LENGTH_SHORT).show();
             }
         });
         findViewById(R.id.toast).setOnClickListener(new View.OnClickListener() {

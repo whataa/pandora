@@ -41,20 +41,19 @@ public class ViewAttrFragment extends BaseListFragment {
         super.onCreate(savedInstanceState);
         if (Pandora.get().getViewRoot() != null) {
             targetView = findViewByDefaultTag(Pandora.get().getViewRoot());
-            if (targetView == null) {
-                onBackPressed();
-            } else {
+            if (targetView != null) {
                 // clear flag
                 targetView.setTag(R.id.pd_view_tag_for_unique, null);
             }
-        } else {
-            onBackPressed();
         }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (targetView == null) {
+            return;
+        }
         getToolbar().setTitle(targetView.getClass().getSimpleName());
         getToolbar().setSubtitle("@" + ViewKnife.getIdString(targetView));
 

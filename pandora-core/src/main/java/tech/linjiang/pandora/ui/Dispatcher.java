@@ -110,8 +110,9 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
     @Override
     protected void onStop() {
         super.onStop();
-        if (!Utils.isNotEmpty(getSupportFragmentManager().getFragments())) {
+        if (type != Type.NET && type != Type.FILE) {
             finish();
+            return;
         }
     }
 

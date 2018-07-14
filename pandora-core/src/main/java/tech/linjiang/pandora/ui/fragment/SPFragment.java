@@ -63,32 +63,41 @@ public class SPFragment extends BaseListFragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.pd_menu_shared_preference, menu);
+        if (menuInfo instanceof MenuRecyclerView.RvContextMenuInfo) {
+            MenuRecyclerView.RvContextMenuInfo info = (MenuRecyclerView.RvContextMenuInfo) menuInfo;
+            if (getAdapter().getItems().get(info.position) instanceof KeyValueItem) {
+                if (!((KeyValueItem) getAdapter().getItems().get(info.position)).isTitle) {
+                    MenuInflater inflater = getActivity().getMenuInflater();
+                    inflater.inflate(R.menu.pd_menu_shared_preference, menu);
+                }
+            }
+        }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        MenuRecyclerView.RvContextMenuInfo info = (MenuRecyclerView.RvContextMenuInfo) item.getMenuInfo();
-        BaseItem baseItem = getAdapter().getItems().get(info.position);
+        if (item.getMenuInfo() instanceof MenuRecyclerView.RvContextMenuInfo) {
+            MenuRecyclerView.RvContextMenuInfo info = (MenuRecyclerView.RvContextMenuInfo) item.getMenuInfo();
+            BaseItem baseItem = getAdapter().getItems().get(info.position);
 
-        if (baseItem instanceof KeyValueItem) {
-            KeyValueItem keyValueItem = (KeyValueItem) baseItem;
+            if (baseItem instanceof KeyValueItem) {
+                KeyValueItem keyValueItem = (KeyValueItem) baseItem;
 
-            if (keyValueItem.isTitle) {
-                return true;
-            }
+                if (keyValueItem.isTitle) {
+                    return true;
+                }
 
-            if (item.getItemId() == R.id.menu_copy) {
-                Utils.copy2ClipBoard(
-                        "KEY :: " + keyValueItem.data[0] + "\nVALUE  :: " + keyValueItem.data[1]
-                );
-                return true;
-            } else if (item.getItemId() == R.id.menu_delete) {
-                String clickedKey = keyValueItem.data[0];
-                Pandora.get().getSharedPref().removeSharedPrefKey(descriptor, clickedKey);
-                getAdapter().removeItem(info.position);
-                return true;
+                if (item.getItemId() == R.id.menu_copy) {
+                    Utils.copy2ClipBoard(
+                            "KEY :: " + keyValueItem.data[0] + "\nVALUE  :: " + keyValueItem.data[1]
+                    );
+                    return true;
+                } else if (item.getItemId() == R.id.menu_delete) {
+                    String clickedKey = keyValueItem.data[0];
+                    Pandora.get().getSharedPref().removeSharedPrefKey(descriptor, clickedKey);
+                    getAdapter().removeItem(info.position);
+                    return true;
+                }
             }
         }
         return super.onContextItemSelected(item);

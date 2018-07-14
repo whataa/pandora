@@ -64,7 +64,6 @@
 
         <Button
             android:layout_width="60dp"
-
             android:layout_height="120dp"
             android:layout_below="@id/open"
             android:layout_marginTop="12dp"
@@ -89,6 +88,7 @@
             android:text="test" />
 
         <TextView
+            android:id="@+id/another_activity"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/test"
@@ -98,7 +98,7 @@
             android:background="#b4c2cf"
             android:gravity="center"
             android:padding="8dp"
-            android:text="I am TextView" />
+            android:text="open transluent activity" />
     </RelativeLayout>
 
     <FrameLayout
