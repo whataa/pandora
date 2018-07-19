@@ -8,4 +8,5 @@ package tech.linjiang.pandora.database.protocol;
 
 public interface IDescriptor {
     String name();
+    boolean exist();
 }

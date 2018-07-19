@@ -2,6 +2,7 @@ package tech.linjiang.pandora.preference;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,11 +23,16 @@ import tech.linjiang.pandora.preference.protocol.IProvider;
 public class SharedPrefDriver {
 
     private static final String TAG = "SharedPrefDriver";
+    private static final String SPECIFIC_SEGMENT = "/user_de/";
 
     private Context context;
+    private Context DPStorageContext;
 
     public SharedPrefDriver(Context context) {
         this.context = context;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            DPStorageContext = context.createDeviceProtectedStorageContext();
+        }
     }
 
     public List<File> getSharedPrefDescs(IProvider provider) {
@@ -57,7 +63,14 @@ public class SharedPrefDriver {
     }
 
     private SharedPreferences getSharedPreferences(File file) {
-        return context.getSharedPreferences(removeSuffix(file.getName()), Context.MODE_PRIVATE);
+        String noSuffixName = removeSuffix(file.getName());
+        SharedPreferences sp;
+        if (file.getPath().contains(SPECIFIC_SEGMENT)) {// not perfect but simple
+            sp = DPStorageContext.getSharedPreferences(noSuffixName, Context.MODE_PRIVATE);
+        } else {
+            sp = context.getSharedPreferences(noSuffixName, Context.MODE_PRIVATE);
+        }
+        return sp;
     }
 
     private static String removeSuffix(String name) {
