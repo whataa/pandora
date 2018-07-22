@@ -26,11 +26,13 @@ public abstract class StoreDatabase extends RoomDatabase {
 
     public static final String TAG = "StoreDatabase";
 
+    public static final String NAME = "store.db";
+
     public abstract DrinkDao drinkDao();
 
 
     private static StoreDatabase db =
-            Room.databaseBuilder(MyApp.getContext(), StoreDatabase.class, "store.db")
+            Room.databaseBuilder(MyApp.getContext(), StoreDatabase.class, NAME)
                     .allowMainThreadQueries()
                     .addMigrations(
                             new MIGRATE_1_2()

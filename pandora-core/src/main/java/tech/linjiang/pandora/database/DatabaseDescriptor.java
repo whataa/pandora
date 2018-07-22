@@ -19,4 +19,9 @@ public class DatabaseDescriptor implements IDescriptor {
     public String name() {
         return file.getName();
     }
+
+    @Override
+    public boolean exist() {
+        return file.exists();
+    }
 }

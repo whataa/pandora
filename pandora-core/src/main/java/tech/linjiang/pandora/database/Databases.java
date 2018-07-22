@@ -2,6 +2,7 @@ package tech.linjiang.pandora.database;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteException;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
@@ -30,6 +31,9 @@ public final class Databases {
 
     public Databases() {
         addDriver(new DatabaseDriver(new DatabaseProvider(Utils.getContext())));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            addDriver(new DatabaseDriver(new DatabaseProvider(Utils.getContext().createDeviceProtectedStorageContext())));
+        }
     }
 
     public boolean addDriver(IDriver<? extends IDescriptor> driver) {
@@ -56,7 +60,9 @@ public final class Databases {
             }
         }
         for (int i = 0; i < holders.size(); i++) {
-            names.put(holders.keyAt(i), holders.valueAt(i).descriptor.name());
+            if (holders.valueAt(i).descriptor.exist()) {
+                names.put(holders.keyAt(i), holders.valueAt(i).descriptor.name());
+            }
         }
         return names;
     }
