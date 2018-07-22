@@ -159,6 +159,7 @@ public class Utils {
         // if failed, let user to allow manually
         return true;
     }
+
     public static void registerSensor(SensorEventListener listener) {
         try {
             SensorManager manager = (SensorManager) CONTEXT.getSystemService(Context.SENSOR_SERVICE);
@@ -173,6 +174,7 @@ public class Utils {
 
     private static long lastCheckTime;
     private static float[] lastXyz = new float[3];
+
     public static boolean checkIfShake(float x, float y, float z) {
         long currentTime = System.currentTimeMillis();
         long diffTime = currentTime - lastCheckTime;
@@ -188,7 +190,7 @@ public class Utils {
         lastXyz[2] = z;
         int delta = (int) (Math.sqrt(deltaX * deltaX
                 + deltaY * deltaY + deltaZ * deltaZ) / diffTime * 10000);
-        if (delta > 1650) {// a buddhist-style value
+        if (delta > 450) {// a buddhist-style value
             return true;
         }
         return false;

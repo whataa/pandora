@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:name=".MyApp"
         android:allowBackup="false"
@@ -20,7 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TransActivity" android:theme="@style/AppTheme.Translucent"/>
+        <activity
+            android:name=".TransActivity"
+            android:theme="@style/AppTheme.Translucent" />
+        <activity android:name=".FragmentActivity"></activity>
     </application>
 
 </manifest>

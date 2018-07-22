@@ -1,5 +1,7 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -98,8 +100,14 @@ public class ViewAttrFragment extends BaseListFragment {
         new SimpleTask<>(new SimpleTask.Callback<Void, List<BaseItem>>() {
             @Override
             public List<BaseItem> doInBackground(Void[] params) {
-                List<Attribute> attributes = Pandora.get().getAttrFactory().parse(targetView);
                 List<BaseItem> data = new ArrayList<>();
+                final Context context = targetView.getContext();
+                if (context instanceof Activity) {
+                    data.add(new TitleItem(context.getClass().getSimpleName()));
+                    data.add(new ViewAttrItem(new Attribute("package", context.getClass().getPackage().toString())));
+                    data.add(new ViewAttrItem(new Attribute("id", getToolbar().getSubtitle().toString())));
+                }
+                List<Attribute> attributes = Pandora.get().getAttrFactory().parse(targetView);
                 if (Utils.isNotEmpty(attributes)) {
                     String category = null;
                     for (Attribute attr : attributes) {
@@ -275,19 +283,19 @@ public class ViewAttrFragment extends BaseListFragment {
                         break;
                     case Attribute.Edit.MARGIN_BOTTOM:
                         int leftMargin = Integer.valueOf(value);
-                        ((ViewGroup.MarginLayoutParams)targetView.getLayoutParams()).leftMargin = ViewKnife.dip2px(leftMargin);
+                        ((ViewGroup.MarginLayoutParams) targetView.getLayoutParams()).leftMargin = ViewKnife.dip2px(leftMargin);
                         break;
                     case Attribute.Edit.MARGIN_LEFT:
                         int rightMargin = Integer.valueOf(value);
-                        ((ViewGroup.MarginLayoutParams)targetView.getLayoutParams()).rightMargin = ViewKnife.dip2px(rightMargin);
+                        ((ViewGroup.MarginLayoutParams) targetView.getLayoutParams()).rightMargin = ViewKnife.dip2px(rightMargin);
                         break;
                     case Attribute.Edit.MARGIN_RIGHT:
                         int topMargin = Integer.valueOf(value);
-                        ((ViewGroup.MarginLayoutParams)targetView.getLayoutParams()).topMargin = ViewKnife.dip2px(topMargin);
+                        ((ViewGroup.MarginLayoutParams) targetView.getLayoutParams()).topMargin = ViewKnife.dip2px(topMargin);
                         break;
                     case Attribute.Edit.MARGIN_TOP:
                         int bottomMargin = Integer.valueOf(value);
-                        ((ViewGroup.MarginLayoutParams)targetView.getLayoutParams()).bottomMargin = ViewKnife.dip2px(bottomMargin);
+                        ((ViewGroup.MarginLayoutParams) targetView.getLayoutParams()).bottomMargin = ViewKnife.dip2px(bottomMargin);
                         break;
                 }
                 targetView.requestLayout();
