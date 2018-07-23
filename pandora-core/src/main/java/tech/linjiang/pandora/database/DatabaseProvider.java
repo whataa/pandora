@@ -15,7 +15,7 @@ import tech.linjiang.pandora.database.protocol.IProvider;
  * Created by linjiang on 29/05/2018.
  */
 
-class DatabaseProvider implements IProvider {
+public class DatabaseProvider implements IProvider {
     private Context context;
 
     public DatabaseProvider(Context context) {
