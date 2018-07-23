@@ -16,7 +16,7 @@ import tech.linjiang.pandora.database.protocol.IDriver;
 import tech.linjiang.pandora.database.protocol.IProvider;
 
 
-class DatabaseDriver implements IDriver<DatabaseDescriptor> {
+public class DatabaseDriver implements IDriver<DatabaseDescriptor> {
 
     private static final String[] EXTRA_FILE_SUFFIXES = new String[]{"-journal", "-shm", "-uid", "-wal"};
 
