@@ -22,7 +22,6 @@
         <activity
             android:name=".TransActivity"
             android:theme="@style/AppTheme.Translucent" />
-        <activity android:name=".FragmentActivity"></activity>
     </application>
 
 </manifest>

@@ -36,6 +36,7 @@ public class Utils {
 
     private static Context CONTEXT;
     private static Handler mainHandler;
+    private static int mThreshold; //摇一摇灵敏度阈值
 
 
     private Utils() {
@@ -160,8 +161,9 @@ public class Utils {
         return true;
     }
 
-    public static void registerSensor(SensorEventListener listener) {
+    public static void registerSensor(int threshold, SensorEventListener listener) {
         try {
+            mThreshold = threshold;
             SensorManager manager = (SensorManager) CONTEXT.getSystemService(Context.SENSOR_SERVICE);
             Sensor sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             manager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -190,7 +192,7 @@ public class Utils {
         lastXyz[2] = z;
         int delta = (int) (Math.sqrt(deltaX * deltaX
                 + deltaY * deltaY + deltaZ * deltaZ) / diffTime * 10000);
-        if (delta > 450) {// a buddhist-style value
+        if (delta > mThreshold) {// a buddhist-style value
             return true;
         }
         return false;

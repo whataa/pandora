@@ -106,19 +106,24 @@ public class Pandora {
     }
 
     public void open() {
-        if (Utils.checkPermission()) {
+        if (Utils.checkPermission() && !entranceView.isOpen()) {
             entranceView.open();
         }
     }
 
     public void close() {
-        if (Utils.checkPermission()) {
+        if (Utils.checkPermission() && entranceView.isOpen()) {
             entranceView.close();
         }
     }
 
     public Pandora enableShakeOpen() {
-        Utils.registerSensor(sensorEventListener);
+        enableShakeOpen(1650);
+        return this;
+    }
+
+    public Pandora enableShakeOpen(int threshold) {
+        Utils.registerSensor(threshold, sensorEventListener);
         return this;
     }
 
