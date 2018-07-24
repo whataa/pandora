@@ -41,6 +41,21 @@ public class Pandora {
         return INSTANCE;
     }
 
+    public Pandora enableNetwork(boolean use) {
+        entranceView.enableNetwork(use);
+        return this;
+    }
+
+    public Pandora enableSandbox(boolean use) {
+        entranceView.enableSandbox(use);
+        return this;
+    }
+
+    public Pandora enableUiInspect(boolean use) {
+        entranceView.enableUiInspect(use);
+        return this;
+    }
+
     private Pandora() {
         entranceView.setOnClickListener(new OnEntranceClick() {
             @Override
@@ -91,19 +106,24 @@ public class Pandora {
     }
 
     public void open() {
-        if (Utils.checkPermission()) {
+        if (Utils.checkPermission() && !entranceView.isOpen()) {
             entranceView.open();
         }
     }
 
     public void close() {
-        if (Utils.checkPermission()) {
+        if (Utils.checkPermission() && entranceView.isOpen()) {
             entranceView.close();
         }
     }
 
     public Pandora enableShakeOpen() {
-        Utils.registerSensor(sensorEventListener);
+        enableShakeOpen(1650);
+        return this;
+    }
+
+    public Pandora enableShakeOpen(int threshold) {
+        Utils.registerSensor(threshold, sensorEventListener);
         return this;
     }
 
@@ -166,13 +186,16 @@ public class Pandora {
     private SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
-            // app-window will only receive event at the top
-            if (!INSTANCE.entranceView.isOpen()
-                    && Utils.checkIfShake(
-                    event.values[0],
-                    event.values[1],
-                    event.values[2])) {
-                INSTANCE.open();
+            if (event.sensor.getType() == 1) {
+                // app-window will only receive event at the top
+                if (Utils.checkIfShake(
+                        event.values[0],
+                        event.values[1],
+                        event.values[2])) {
+                    if (!INSTANCE.entranceView.isOpen()) {
+                        INSTANCE.open();
+                    }
+                }
             }
         }
 

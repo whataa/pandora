@@ -83,6 +83,18 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
         inspectWrapper.findViewById(R.id.ui_baseline).setOnClickListener(this);
     }
 
+    public void enableNetwork(boolean use) {
+        entranceWrapper.findViewById(R.id.entrance_network).setVisibility(use ? VISIBLE : GONE);
+    }
+
+    public void enableSandbox(boolean use) {
+        entranceWrapper.findViewById(R.id.entrance_sandbox).setVisibility(use ? VISIBLE : GONE);
+    }
+
+    public void enableUiInspect(boolean use) {
+        entranceWrapper.findViewById(R.id.entrance_ui).setVisibility(use ? VISIBLE : GONE);
+    }
+
     private boolean isOpen;
 
     public boolean isOpen() {
@@ -144,6 +156,8 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
                     params.y = Math.max(0, params.y);
                     windowManager.updateViewLayout(EntranceView.this, params);
                     lastY = event.getRawY();
+                    break;
+                default:
                     break;
             }
             return true;
