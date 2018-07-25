@@ -11,6 +11,20 @@
 
     <TextView
         android:foreground="?android:attr/selectableItemBackground"
+        android:id="@+id/entrance_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/pd_more"
+        android:gravity="center"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:scaleType="centerInside"
+        android:text="more"
+        android:textColor="#000"
+        android:textSize="10dp" />
+
+    <TextView
+        android:foreground="?android:attr/selectableItemBackground"
         android:id="@+id/entrance_network"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,17 +53,19 @@
 
     <TextView
         android:foreground="?android:attr/selectableItemBackground"
-        android:id="@+id/entrance_ui"
+        android:id="@+id/ui_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableTop="@drawable/pd_paint"
+        android:drawableTop="@drawable/pd_select"
         android:gravity="center"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:scaleType="centerInside"
-        android:text="uiInspect"
+        android:text="select"
         android:textColor="#000"
         android:textSize="10dp" />
+
+
 
     <TextView
         android:id="@+id/entrance_close"

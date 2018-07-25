@@ -17,8 +17,10 @@ import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.inspector.BaseLineView;
 import tech.linjiang.pandora.inspector.OperableView;
+import tech.linjiang.pandora.inspector.treenode.TreeView;
 import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.ui.connector.UIStateCallback;
+import tech.linjiang.pandora.ui.fragment.ConfigFragment;
 import tech.linjiang.pandora.ui.fragment.NetFragment;
 import tech.linjiang.pandora.ui.fragment.SandboxFragment;
 import tech.linjiang.pandora.ui.fragment.ViewFragment;
@@ -61,14 +63,13 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
                 view = new BaseLineView(this);
                 setContentView(view);
                 break;
-            case Type.ATTR:
-            case Type.HIERARCHY:
+            case Type.SELECT:
                 view = new FrameLayout(this);
                 view.setId(R.id.pd_fragment_container_id);
                 setContentView(view);
                 if (savedInstanceState == null) {
                     getSupportFragmentManager().beginTransaction()
-                            .add(R.id.pd_fragment_container_id, ViewFragment.newInstance(type))
+                            .add(R.id.pd_fragment_container_id, ViewFragment.newInstance())
                             .commit();
                 }
                 break;
@@ -92,10 +93,20 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
                             .commit();
                 }
                 break;
-            case Type.SELECT:
-                OperableView operableView = new OperableView(this);
-                operableView.tryGetFrontView(Pandora.get().getBottomActivity());
-                setContentView(operableView);
+            case Type.CONFIG:
+                view = new FrameLayout(this);
+                view.setId(R.id.pd_fragment_container_id);
+                setContentView(view);
+                if (savedInstanceState == null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.pd_fragment_container_id, new ConfigFragment())
+                            .commit();
+                }
+                break;
+            case Type.HIERARCHY:
+                TreeView treeNodeView = new TreeView(this);
+                treeNodeView.setRootView(Pandora.get().getViewRoot());
+                setContentView(treeNodeView);
                 break;
         }
 
@@ -110,7 +121,7 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
     @Override
     protected void onStop() {
         super.onStop();
-        if (type != Type.NET && type != Type.FILE) {
+        if (type != Type.NET && type != Type.FILE && type != Type.CONFIG) {
             finish();
             return;
         }

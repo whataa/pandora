@@ -1,6 +1,9 @@
-package tech.linjiang.pandora.util;
+package tech.linjiang.pandora;
 
+import android.app.Application;
 import android.support.v4.content.FileProvider;
+
+import tech.linjiang.pandora.Pandora;
 
 /**
  * Created by linjiang on 2018/6/26.
@@ -12,4 +15,11 @@ import android.support.v4.content.FileProvider;
  */
 
 public class PdFileProvider extends FileProvider {
+    @Override
+    public boolean onCreate() {
+        if (getContext() instanceof Application) {
+            Pandora.init(((Application) getContext()));
+        }
+        return super.onCreate();
+    }
 }

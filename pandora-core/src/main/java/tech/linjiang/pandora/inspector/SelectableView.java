@@ -90,6 +90,9 @@ public class SelectableView extends ElementHoldView {
             }
             targetElement = element;
             clickInfoCanvas.setInfoElement(element);
+            if (clickListener != null) {
+                clickListener.onClick(element.getView());
+            }
         }
         invalidate();
     }

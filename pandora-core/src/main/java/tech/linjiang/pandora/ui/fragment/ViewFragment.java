@@ -1,15 +1,25 @@
 package tech.linjiang.pandora.ui.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.inspector.SelectableView;
-import tech.linjiang.pandora.inspector.treenode.TreeView;
-import tech.linjiang.pandora.ui.connector.Type;
+import tech.linjiang.pandora.inspector.OperableView;
+import tech.linjiang.pandora.ui.item.ViewNameItem;
+import tech.linjiang.pandora.ui.recyclerview.BaseItem;
+import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
+import tech.linjiang.pandora.util.ViewKnife;
 
 /**
  * Created by linjiang on 15/06/2018.
@@ -17,18 +27,10 @@ import tech.linjiang.pandora.ui.connector.Type;
 
 public class ViewFragment extends BaseFragment implements View.OnClickListener {
 
-    public static BaseFragment newInstance(@Type int type) {
-        if (type != Type.ATTR && type != Type.HIERARCHY) {
-            throw new IllegalArgumentException("");
-        }
+    public static BaseFragment newInstance() {
         ViewFragment fragment = new ViewFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(PARAM1, type);
-        fragment.setArguments(bundle);
         return fragment;
     }
-
-    private int type;
 
     @Override
     protected boolean enableToolbar() {
@@ -37,7 +39,7 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected boolean enableSwipeBack() {
-        return type == Type.HIERARCHY;
+        return false;
     }
 
     @Override
@@ -47,30 +49,105 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected View getLayoutView() {
-        if (type == Type.ATTR) {
-            SelectableView selectView = new SelectableView(getContext());
-            selectView.tryGetFrontView(Pandora.get().getBottomActivity());
-            selectView.setOnClickListener(this);
-            return selectView;
-        } else if (type == Type.HIERARCHY) {
-            TreeView treeNodeView = new TreeView(getContext());
-            treeNodeView.setRootView(Pandora.get().getViewRoot());
-            treeNodeView.setOnClickListener(this);
-            return treeNodeView;
-        }
-        return null;
-    }
+        View panelView = LayoutInflater.from(getContext()).inflate(R.layout.pd_layout_view_panel, null);
+        operableView = new OperableView(getContext());
+        operableView.tryGetFrontView(Pandora.get().getBottomActivity());
+        operableView.setOnClickListener(this);
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        type = getArguments().getInt(PARAM1);
+        CoordinatorLayout layout = new CoordinatorLayout(getContext());
+        CoordinatorLayout.LayoutParams selectViewParams = new CoordinatorLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout.addView(operableView, selectViewParams);
+        CoordinatorLayout.LayoutParams panelViewParams = new CoordinatorLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        panelViewParams.setBehavior(behavior = new BottomSheetBehavior());
+        // shadow's height is 18dp
+        behavior.setPeekHeight(ViewKnife.dip2px(124));
+        behavior.setHideable(true);
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        layout.addView(panelView, panelViewParams);
+
+        return layout;
     }
 
     @Override
     public void onClick(View v) {
-        // add flag
-        v.setTag(R.id.pd_view_tag_for_unique, new Object());
-        launch(ViewAttrFragment.class, null);
+        if (operableView.isSelectedEmpty()) {
+            behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        } else {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+        targetView = v;
+        refreshViewInfo(v);
+    }
+
+    private BottomSheetBehavior behavior;
+    private OperableView operableView;
+    private View targetView;
+    private TextView tvType, tvClazz, tvPath, tvId, tvSize;
+    private RecyclerView parentRv, currentRv, childRv;
+    private UniversalAdapter parentAdapter = new UniversalAdapter(),
+            currentAdapter = new UniversalAdapter(),
+            childAdapter = new UniversalAdapter();
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.findViewById(R.id.view_panel_wrapper).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // add flag
+                targetView.setTag(R.id.pd_view_tag_for_unique, new Object());
+                launch(ViewAttrFragment.class, null);
+            }
+        });
+        tvType = view.findViewById(R.id.view_panel_type);
+        tvClazz = view.findViewById(R.id.view_panel_clazz);
+        tvPath = view.findViewById(R.id.view_panel_path);
+        tvId = view.findViewById(R.id.view_panel_id);
+        tvSize = view.findViewById(R.id.view_panel_size);
+        parentRv = view.findViewById(R.id.view_panel_parent);
+        parentRv.setAdapter(parentAdapter);
+        currentRv = view.findViewById(R.id.view_panel_current);
+        currentRv.setAdapter(currentAdapter);
+        childRv = view.findViewById(R.id.view_panel_child);
+        childRv.setAdapter(childAdapter);
+
+    }
+
+    private void refreshViewInfo(View target) {
+        tvType.setText(target instanceof ViewGroup ? "group" : "view");
+        tvClazz.setText(target.getClass().getSimpleName());
+        tvPath.setText(target.getClass().getName());
+        tvId.setText(ViewKnife.getIdString(target));
+        int widthText = ViewKnife.px2dip(target.getWidth());
+        int heightText = ViewKnife.px2dip(target.getHeight());
+        tvSize.setText(String.format("%d x %d dp", widthText, heightText));
+        parentAdapter.clearItems();
+        currentAdapter.clearItems();
+        childAdapter.clearItems();
+        if (target instanceof ViewGroup) {
+            List<BaseItem> childData = new ArrayList<>();
+            for (int i = 0; i < ((ViewGroup)target).getChildCount(); i++) {
+                childData.add(new ViewNameItem(((ViewGroup)target).getChildAt(i).getClass().getSimpleName()));
+            }
+            childAdapter.setItems(childData);
+        }
+        if (target.getParent() != null && target.getParent() instanceof ViewGroup) {
+            ViewGroup parentGroup = (ViewGroup) target.getParent();
+            List<BaseItem> parentGroupData = new ArrayList<>();
+            for (int i = 0; i < parentGroup.getChildCount(); i++) {
+                parentGroupData.add(new ViewNameItem(parentGroup.getChildAt(i).getClass().getSimpleName()));
+            }
+            currentAdapter.setItems(parentGroupData);
+            if (parentGroup.getParent() != null && parentGroup.getParent() instanceof ViewGroup) {
+                ViewGroup grandGroup = (ViewGroup) parentGroup.getParent();
+                List<BaseItem> grandGroupData = new ArrayList<>();
+                for (int i = 0; i < grandGroup.getChildCount(); i++) {
+                    grandGroupData.add(new ViewNameItem(grandGroup.getChildAt(i).getClass().getSimpleName()));
+                }
+                parentAdapter.setItems(grandGroupData);
+            }
+        }
     }
 }

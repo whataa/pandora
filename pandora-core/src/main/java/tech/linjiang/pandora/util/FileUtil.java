@@ -116,7 +116,7 @@ public class FileUtil {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri = FileProvider.getUriForFile(Utils.getContext(),
-                Utils.getContext().getPackageName() + ".fileProvider", file);
+                Utils.getContext().getPackageName() + ".pdFileProvider", file);
         intent.setDataAndType(uri, getFileType(filePath));
         return intent;
     }

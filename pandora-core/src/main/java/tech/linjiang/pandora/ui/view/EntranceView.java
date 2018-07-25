@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import tech.linjiang.pandora.core.R;
+import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.ViewKnife;
 
 /**
@@ -57,7 +58,8 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
         inspectWrapper = LayoutInflater.from(getContext()).inflate(R.layout.pd_layout_ui_inspect, null);
         entranceWrapper.findViewById(R.id.entrance_network).setOnClickListener(this);
         entranceWrapper.findViewById(R.id.entrance_sandbox).setOnClickListener(this);
-        entranceWrapper.findViewById(R.id.entrance_ui).setOnClickListener(new OnClickListener() {
+        entranceWrapper.findViewById(R.id.ui_select).setOnClickListener(this);
+        entranceWrapper.findViewById(R.id.entrance_more).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 entranceWrapper.setVisibility(GONE);
@@ -77,9 +79,9 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
                 inspectWrapper.setVisibility(GONE);
             }
         });
+        inspectWrapper.findViewById(R.id.entrance_config).setOnClickListener(this);
         inspectWrapper.findViewById(R.id.ui_hierarchy).setOnClickListener(this);
-        inspectWrapper.findViewById(R.id.ui_select).setOnClickListener(this);
-        inspectWrapper.findViewById(R.id.ui_info).setOnClickListener(this);
+        inspectWrapper.findViewById(R.id.ui_grid).setOnClickListener(this);
         inspectWrapper.findViewById(R.id.ui_baseline).setOnClickListener(this);
     }
 
@@ -92,7 +94,7 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
     }
 
     public void enableUiInspect(boolean use) {
-        entranceWrapper.findViewById(R.id.entrance_ui).setVisibility(use ? VISIBLE : GONE);
+        entranceWrapper.findViewById(R.id.entrance_more).setVisibility(use ? VISIBLE : GONE);
     }
 
     private boolean isOpen;
@@ -141,6 +143,12 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
     }
 
     public void show() {
+        boolean netEnable = Config.getCOMMON_NETWORK_SWITCH();
+        boolean sbEnable = Config.getCOMMON_SANDBOX_SWITCH();
+        boolean uiEnable = Config.getCOMMON_UI_SWITCH();
+        enableNetwork(netEnable);
+        enableSandbox(sbEnable);
+        enableUiInspect(uiEnable);
         setVisibility(VISIBLE);
     }
 

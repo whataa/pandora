@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.support.annotation.IntDef;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -221,6 +222,9 @@ public class OperableView extends ElementHoldView {
                         // cancel selected
                         relativeElements[i] = null;
                         searchCount = i;
+                        if (clickListener != null) {
+                            clickListener.onClick(element.getView());
+                        }
                         return;
                     }
                     bothNull = false;
@@ -232,8 +236,27 @@ public class OperableView extends ElementHoldView {
             }
             relativeElements[searchCount % elementsNum] = element;
             searchCount++;
+            if (clickListener != null) {
+                clickListener.onClick(element.getView());
+            }
         }
     }
 
+    public boolean isSelectedEmpty() {
+        boolean empty = true;
+        for (int i = 0; i < elementsNum; i++) {
+            if (relativeElements[i] != null) {
+                empty = false;
+                break;
+            }
+        }
+        return empty;
+    }
+
+    private OnClickListener clickListener;
+    @Override
+    public void setOnClickListener(@Nullable OnClickListener l) {
+        clickListener = l;
+    }
 
 }

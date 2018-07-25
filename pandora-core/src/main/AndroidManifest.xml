@@ -7,8 +7,8 @@
             android:theme="@style/TransTheme"/>
 
         <provider
-            android:name="tech.linjiang.pandora.util.PdFileProvider"
-            android:authorities="${applicationId}.fileProvider"
+            android:name="tech.linjiang.pandora.PdFileProvider"
+            android:authorities="${applicationId}.pdFileProvider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

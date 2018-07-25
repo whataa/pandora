@@ -49,6 +49,13 @@ public class OkHttpInterceptor implements Interceptor {
             notifyStart(id);
         }
 
+        long delayReq = Config.getNETWORK_DELAY_REQ();
+        if (delayReq > 0) {
+            try {
+                Thread.sleep(delayReq);
+            } catch (Throwable ignore){}
+        }
+
         Response response;
         try {
             response = chain.proceed(request);
@@ -58,6 +65,13 @@ public class OkHttpInterceptor implements Interceptor {
                 notifyEnd(id);
             }
             throw e;
+        }
+
+        long delayRes = Config.getNETWORK_DELAY_RES();
+        if (delayRes > 0) {
+            try {
+                Thread.sleep(delayRes);
+            } catch (Throwable ignore){}
         }
 
         if (Config.isNetLogEnable() && id >= 0) {
@@ -144,7 +158,9 @@ public class OkHttpInterceptor implements Interceptor {
             Utils.post(new Runnable() {
                 @Override
                 public void run() {
-                    listener.onRequestStart(id);
+                    if (listener != null) {
+                        listener.onRequestStart(id);
+                    }
                 }
             });
         }
@@ -155,7 +171,9 @@ public class OkHttpInterceptor implements Interceptor {
             Utils.post(new Runnable() {
                 @Override
                 public void run() {
-                    listener.onRequestEnd(id);
+                    if (listener != null) {
+                        listener.onRequestEnd(id);
+                    }
                 }
             });
         }

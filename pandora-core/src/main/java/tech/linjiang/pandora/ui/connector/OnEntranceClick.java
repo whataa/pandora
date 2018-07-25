@@ -21,10 +21,12 @@ public class OnEntranceClick implements View.OnClickListener {
             onClick(Type.HIERARCHY);
         } else if (v.getId() == R.id.ui_select) {
             onClick(Type.SELECT);
-        } else if (v.getId() == R.id.ui_info) {
-            onClick(Type.ATTR);
+        } else if (v.getId() == R.id.entrance_config) {
+            onClick(Type.CONFIG);
         } else if (v.getId() == R.id.ui_baseline) {
             onClick(Type.BASELINE);
+        } else if (v.getId() == R.id.ui_grid) {
+            onClick(Type.GRID);
         }
     }
 

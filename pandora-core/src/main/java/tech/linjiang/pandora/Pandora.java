@@ -16,6 +16,7 @@ import tech.linjiang.pandora.ui.Dispatcher;
 import tech.linjiang.pandora.ui.connector.OnEntranceClick;
 import tech.linjiang.pandora.ui.connector.SimpleActivityLifecycleCallbacks;
 import tech.linjiang.pandora.ui.view.EntranceView;
+import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.Utils;
 
 /**
@@ -27,33 +28,17 @@ public class Pandora {
 
     private static Pandora INSTANCE;
 
-    public static Pandora init(Application application) {
+
+    static Pandora init(Application application) {
         INSTANCE = new Pandora();
         Utils.init(application);
         application.registerActivityLifecycleCallbacks(INSTANCE.callbacks);
+        Utils.registerSensor(INSTANCE.sensorEventListener);;
         return INSTANCE;
     }
 
     public static Pandora get() {
-        if (INSTANCE == null) {
-            throw new RuntimeException("need to call Pandora#init in Application#onCreate firstly.");
-        }
         return INSTANCE;
-    }
-
-    public Pandora enableNetwork(boolean use) {
-        entranceView.enableNetwork(use);
-        return this;
-    }
-
-    public Pandora enableSandbox(boolean use) {
-        entranceView.enableSandbox(use);
-        return this;
-    }
-
-    public Pandora enableUiInspect(boolean use) {
-        entranceView.enableUiInspect(use);
-        return this;
     }
 
     private Pandora() {
@@ -67,7 +52,7 @@ public class Pandora {
     }
 
     private final EntranceView entranceView = new EntranceView(Utils.getContext());
-    private OkHttpInterceptor interceptor = new OkHttpInterceptor();
+    private final OkHttpInterceptor interceptor = new OkHttpInterceptor();
     private final Databases databases = new Databases();
     private final SharedPref sharedPref = new SharedPref();
     private final AttrFactory attrFactory = new AttrFactory();
@@ -116,17 +101,6 @@ public class Pandora {
             entranceView.close();
         }
     }
-
-    public Pandora enableShakeOpen() {
-        enableShakeOpen(1650);
-        return this;
-    }
-
-    public Pandora enableShakeOpen(int threshold) {
-        Utils.registerSensor(threshold, sensorEventListener);
-        return this;
-    }
-
 
     private SimpleActivityLifecycleCallbacks callbacks = new SimpleActivityLifecycleCallbacks() {
         private int count;
@@ -186,14 +160,16 @@ public class Pandora {
     private SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
-            if (event.sensor.getType() == 1) {
-                // app-window will only receive event at the top
-                if (Utils.checkIfShake(
-                        event.values[0],
-                        event.values[1],
-                        event.values[2])) {
-                    if (!INSTANCE.entranceView.isOpen()) {
-                        INSTANCE.open();
+            if (Config.getSHAKE_SWITCH()) {
+                if (event.sensor.getType() == 1) {
+                    // app-window will only receive event at the top
+                    if (Utils.checkIfShake(
+                            event.values[0],
+                            event.values[1],
+                            event.values[2])) {
+                        if (!INSTANCE.entranceView.isOpen()) {
+                            INSTANCE.open();
+                        }
                     }
                 }
             }

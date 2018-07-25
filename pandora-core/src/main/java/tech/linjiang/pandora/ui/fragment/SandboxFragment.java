@@ -1,5 +1,6 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
@@ -17,6 +18,7 @@ import tech.linjiang.pandora.ui.item.SPItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
+import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.SimpleTask;
 
 /**
@@ -72,12 +74,21 @@ public class SandboxFragment extends BaseListFragment {
                     data.add(new SPItem(spFiles.get(i).getName(), spFiles.get(i)));
                 }
 
-                data.add(new TitleItem("File"));
+                data.add(new TitleItem("Files"));
 
                 List<File> descriptors = Sandbox.getRootFiles();
                 for (int i = 0; i < descriptors.size(); i++) {
                     data.add(new FileItem(descriptors.get(i)));
                 }
+
+                if (Config.getSANBOX_DPM() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    data.add(new TitleItem("Device-protect-mode Files"));
+                    List<File> dpm = Sandbox.getDPMFiles();
+                    for (int i = 0; i < dpm.size(); i++) {
+                        data.add(new FileItem(dpm.get(i)));
+                    }
+                }
+
                 return data;
             }
 

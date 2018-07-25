@@ -43,10 +43,14 @@
             tools:text="123" />
     </LinearLayout>
 
-    <ImageView
+    <TextView
+        android:textColor="@color/pd_label_dark"
+        tools:text="123"
+        android:textSize="14dp"
+        android:drawablePadding="4dp"
         android:id="@+id/common_item_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:src="@drawable/pd_right" />
+        android:drawableRight="@drawable/pd_right" />
 </LinearLayout>

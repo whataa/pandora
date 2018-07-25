@@ -137,6 +137,12 @@ public class UniversalAdapter
             return this;
         }
 
+        public ViewPool setTextColor(@IdRes int id, @ColorInt int color) {
+            TextView tv = getView(id);
+            tv.setTextColor(color);
+            return this;
+        }
+
         public ViewPool setImageResource(@IdRes int id, @DrawableRes int resId) {
             ImageView tv = getView(id);
             tv.setImageResource(resId);

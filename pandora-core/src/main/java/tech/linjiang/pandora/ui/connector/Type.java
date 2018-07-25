@@ -11,7 +11,8 @@ import java.lang.annotation.RetentionPolicy;
         Type.HIERARCHY,
         Type.BASELINE,
         Type.SELECT,
-        Type.ATTR
+        Type.CONFIG,
+        Type.GRID,
 })
 @Retention(RetentionPolicy.SOURCE)
 public @interface Type {
@@ -20,5 +21,6 @@ public @interface Type {
     int HIERARCHY = 0x03;
     int BASELINE = 0x05;
     int SELECT = 0x06;
-    int ATTR = 0x07;
+    int CONFIG = 0x07;
+    int GRID = 0x08;
 }

@@ -32,6 +32,7 @@ public class NetItem extends BaseItem<Summary> {
         pool.setImageResource(R.id.item_net_status, !done ? R.drawable.pd_transform :
                 (data.status == 1 ? R.drawable.pd_error : R.drawable.pd_done));
 
+        pool.setTextColor(R.id.item_net_url, done && data.code > 0 && data.code != 200 ? Color.BLUE : Color.BLACK);
         pool.setText(R.id.item_net_url, data.url)
                 .setText(R.id.item_net_host, data.host)
                 .setText(R.id.item_net_info,

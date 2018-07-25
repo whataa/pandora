@@ -16,6 +16,7 @@ import java.util.List;
 
 import tech.linjiang.pandora.network.model.Content;
 import tech.linjiang.pandora.network.model.Summary;
+import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.JsonUtil;
 import tech.linjiang.pandora.util.Utils;
 
@@ -133,7 +134,6 @@ public class CacheDbHelper extends SQLiteOpenHelper {
         static final String SQL_CLEAR_ENTRIES =
                 "DELETE FROM " + SummaryEntry.TABLE_NAME;
 
-        private static final int MAX_QUERY_COUNT = 512;
 
         public static void update(long pkValue, ContentValues values) {
             getWDb().update(TABLE_NAME, values, _ID + " = ?", new String[]{String.valueOf(pkValue)});
@@ -179,7 +179,7 @@ public class CacheDbHelper extends SQLiteOpenHelper {
                     null,
                     null,
                     COLUMN_NAME_TIME_START + " DESC",
-                    String.valueOf(MAX_QUERY_COUNT)
+                    String.valueOf(Config.getNETWORK_PAGE_SIZE())
             );
             while(cursor.moveToNext()) {
                 Summary summary = parse(cursor);

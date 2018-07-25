@@ -11,6 +11,5 @@
     </style>
 
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light">
-        <item name="actionMenuTextColor">@color/pd_green</item>
     </style>
 </resources>
