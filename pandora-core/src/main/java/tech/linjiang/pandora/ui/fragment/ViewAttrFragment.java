@@ -104,7 +104,7 @@ public class ViewAttrFragment extends BaseListFragment {
                 final Context context = targetView.getContext();
                 if (context instanceof Activity) {
                     data.add(new TitleItem(context.getClass().getSimpleName()));
-                    data.add(new ViewAttrItem(new Attribute("package", context.getClass().getPackage().toString())));
+                    data.add(new ViewAttrItem(new Attribute("package", context.getClass().getPackage().getName())));
                     data.add(new ViewAttrItem(new Attribute("id", getToolbar().getSubtitle().toString())));
                 }
                 List<Attribute> attributes = Pandora.get().getAttrFactory().parse(targetView);

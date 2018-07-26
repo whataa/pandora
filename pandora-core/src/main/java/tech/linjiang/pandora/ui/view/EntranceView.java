@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.util.Config;
+import tech.linjiang.pandora.util.Utils;
 import tech.linjiang.pandora.util.ViewKnife;
 
 /**
@@ -25,15 +26,11 @@ import tech.linjiang.pandora.util.ViewKnife;
 public class EntranceView extends LinearLayout implements View.OnClickListener {
     private static final String TAG = "EntranceView";
 
-    private WindowManager windowManager;
-    private WindowManager.LayoutParams params = new WindowManager.LayoutParams();
     private float lastY;
-    private View entranceWrapper, inspectWrapper;
     private OnClickListener clickListener;
 
     public EntranceView(Context context) {
         super(context);
-        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         initSelf();
         inflate();
     }
@@ -54,8 +51,8 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
     }
 
     private void inflate() {
-        entranceWrapper = LayoutInflater.from(getContext()).inflate(R.layout.pd_layout_entrance, null);
-        inspectWrapper = LayoutInflater.from(getContext()).inflate(R.layout.pd_layout_ui_inspect, null);
+        final View entranceWrapper = LayoutInflater.from(getContext()).inflate(R.layout.pd_layout_entrance, null);
+        final View inspectWrapper = LayoutInflater.from(getContext()).inflate(R.layout.pd_layout_ui_inspect, null);
         entranceWrapper.findViewById(R.id.entrance_network).setOnClickListener(this);
         entranceWrapper.findViewById(R.id.entrance_sandbox).setOnClickListener(this);
         entranceWrapper.findViewById(R.id.ui_select).setOnClickListener(this);
@@ -82,34 +79,35 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
         inspectWrapper.findViewById(R.id.entrance_config).setOnClickListener(this);
         inspectWrapper.findViewById(R.id.ui_hierarchy).setOnClickListener(this);
         inspectWrapper.findViewById(R.id.ui_grid).setOnClickListener(this);
+        inspectWrapper.findViewById(R.id.ui_window).setOnClickListener(this);
         inspectWrapper.findViewById(R.id.ui_baseline).setOnClickListener(this);
+        addView(entranceWrapper);
+        addView(inspectWrapper);
     }
 
     public void enableNetwork(boolean use) {
-        entranceWrapper.findViewById(R.id.entrance_network).setVisibility(use ? VISIBLE : GONE);
+        findViewById(R.id.entrance_network).setVisibility(use ? VISIBLE : GONE);
     }
 
     public void enableSandbox(boolean use) {
-        entranceWrapper.findViewById(R.id.entrance_sandbox).setVisibility(use ? VISIBLE : GONE);
+        findViewById(R.id.entrance_sandbox).setVisibility(use ? VISIBLE : GONE);
     }
 
     public void enableUiInspect(boolean use) {
-        entranceWrapper.findViewById(R.id.entrance_more).setVisibility(use ? VISIBLE : GONE);
+        findViewById(R.id.ui_select).setVisibility(use ? VISIBLE : GONE);
     }
 
     private boolean isOpen;
 
-    public boolean isOpen() {
-        return isOpen;
-    }
 
-    public void open() {
-        close();
-        entranceWrapper.setVisibility(VISIBLE);
-        inspectWrapper.setVisibility(GONE);
-        addView(entranceWrapper);
-        addView(inspectWrapper);
+    public static void open() {
+        if (instance.isOpen) {
+            return;
+        }
+        instance.getChildAt(1).setVisibility(VISIBLE);
+        instance.getChildAt(2).setVisibility(GONE);
         try {
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams();
             params.width = FrameLayout.LayoutParams.WRAP_CONTENT;
             params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
@@ -122,34 +120,35 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
             params.gravity = Gravity.TOP | Gravity.START;
             params.x = 0;
             params.y = 0;
-            windowManager.addView(this, params);
-            isOpen = true;
+            instance.getWindowManager().addView(instance, params);
+            instance.isOpen = true;
         } catch (Throwable ignore) {
         }
     }
 
-    public void close() {
-        removeView(entranceWrapper);
-        removeView(inspectWrapper);
+    public static void close() {
+        if (!instance.isOpen) {
+            return;
+        }
         try {
-            windowManager.removeView(this);
-            isOpen = false;
+            instance.getWindowManager().removeView(instance);
+            instance.isOpen = false;
         } catch (Throwable ignore) {
         }
     }
 
-    public void hide() {
-        setVisibility(GONE);
+    public static void hide() {
+        instance.setVisibility(GONE);
     }
 
-    public void show() {
+    public static void show() {
         boolean netEnable = Config.getCOMMON_NETWORK_SWITCH();
         boolean sbEnable = Config.getCOMMON_SANDBOX_SWITCH();
         boolean uiEnable = Config.getCOMMON_UI_SWITCH();
-        enableNetwork(netEnable);
-        enableSandbox(sbEnable);
-        enableUiInspect(uiEnable);
-        setVisibility(VISIBLE);
+        instance.enableNetwork(netEnable);
+        instance.enableSandbox(sbEnable);
+        instance.enableUiInspect(uiEnable);
+        instance.setVisibility(VISIBLE);
     }
 
     private OnTouchListener touchListener = new OnTouchListener() {
@@ -160,9 +159,10 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
                     lastY = event.getRawY();
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    WindowManager.LayoutParams params = (WindowManager.LayoutParams) getLayoutParams();
                     params.y += event.getRawY() - lastY;
                     params.y = Math.max(0, params.y);
-                    windowManager.updateViewLayout(EntranceView.this, params);
+                    getWindowManager().updateViewLayout(EntranceView.this, params);
                     lastY = event.getRawY();
                     break;
                 default:
@@ -171,6 +171,10 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
             return true;
         }
     };
+
+    public static void setListener(@Nullable OnClickListener l) {
+        instance.clickListener = l;
+    }
 
     @Override
     public void setOnClickListener(@Nullable OnClickListener l) {
@@ -183,4 +187,10 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
             clickListener.onClick(v);
         }
     }
+
+    private WindowManager getWindowManager() {
+        return ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE));
+    }
+
+    private static final EntranceView instance = new EntranceView(Utils.getContext());
 }

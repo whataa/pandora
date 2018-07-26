@@ -13,6 +13,7 @@ import java.lang.annotation.RetentionPolicy;
         Type.SELECT,
         Type.CONFIG,
         Type.GRID,
+        Type.WINDOW,
 })
 @Retention(RetentionPolicy.SOURCE)
 public @interface Type {
@@ -23,4 +24,5 @@ public @interface Type {
     int SELECT = 0x06;
     int CONFIG = 0x07;
     int GRID = 0x08;
+    int WINDOW = 0x09;
 }

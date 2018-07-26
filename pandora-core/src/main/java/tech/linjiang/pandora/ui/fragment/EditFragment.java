@@ -31,6 +31,7 @@ import tech.linjiang.pandora.util.ViewKnife;
  * PARAM1: Default content
  * PARAM2: EditCallback
  * PARAM3: Quick input options
+ * PARAM4: if can edit
  */
 
 public class EditFragment extends BaseFragment {
@@ -94,6 +95,7 @@ public class EditFragment extends BaseFragment {
 
     private EditText editText;
     private EditCallback callback;
+    private boolean canNotEdit;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +112,12 @@ public class EditFragment extends BaseFragment {
         final String data = getArguments().getString(PARAM1);
         editText.setText(data);
         editText.setSelection(editText.getText().length());
-        editText.requestFocus();
+        canNotEdit = getArguments().getBoolean(PARAM4);
+        if (canNotEdit) {
+            editText.setEnabled(false);
+        } else {
+            editText.requestFocus();
+        }
 
         getToolbar().inflateMenu(R.menu.pd_menu_edit);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -132,7 +139,9 @@ public class EditFragment extends BaseFragment {
 
     @Override
     protected void onViewEnterAnimEnd(View container) {
-        openSoftInput();
+        if (!canNotEdit) {
+            openSoftInput();
+        }
     }
 
     @Override

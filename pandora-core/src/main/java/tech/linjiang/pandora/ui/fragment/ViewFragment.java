@@ -16,9 +16,10 @@ import java.util.List;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.inspector.OperableView;
-import tech.linjiang.pandora.ui.item.ViewNameItem;
+import tech.linjiang.pandora.ui.item.ViewItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
+import tech.linjiang.pandora.util.Utils;
 import tech.linjiang.pandora.util.ViewKnife;
 
 /**
@@ -75,7 +76,9 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
         if (operableView.isSelectedEmpty()) {
             behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         } else {
-            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            if (behavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
         }
         targetView = v;
         refreshViewInfo(v);
@@ -101,6 +104,12 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
                 launch(ViewAttrFragment.class, null);
             }
         });
+        view.findViewById(R.id.view_panel_hierarchy).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launch(HierarchyFragment.class, null);
+            }
+        });
         tvType = view.findViewById(R.id.view_panel_type);
         tvClazz = view.findViewById(R.id.view_panel_clazz);
         tvPath = view.findViewById(R.id.view_panel_path);
@@ -108,10 +117,13 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
         tvSize = view.findViewById(R.id.view_panel_size);
         parentRv = view.findViewById(R.id.view_panel_parent);
         parentRv.setAdapter(parentAdapter);
+        parentAdapter.setListener(clickListener);
         currentRv = view.findViewById(R.id.view_panel_current);
         currentRv.setAdapter(currentAdapter);
+        currentAdapter.setListener(clickListener);
         childRv = view.findViewById(R.id.view_panel_child);
         childRv.setAdapter(childAdapter);
+        childAdapter.setListener(clickListener);
 
     }
 
@@ -129,7 +141,8 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
         if (target instanceof ViewGroup) {
             List<BaseItem> childData = new ArrayList<>();
             for (int i = 0; i < ((ViewGroup)target).getChildCount(); i++) {
-                childData.add(new ViewNameItem(((ViewGroup)target).getChildAt(i).getClass().getSimpleName()));
+                View item = ((ViewGroup)target).getChildAt(i);
+                childData.add(new ViewItem(item, false, true));
             }
             childAdapter.setItems(childData);
         }
@@ -137,17 +150,35 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
             ViewGroup parentGroup = (ViewGroup) target.getParent();
             List<BaseItem> parentGroupData = new ArrayList<>();
             for (int i = 0; i < parentGroup.getChildCount(); i++) {
-                parentGroupData.add(new ViewNameItem(parentGroup.getChildAt(i).getClass().getSimpleName()));
+                View item = parentGroup.getChildAt(i);
+                parentGroupData.add(new ViewItem(item, item == target, false));
             }
             currentAdapter.setItems(parentGroupData);
             if (parentGroup.getParent() != null && parentGroup.getParent() instanceof ViewGroup) {
                 ViewGroup grandGroup = (ViewGroup) parentGroup.getParent();
                 List<BaseItem> grandGroupData = new ArrayList<>();
                 for (int i = 0; i < grandGroup.getChildCount(); i++) {
-                    grandGroupData.add(new ViewNameItem(grandGroup.getChildAt(i).getClass().getSimpleName()));
+                    View item = grandGroup.getChildAt(i);
+                    grandGroupData.add(new ViewItem(item, false, item == target.getParent()));
                 }
                 parentAdapter.setItems(grandGroupData);
             }
         }
     }
+
+    private UniversalAdapter.OnItemClickListener clickListener = new UniversalAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(int position, BaseItem item) {
+            if (item instanceof ViewItem) {
+                View clickItem = (View) item.data;
+                boolean selected = ((ViewItem)item).selected;
+                if (!selected) {
+                    boolean success = operableView.handleClick(clickItem);
+                    if (!success) {
+                        Utils.toast("Alpha == 0 || Visibility != VISIBLE");
+                    }
+                }
+            }
+        }
+    };
 }

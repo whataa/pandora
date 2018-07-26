@@ -13,18 +13,15 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
-import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.inspector.BaseLineView;
-import tech.linjiang.pandora.inspector.OperableView;
-import tech.linjiang.pandora.inspector.treenode.TreeView;
 import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.ui.connector.UIStateCallback;
 import tech.linjiang.pandora.ui.fragment.ConfigFragment;
+import tech.linjiang.pandora.ui.fragment.HierarchyFragment;
 import tech.linjiang.pandora.ui.fragment.NetFragment;
 import tech.linjiang.pandora.ui.fragment.SandboxFragment;
 import tech.linjiang.pandora.ui.fragment.ViewFragment;
-import tech.linjiang.pandora.util.Utils;
 import tech.linjiang.pandora.util.ViewKnife;
 
 /**
@@ -69,7 +66,7 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
                 setContentView(view);
                 if (savedInstanceState == null) {
                     getSupportFragmentManager().beginTransaction()
-                            .add(R.id.pd_fragment_container_id, ViewFragment.newInstance())
+                            .add(R.id.pd_fragment_container_id, new ViewFragment())
                             .commit();
                 }
                 break;
@@ -104,9 +101,14 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
                 }
                 break;
             case Type.HIERARCHY:
-                TreeView treeNodeView = new TreeView(this);
-                treeNodeView.setRootView(Pandora.get().getViewRoot());
-                setContentView(treeNodeView);
+                view = new FrameLayout(this);
+                view.setId(R.id.pd_fragment_container_id);
+                setContentView(view);
+                if (savedInstanceState == null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.pd_fragment_container_id, new HierarchyFragment())
+                            .commit();
+                }
                 break;
         }
 
@@ -123,7 +125,6 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
         super.onStop();
         if (type != Type.NET && type != Type.FILE && type != Type.CONFIG) {
             finish();
-            return;
         }
     }
 

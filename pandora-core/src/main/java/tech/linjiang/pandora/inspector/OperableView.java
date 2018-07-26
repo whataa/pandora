@@ -8,6 +8,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
@@ -214,14 +215,27 @@ public class OperableView extends ElementHoldView {
 
     private void handleClick(float x, float y) {
         final Element element = getTargetElement(x, y);
+        handleElementSelected(element, true);
+    }
+
+    public boolean handleClick(View v) {
+        final Element element = getTargetElement(v);
+        handleElementSelected(element, false);
+        invalidate();
+        return element != null;
+    }
+
+    private void handleElementSelected(Element element, boolean cancelIfSelected) {
         if (element != null) {
             boolean bothNull = true;
             for (int i = 0; i < relativeElements.length; i++) {
                 if (relativeElements[i] != null) {
                     if (relativeElements[i] == element) {
-                        // cancel selected
-                        relativeElements[i] = null;
-                        searchCount = i;
+                        if (cancelIfSelected) {
+                            // cancel selected
+                            relativeElements[i] = null;
+                            searchCount = i;
+                        }
                         if (clickListener != null) {
                             clickListener.onClick(element.getView());
                         }

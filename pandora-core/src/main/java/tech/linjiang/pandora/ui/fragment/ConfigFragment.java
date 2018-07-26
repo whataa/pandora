@@ -19,6 +19,7 @@ import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
 import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.Utils;
+import tech.linjiang.pandora.util.ViewKnife;
 
 /**
  * Created by linjiang on 2018/7/24.
@@ -51,9 +52,6 @@ public class ConfigFragment extends BaseListFragment {
                     @Config.Type int type = (int) item.getTag();
                     Log.d(TAG, "onItemClick: " + type);
                     switch (type) {
-                        case Config.Type.COMMON_ACTIVITY:
-                            Config.setCOMMON_ACTIVITY(!Config.getCOMMON_ACTIVITY());
-                            break;
                         case Config.Type.COMMON_NETWORK_SWITCH:
                             Config.setCOMMON_NETWORK_SWITCH(!Config.getCOMMON_NETWORK_SWITCH());
                             break;
@@ -66,17 +64,22 @@ public class ConfigFragment extends BaseListFragment {
                         case Config.Type.NETWORK_DELAY_REQ:
                         case Config.Type.NETWORK_DELAY_RES:
                         case Config.Type.NETWORK_PAGE_SIZE:
+                        case Config.Type.UI_ACTIVITY_GRAVITY:
+                        case Config.Type.UI_GRID_INTERVAL:
                         case Config.Type.SHAKE_THRESHOLD:
                             editingType = type;
                             Bundle bundle = new Bundle();
                             bundle.putSerializable(PARAM2, callback);
                             if (type == Config.Type.SHAKE_THRESHOLD) {
                                 bundle.putStringArray(PARAM3, Utils.newArray("800", "1000", "1200", "1400", "1600"));
+                            } else if (type == Config.Type.UI_ACTIVITY_GRAVITY) {
+                                bundle.putStringArray(PARAM3, Utils.newArray("start|top", "end|top", "start|bottom", "end|bottom"));
+                                bundle.putBoolean(PARAM4, true);
                             }
                             launch(EditFragment.class, bundle);
                             break;
-                        case Config.Type.SANBOX_DPM:
-                            Config.setSANBOX_DPM(!Config.getSANBOX_DPM());
+                        case Config.Type.SANDBOX_DPM:
+                            Config.setSANDBOX_DPM(!Config.getSANDBOX_DPM());
                             break;
                         case Config.Type.SHAKE_SWITCH:
                             Config.setSHAKE_SWITCH(!Config.getSHAKE_SWITCH());
@@ -91,24 +94,26 @@ public class ConfigFragment extends BaseListFragment {
     private void refreshData() {
         List<BaseItem> data = new ArrayList<>();
 
-        data.add(new TitleItem("COMMON"));
-        data.add(new CheckBoxItem("show current activity name", Config.getCOMMON_ACTIVITY()).setTag(Config.Type.COMMON_ACTIVITY));
-        data.add(new CheckBoxItem("enable network module", Config.getCOMMON_NETWORK_SWITCH()).setTag(Config.Type.COMMON_NETWORK_SWITCH));
-        data.add(new CheckBoxItem("enable sandbox module", Config.getCOMMON_SANDBOX_SWITCH()).setTag(Config.Type.COMMON_SANDBOX_SWITCH));
-        data.add(new CheckBoxItem("enable UI module", Config.getCOMMON_UI_SWITCH()).setTag(Config.Type.COMMON_UI_SWITCH));
-
         data.add(new TitleItem("NETWORK"));
-        data.add(new NameArrowItem("delay for each request (ms)", "" + Config.getNETWORK_DELAY_REQ()).setTag(Config.Type.NETWORK_DELAY_REQ));
-        data.add(new NameArrowItem("delay for each response (ms)", "" + Config.getNETWORK_DELAY_RES()).setTag(Config.Type.NETWORK_DELAY_RES));
+        data.add(new NameArrowItem("delay for each request(ms)", "" + Config.getNETWORK_DELAY_REQ()).setTag(Config.Type.NETWORK_DELAY_REQ));
+        data.add(new NameArrowItem("delay for each response(ms)", "" + Config.getNETWORK_DELAY_RES()).setTag(Config.Type.NETWORK_DELAY_RES));
         data.add(new NameArrowItem("the maximum number of first loads", "" + Config.getNETWORK_PAGE_SIZE()).setTag(Config.Type.NETWORK_PAGE_SIZE));
 
         data.add(new TitleItem("SANDBOX"));
-        data.add(new CheckBoxItem("show device-protect-mode file\n(only for api>=24)", Config.getSANBOX_DPM()).setTag(Config.Type.SANBOX_DPM));
+        data.add(new CheckBoxItem("show device-protect-mode file\n(only for api>=24)", Config.getSANDBOX_DPM()).setTag(Config.Type.SANDBOX_DPM));
+
+        data.add(new TitleItem("UI"));
+        data.add(new NameArrowItem("the gravity of activity info", "" + ViewKnife.parseGravity(Config.getUI_ACTIVITY_GRAVITY())).setTag(Config.Type.UI_ACTIVITY_GRAVITY));
+        data.add(new NameArrowItem("the interval of grid line(dp)", "" + Config.getUI_GRID_INTERVAL()).setTag(Config.Type.UI_GRID_INTERVAL));
 
         data.add(new TitleItem("SHAKE"));
         data.add(new CheckBoxItem("turn on", Config.getSHAKE_SWITCH()).setTag(Config.Type.SHAKE_SWITCH));
         data.add(new NameArrowItem("threshold", "" + Config.getSHAKE_THRESHOLD()).setTag(Config.Type.SHAKE_THRESHOLD));
 
+        data.add(new TitleItem("COMMON"));
+        data.add(new CheckBoxItem("enable network module", Config.getCOMMON_NETWORK_SWITCH()).setTag(Config.Type.COMMON_NETWORK_SWITCH));
+        data.add(new CheckBoxItem("enable sandbox module", Config.getCOMMON_SANDBOX_SWITCH()).setTag(Config.Type.COMMON_SANDBOX_SWITCH));
+//        data.add(new CheckBoxItem("enable UI module", Config.getCOMMON_UI_SWITCH()).setTag(Config.Type.COMMON_UI_SWITCH));
         getAdapter().setItems(data);
     }
 
@@ -142,6 +147,24 @@ public class ConfigFragment extends BaseListFragment {
                         }
                         Config.setSHAKE_THRESHOLD(threshold);
                         break;
+                    case Config.Type.UI_ACTIVITY_GRAVITY:
+                        String gravity = String.valueOf(value);
+                        int result = ViewKnife.formatGravity(gravity);
+                        if (result != 0) {
+                            Config.setUI_ACTIVITY_GRAVITY(result);
+                        } else {
+                            Utils.toast("invalid");
+                        }
+                        break;
+                    case Config.Type.UI_GRID_INTERVAL:
+                        int interval = Integer.parseInt(value);
+                        if (interval < 1) {
+                            Utils.toast("invalid. At least 1");
+                            return;
+                        }
+                        Config.setUI_GRID_INTERVAL(interval);
+                        break;
+
                 }
                 refreshData();
                 Utils.toast(R.string.pd_success);

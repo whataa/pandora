@@ -11,6 +11,8 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -157,5 +159,33 @@ public class ViewKnife {
     // generateViewId(), isViewIdGenerated()
     private static boolean isViewIdGenerated(int id) {
         return (id & 0xFF000000) == 0 && (id & 0x00FFFFFF) != 0;
+    }
+
+    public static int formatGravity(String value) {
+        int start = value.contains("start") ? Gravity.START : 0;
+        int top = value.contains("top") ? Gravity.TOP : 0;
+        int end = value.contains("end") ? Gravity.END : 0;
+        int bottom = value.contains("bottom") ? Gravity.BOTTOM : 0;
+        return start | top | end | bottom;
+    }
+    public static String parseGravity(int value) {
+        String start = existGravity(value, Gravity.START) ? "start" : null;
+        String top = existGravity(value, Gravity.TOP) ? "top" : null;
+        String end = existGravity(value, Gravity.END) ? "end" : null;
+        String bottom = existGravity(value, Gravity.BOTTOM) ? "bottom" : null;
+        StringBuilder sb = new StringBuilder();
+        sb.append(!TextUtils.isEmpty(start) ? start + "|" : "");
+        sb.append(!TextUtils.isEmpty(top) ? top + "|" : "");
+        sb.append(!TextUtils.isEmpty(end) ? end + "|" : "");
+        sb.append(!TextUtils.isEmpty(bottom) ? bottom + "|" : "");
+        String result = sb.toString();
+        if (result.endsWith("|")) {
+            result = result.substring(0, result.lastIndexOf("|"));
+        }
+        return result;
+    }
+
+    private static boolean existGravity(int value, int attr) {
+        return (value & attr) == attr;
     }
 }

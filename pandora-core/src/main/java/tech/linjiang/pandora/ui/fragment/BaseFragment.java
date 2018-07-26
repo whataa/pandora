@@ -35,6 +35,7 @@ abstract class BaseFragment extends Fragment
     protected static final String PARAM1 = "param1";
     protected static final String PARAM2 = "param2";
     protected static final String PARAM3 = "param3";
+    protected static final String PARAM4 = "param4";
     protected static final String PARAM_TITLE = "param_title";
 
     protected final void launch(Class<? extends BaseFragment> target, Bundle extra) {

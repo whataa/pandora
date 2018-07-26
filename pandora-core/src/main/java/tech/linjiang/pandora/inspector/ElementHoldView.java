@@ -61,6 +61,21 @@ public class ElementHoldView extends HintView {
         return target;
     }
 
+    protected final Element getTargetElement(View v) {
+        Element target = null;
+        for (int i = elements.size() - 1; i >= 0; i--) {
+            final Element element = elements.get(i);
+            if (element.getView() == v) {
+                target = element;
+                break;
+            }
+        }
+        if (target == null) {
+            Log.w(TAG, "getTargetElement: not find");
+        }
+        return target;
+    }
+
 
     protected final void resetAll() {
         for (Element e : elements) {

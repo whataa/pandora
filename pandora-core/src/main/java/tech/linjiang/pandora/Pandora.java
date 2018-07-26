@@ -3,18 +3,23 @@ package tech.linjiang.pandora;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
+import android.content.ComponentCallbacks;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.view.View;
 
 import tech.linjiang.pandora.database.Databases;
+import tech.linjiang.pandora.inspector.CurInfoView;
+import tech.linjiang.pandora.inspector.GridLineView;
 import tech.linjiang.pandora.inspector.attribute.AttrFactory;
 import tech.linjiang.pandora.network.OkHttpInterceptor;
 import tech.linjiang.pandora.preference.SharedPref;
 import tech.linjiang.pandora.ui.Dispatcher;
 import tech.linjiang.pandora.ui.connector.OnEntranceClick;
 import tech.linjiang.pandora.ui.connector.SimpleActivityLifecycleCallbacks;
+import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.ui.view.EntranceView;
 import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.Utils;
@@ -23,18 +28,27 @@ import tech.linjiang.pandora.util.Utils;
  * Created by linjiang on 29/05/2018.
  */
 @SuppressLint("StaticFieldLeak")
-public class Pandora {
-    private static final String TAG = "Pandora";
+public final class Pandora {
 
     private static Pandora INSTANCE;
 
 
-    static Pandora init(Application application) {
+    static void init(Application application) {
         INSTANCE = new Pandora();
         Utils.init(application);
         application.registerActivityLifecycleCallbacks(INSTANCE.callbacks);
-        Utils.registerSensor(INSTANCE.sensorEventListener);;
-        return INSTANCE;
+        application.registerComponentCallbacks(new ComponentCallbacks() {
+            @Override
+            public void onConfigurationChanged(Configuration newConfig) {
+
+            }
+
+            @Override
+            public void onLowMemory() {
+
+            }
+        });
+        Utils.registerSensor(INSTANCE.sensorEventListener);
     }
 
     public static Pandora get() {
@@ -42,22 +56,27 @@ public class Pandora {
     }
 
     private Pandora() {
-        entranceView.setOnClickListener(new OnEntranceClick() {
+        EntranceView.setListener(new OnEntranceClick() {
             @Override
             protected void onClick(int type) {
+                if (type == Type.GRID) {
+                    GridLineView.toggle();
+                    return;
+                } else if (type == Type.WINDOW) {
+                    CurInfoView.toggle();
+                    return;
+                }
                 preventFree = true;
                 super.onClick(type);
             }
         });
     }
 
-    private final EntranceView entranceView = new EntranceView(Utils.getContext());
     private final OkHttpInterceptor interceptor = new OkHttpInterceptor();
     private final Databases databases = new Databases();
     private final SharedPref sharedPref = new SharedPref();
     private final AttrFactory attrFactory = new AttrFactory();
     private Activity bottomActivity;
-    private String curActivityName;
     // let dispatcher doesn't looks like an activity
     private boolean preventFree;
 
@@ -91,14 +110,14 @@ public class Pandora {
     }
 
     public void open() {
-        if (Utils.checkPermission() && !entranceView.isOpen()) {
-            entranceView.open();
+        if (Utils.checkPermission()) {
+            EntranceView.open();
         }
     }
 
     public void close() {
-        if (Utils.checkPermission() && entranceView.isOpen()) {
-            entranceView.close();
+        if (Utils.checkPermission()) {
+            EntranceView.close();
         }
     }
 
@@ -110,10 +129,10 @@ public class Pandora {
             super.onActivityStarted(activity);
             count++;
             if (count == 1) {
-                INSTANCE.entranceView.show();
+                showOverlays();
             }
             if (activity instanceof Dispatcher) {
-                INSTANCE.entranceView.hide();
+                EntranceView.hide();
             }
         }
 
@@ -123,6 +142,7 @@ public class Pandora {
             if (!(activity instanceof Dispatcher)) {
                 INSTANCE.bottomActivity = activity;
             }
+            CurInfoView.updateText(activity.getClass().getName());
         }
 
         @Override
@@ -133,6 +153,7 @@ public class Pandora {
                     INSTANCE.bottomActivity = null;
                 }
             }
+            CurInfoView.updateText(null);
         }
 
         @Override
@@ -140,10 +161,10 @@ public class Pandora {
             super.onActivityStopped(activity);
             count--;
             if (count <= 0) {
-                INSTANCE.entranceView.hide();
+                hideOverlays();
             } else {
                 if (activity instanceof Dispatcher) {
-                    INSTANCE.entranceView.show();
+                    EntranceView.show();
                 }
             }
         }
@@ -167,9 +188,7 @@ public class Pandora {
                             event.values[0],
                             event.values[1],
                             event.values[2])) {
-                        if (!INSTANCE.entranceView.isOpen()) {
-                            INSTANCE.open();
-                        }
+                        EntranceView.open();
                     }
                 }
             }
@@ -182,4 +201,15 @@ public class Pandora {
     };
 
 
+    private void showOverlays() {
+        EntranceView.show();
+        CurInfoView.show();
+        GridLineView.show();
+    }
+
+    private void hideOverlays() {
+        EntranceView.hide();
+        CurInfoView.hide();
+        GridLineView.hide();
+    }
 }

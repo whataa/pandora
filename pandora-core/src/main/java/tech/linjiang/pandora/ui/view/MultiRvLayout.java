@@ -1,4 +1,4 @@
-package tech.linjiang.pandora.inspector;
+package tech.linjiang.pandora.ui.view;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

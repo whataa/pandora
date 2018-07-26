@@ -1,6 +1,7 @@
 package tech.linjiang.pandora.util;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Application;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -16,8 +17,11 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -25,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import tech.linjiang.pandora.core.R;
 
@@ -145,6 +150,13 @@ public class Utils {
         }
     }
 
+    public static void removeViewFromWindow(View v) {
+        try {
+            WindowManager windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
+            windowManager.removeView(v);
+        } catch (Throwable ignore){}
+    }
+
     public static boolean checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(CONTEXT)) {
@@ -194,5 +206,30 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    @SuppressLint("PrivateApi")
+    public static String getTopActivityName() {
+        try {
+            Class activityThreadClass = Class.forName("android.app.ActivityThread");
+            Method currentActivityThreadMethod = activityThreadClass.getMethod("currentActivityThread");
+            Object currentActivityThread = currentActivityThreadMethod.invoke(null);
+            Field mActivitiesField = activityThreadClass.getDeclaredField("mActivities");
+            mActivitiesField.setAccessible(true);
+            Map activities = (Map) mActivitiesField.get(currentActivityThread);
+            for (Object record : activities.values()) {
+                Class recordClass = record.getClass();
+                Field pausedField = recordClass.getDeclaredField("paused");
+                pausedField.setAccessible(true);
+                if (!(boolean) pausedField.get(record)) {
+                    Field activityField = recordClass.getDeclaredField("activity");
+                    activityField.setAccessible(true);
+                    return ((Activity) activityField.get(record)).getClass().getName();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

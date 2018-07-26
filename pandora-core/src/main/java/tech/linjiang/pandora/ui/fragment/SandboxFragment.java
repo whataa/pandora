@@ -81,7 +81,7 @@ public class SandboxFragment extends BaseListFragment {
                     data.add(new FileItem(descriptors.get(i)));
                 }
 
-                if (Config.getSANBOX_DPM() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (Config.getSANDBOX_DPM() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     data.add(new TitleItem("Device-protect-mode Files"));
                     List<File> dpm = Sandbox.getDPMFiles();
                     for (int i = 0; i < dpm.size(); i++) {

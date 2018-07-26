@@ -14,11 +14,11 @@
         android:paddingTop="6dp">
 
         <TextView
-            android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/entrance_config"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/pd_config"
+            android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
@@ -52,6 +52,20 @@
             android:paddingRight="8dp"
             android:scaleType="centerInside"
             android:text="gridline"
+            android:textColor="#000"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/ui_window"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/pd_windows"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:scaleType="centerInside"
+            android:text="activity"
             android:textColor="#000"
             android:textSize="10dp" />
 
