@@ -80,7 +80,9 @@ public class NetContentFragment extends BaseListFragment {
     }
 
     private void setSearchView() {
-        getToolbar().inflateMenu(R.menu.pd_menu_content);
+        getToolbar().getMenu().findItem(R.id.menu_copy).setVisible(true);
+        getToolbar().getMenu().findItem(R.id.menu_search).setVisible(true);
+        getToolbar().getMenu().findItem(R.id.menu_share).setVisible(true);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

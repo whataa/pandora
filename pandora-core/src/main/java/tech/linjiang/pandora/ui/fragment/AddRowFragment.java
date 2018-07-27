@@ -50,7 +50,7 @@ public class AddRowFragment extends BaseListFragment {
         super.onViewCreated(view, savedInstanceState);
         getToolbar().setTitle("Add Row");
 
-        getToolbar().inflateMenu(R.menu.pd_menu_edit);
+        getToolbar().getMenu().findItem(R.id.menu_save).setVisible(true);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

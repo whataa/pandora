@@ -202,6 +202,7 @@ abstract class BaseFragment extends Fragment
             return view;
         }
         toolbar = new Toolbar(new ContextThemeWrapper(getContext(), R.style.ToolbarTheme));
+        toolbar.inflateMenu(R.menu.pd_menu_common);
         toolbar.setId(R.id.pd_toolbar_id);
         toolbar.setTitle(getArguments().getString(PARAM_TITLE, ViewKnife.getString(R.string.pd_lib_name)));
         toolbar.setBackgroundColor(ViewKnife.getColor(R.color.pd_toolbar_bg));

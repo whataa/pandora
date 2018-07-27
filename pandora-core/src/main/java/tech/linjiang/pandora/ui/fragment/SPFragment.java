@@ -68,7 +68,9 @@ public class SPFragment extends BaseListFragment {
             if (getAdapter().getItems().get(info.position) instanceof KeyValueItem) {
                 if (!((KeyValueItem) getAdapter().getItems().get(info.position)).isTitle) {
                     MenuInflater inflater = getActivity().getMenuInflater();
-                    inflater.inflate(R.menu.pd_menu_shared_preference, menu);
+                    inflater.inflate(R.menu.pd_menu_common, menu);
+                    menu.findItem(R.id.menu_copy_value).setVisible(true);
+                    menu.findItem(R.id.menu_delete_key).setVisible(true);
                 }
             }
         }
@@ -87,12 +89,12 @@ public class SPFragment extends BaseListFragment {
                     return true;
                 }
 
-                if (item.getItemId() == R.id.menu_copy) {
+                if (item.getItemId() == R.id.menu_copy_value) {
                     Utils.copy2ClipBoard(
                             "KEY :: " + keyValueItem.data[0] + "\nVALUE  :: " + keyValueItem.data[1]
                     );
                     return true;
-                } else if (item.getItemId() == R.id.menu_delete) {
+                } else if (item.getItemId() == R.id.menu_delete_key) {
                     String clickedKey = keyValueItem.data[0];
                     Pandora.get().getSharedPref().removeSharedPrefKey(descriptor, clickedKey);
                     getAdapter().removeItem(info.position);

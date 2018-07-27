@@ -32,7 +32,7 @@ public class ConfigFragment extends BaseListFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getToolbar().setTitle("Setting");
-        getToolbar().inflateMenu(R.menu.pd_menu_config);
+        getToolbar().getMenu().findItem(R.id.menu_reset).setVisible(true);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

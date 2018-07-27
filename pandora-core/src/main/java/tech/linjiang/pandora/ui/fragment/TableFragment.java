@@ -134,7 +134,9 @@ public class TableFragment extends BaseFragment {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.pd_menu_context_table, menu);
+        inflater.inflate(R.menu.pd_menu_common, menu);
+        menu.findItem(R.id.menu_copy_value).setVisible(true);
+        menu.findItem(R.id.menu_delete_row).setVisible(true);
     }
 
     @Override
@@ -142,10 +144,10 @@ public class TableFragment extends BaseFragment {
         MenuRecyclerView.RvContextMenuInfo info = (MenuRecyclerView.RvContextMenuInfo) item.getMenuInfo();
         BaseItem gridItem = adapter.getItems().get(info.position);
         if (gridItem instanceof GridItem) {
-            if (item.getItemId() == R.id.menu_copy) {
+            if (item.getItemId() == R.id.menu_copy_value) {
                 Utils.copy2ClipBoard((String) gridItem.data);
                 return true;
-            } else if (item.getItemId() == R.id.menu_delete) {
+            } else if (item.getItemId() == R.id.menu_delete_row) {
                 String pkValue = ((GridItem) gridItem).primaryKeyValue;
                 delete(pkValue);
                 return true;
@@ -155,7 +157,11 @@ public class TableFragment extends BaseFragment {
     }
 
     private void initMenu() {
-        getToolbar().inflateMenu(R.menu.pd_menu_table);
+        getToolbar().getMenu().findItem(R.id.menu_search).setVisible(true);
+        getToolbar().getMenu().findItem(R.id.menu_info).setVisible(true);
+        getToolbar().getMenu().findItem(R.id.menu_add).setVisible(true);
+        getToolbar().getMenu().findItem(R.id.menu_delete_all).setVisible(true);
+
         MenuItem menuItem = getToolbar().getMenu().findItem(R.id.menu_search);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint(ViewKnife.getString(R.string.pd_search_hint));

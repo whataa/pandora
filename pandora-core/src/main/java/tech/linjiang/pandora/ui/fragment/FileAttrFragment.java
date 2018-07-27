@@ -40,7 +40,10 @@ public class FileAttrFragment extends BaseListFragment {
         }
         getRecyclerView().removeItemDecoration(getRecyclerView().getItemDecorationAt(0));
         getToolbar().setTitle(file.getName());
-        getToolbar().inflateMenu(R.menu.pd_menu_file);
+        getToolbar().getMenu().findItem(R.id.menu_open).setVisible(true);
+        getToolbar().getMenu().findItem(R.id.menu_open_txt).setVisible(true);
+        getToolbar().getMenu().findItem(R.id.menu_rename).setVisible(true);
+        getToolbar().getMenu().findItem(R.id.menu_delete).setVisible(true);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
