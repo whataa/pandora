@@ -28,6 +28,7 @@ public class Config {
     private static final String KEY_NETWORK_PAGE_SIZE       = "key_network_page_size";
     private static final String KEY_UI_ACTIVITY_GRAVITY     = "key_ui_activity_gravity";
     private static final String KEY_UI_GRID_INTERVAL        = "key_ui_grid_interval";
+    private static final String KEY_UI_IGNORE_SYS_LAYER     = "key_ui_ignore_sys_layer";
 
     private static final boolean DEF_KEY_SHAKE_SWITCH = true;
     private static final int DEF_KEY_SHAKE_THRESHOLD = 1500;
@@ -40,6 +41,8 @@ public class Config {
     private static final int DEF_KEY_NETWORK_PAGE_SIZE = 512;
     private static final int DEF_UI_ACTIVITY_GRAVITY = Gravity.START | Gravity.BOTTOM;
     private static final int DEF_UI_GRID_INTERVAL = 5;
+    private static final boolean DEF_UI_IGNORE_SYS_LAYER = false;
+
 
     public static void setNetLogEnable(boolean enable) {
         getSp().edit()
@@ -58,7 +61,7 @@ public class Config {
 
     // =============================================================================================
     public static void reset() {
-        getSp().edit().clear().commit();
+        getSp().edit().clear().apply();
     }
 
     public static boolean getSHAKE_SWITCH() {
@@ -180,6 +183,16 @@ public class Config {
                 .apply();
     }
 
+    //
+
+    public static boolean getUI_IGNORE_SYS_LAYER() {
+        return getSp().getBoolean(KEY_UI_IGNORE_SYS_LAYER, DEF_UI_IGNORE_SYS_LAYER);
+    }
+    public static void setUI_IGNORE_SYS_LAYER(Boolean value) {
+        getSp().edit()
+                .putBoolean(KEY_UI_IGNORE_SYS_LAYER, value)
+                .apply();
+    }
 
 
 
@@ -195,6 +208,7 @@ public class Config {
             Type.SANDBOX_DPM,
             Type.UI_ACTIVITY_GRAVITY,
             Type.UI_GRID_INTERVAL,
+            Type.UI_IGNORE_SYS_LAYER,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {
@@ -213,6 +227,7 @@ public class Config {
 
         int UI_ACTIVITY_GRAVITY = 0x40;
         int UI_GRID_INTERVAL = 0x41;
+        int UI_IGNORE_SYS_LAYER = 0x42;
 
     }
 }

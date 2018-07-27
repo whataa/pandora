@@ -194,6 +194,7 @@
     </LinearLayout>
 
     <FrameLayout
+        android:foreground="?android:attr/selectableItemBackground"
         android:id="@+id/view_panel_hierarchy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

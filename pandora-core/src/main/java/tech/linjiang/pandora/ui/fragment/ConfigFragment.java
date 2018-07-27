@@ -84,6 +84,9 @@ public class ConfigFragment extends BaseListFragment {
                         case Config.Type.SHAKE_SWITCH:
                             Config.setSHAKE_SWITCH(!Config.getSHAKE_SWITCH());
                             break;
+                        case Config.Type.UI_IGNORE_SYS_LAYER:
+                            Config.setUI_IGNORE_SYS_LAYER(!Config.getUI_IGNORE_SYS_LAYER());
+                            break;
                     }
                 }
             }
@@ -105,6 +108,7 @@ public class ConfigFragment extends BaseListFragment {
         data.add(new TitleItem("UI"));
         data.add(new NameArrowItem("the gravity of activity info", "" + ViewKnife.parseGravity(Config.getUI_ACTIVITY_GRAVITY())).setTag(Config.Type.UI_ACTIVITY_GRAVITY));
         data.add(new NameArrowItem("the interval of grid line(dp)", "" + Config.getUI_GRID_INTERVAL()).setTag(Config.Type.UI_GRID_INTERVAL));
+        data.add(new CheckBoxItem("ignore system layers in hierarchy", Config.getUI_IGNORE_SYS_LAYER()).setTag(Config.Type.UI_IGNORE_SYS_LAYER));
 
         data.add(new TitleItem("SHAKE"));
         data.add(new CheckBoxItem("turn on", Config.getSHAKE_SWITCH()).setTag(Config.Type.SHAKE_SWITCH));

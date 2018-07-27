@@ -12,6 +12,7 @@
 
 
     <LinearLayout
+        android:id="@+id/item_hierarchy_content_wrapper"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -46,6 +47,7 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/view_name_more"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:paddingLeft="12dp"

@@ -107,6 +107,7 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
         view.findViewById(R.id.view_panel_hierarchy).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                targetView.setTag(R.id.pd_view_tag_for_unique, new Object());
                 launch(HierarchyFragment.class, null);
             }
         });

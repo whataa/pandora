@@ -61,6 +61,12 @@ public class UniversalAdapter
         notifyDataSetChanged();
     }
 
+    public void performClick(int position) {
+        if (listener != null) {
+            listener.onItemClick(position, data.get(position));
+        }
+    }
+
     public void setListener(OnItemClickListener listener) {
         this.listener = listener;
     }

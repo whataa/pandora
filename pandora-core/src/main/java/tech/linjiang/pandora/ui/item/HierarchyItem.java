@@ -17,17 +17,24 @@ import tech.linjiang.pandora.util.ViewKnife;
  * Created by linjiang on 2018/7/26.
  */
 
-public class HierarchyItem extends BaseItem<View> {
+public class HierarchyItem extends BaseItem<View> implements View.OnClickListener {
 
+    public static HierarchyItem createRoot(View data, View.OnClickListener childClickListener) {
+        HierarchyItem hierarchyItem = new HierarchyItem(data, 0);
+        hierarchyItem.childClickListener = childClickListener;
+        return hierarchyItem;
+    }
 
-    public HierarchyItem(View data, int layerCount) {
+    HierarchyItem(View data, int layerCount) {
         super(data);
         this.layerCount = layerCount;
     }
 
+    public boolean isTarget;
     public boolean isExpand;
     public int layerCount;
-
+    public int sysLayerCount;
+    private View.OnClickListener childClickListener;
 
     public boolean isGroup() {
         return data instanceof ViewGroup;
@@ -43,7 +50,10 @@ public class HierarchyItem extends BaseItem<View> {
         List<HierarchyItem> result = new ArrayList<>();
         int newLayerCount = layerCount + 1;
         for (int i = 0; i < group.getChildCount(); i++) {
-            result.add(new HierarchyItem(group.getChildAt(i), newLayerCount));
+            HierarchyItem item = new HierarchyItem(group.getChildAt(i), newLayerCount);
+            item.sysLayerCount = sysLayerCount;
+            item.childClickListener = childClickListener;
+            result.add(item);
         }
         return result;
     }
@@ -67,11 +77,14 @@ public class HierarchyItem extends BaseItem<View> {
     @Override
     public void onBinding(int position, UniversalAdapter.ViewPool pool, View data) {
         itemView = pool.itemView;
-        pool.setText(R.id.view_name_title, viewToTitleString(data)).setTextColor(R.id.view_name_title, isVisible() ? 0xff000000 : 0xff959595)
-                .setText(R.id.view_name_subtitle, viewToSummaryString(data)).setTextColor(R.id.view_name_subtitle, isVisible() ? 0xff000000 : 0xff959595);
+        int color = isVisible() ? isTarget ? ViewKnife.getColor(R.color.pd_blue) : 0xff000000 : 0xff959595;
+        pool.setText(R.id.view_name_title, viewToTitleString(data))
+                .setTextColor(R.id.view_name_title, color)
+                .setText(R.id.view_name_subtitle, viewToSummaryString(data))
+                .setTextColor(R.id.view_name_subtitle, color);
 
         TreeNodeLayout layout = pool.getView(R.id.view_name_wrapper);
-        layout.setLayerCount(layerCount, 5);
+        layout.setLayerCount(layerCount, sysLayerCount);
         if (isGroup() && getChildCount() > 0) {
             ((TextView) pool.getView(R.id.view_name_title)).setCompoundDrawablesWithIntrinsicBounds(
                     ViewKnife.getDrawable(isExpand ? R.drawable.pd_expand : R.drawable.pd_collapse), null, null, null);
@@ -79,6 +92,8 @@ public class HierarchyItem extends BaseItem<View> {
             ((TextView) pool.getView(R.id.view_name_title)).setCompoundDrawablesWithIntrinsicBounds(
                     null, null, null, null);
         }
+        pool.getView(R.id.view_name_more).setOnClickListener(this);
+        pool.getView(R.id.view_name_more).setTag(position);
     }
 
     @Override
@@ -106,5 +121,12 @@ public class HierarchyItem extends BaseItem<View> {
                 view.getBottom() +
                 ")} " +
                 ViewKnife.getIdString(view);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (childClickListener != null) {
+            childClickListener.onClick(v);
+        }
     }
 }

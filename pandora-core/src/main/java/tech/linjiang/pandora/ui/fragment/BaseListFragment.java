@@ -2,6 +2,7 @@ package tech.linjiang.pandora.ui.fragment;
 
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import tech.linjiang.pandora.core.R;
@@ -24,7 +25,7 @@ public class BaseListFragment extends BaseFragment {
         adapter = new UniversalAdapter();
         recyclerView = new MenuRecyclerView(getContext());
         recyclerView.setBackgroundColor(ViewKnife.getColor(R.color.pd_main_bg));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(onCreateLayoutManager());
         DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         divider.setDrawable(ViewKnife.getDrawable(R.drawable.pd_divider_horizontal));
         recyclerView.addItemDecoration(divider);
@@ -41,5 +42,9 @@ public class BaseListFragment extends BaseFragment {
 
     public final UniversalAdapter getAdapter() {
         return adapter;
+    }
+
+    protected RecyclerView.LayoutManager onCreateLayoutManager() {
+        return new LinearLayoutManager(getContext());
     }
 }
