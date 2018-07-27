@@ -1,12 +1,11 @@
 package tech.linjiang.pandora.util;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Application;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -17,11 +16,11 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -29,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import tech.linjiang.pandora.core.R;
 
@@ -208,28 +206,23 @@ public class Utils {
         return false;
     }
 
-    @SuppressLint("PrivateApi")
-    public static String getTopActivityName() {
-        try {
-            Class activityThreadClass = Class.forName("android.app.ActivityThread");
-            Method currentActivityThreadMethod = activityThreadClass.getMethod("currentActivityThread");
-            Object currentActivityThread = currentActivityThreadMethod.invoke(null);
-            Field mActivitiesField = activityThreadClass.getDeclaredField("mActivities");
-            mActivitiesField.setAccessible(true);
-            Map activities = (Map) mActivitiesField.get(currentActivityThread);
-            for (Object record : activities.values()) {
-                Class recordClass = record.getClass();
-                Field pausedField = recordClass.getDeclaredField("paused");
-                pausedField.setAccessible(true);
-                if (!(boolean) pausedField.get(record)) {
-                    Field activityField = recordClass.getDeclaredField("activity");
-                    activityField.setAccessible(true);
-                    return ((Activity) activityField.get(record)).getClass().getName();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    private static int widthCache;
+    public static int getScreenWidth() {
+        if (widthCache > 0) {
+            return widthCache;
         }
-        return null;
+        Display display = ((WindowManager) Utils.getContext()
+                .getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        try {
+            Class<?> cls = Display.class;
+            Class<?>[] parameterTypes = {Point.class};
+            Point parameter = new Point();
+            Method method = cls.getMethod("getSize", parameterTypes);
+            method.invoke(display, parameter);
+            widthCache = parameter.x;
+        } catch (Exception e) {
+            widthCache = display.getWidth();
+        }
+        return widthCache;
     }
 }

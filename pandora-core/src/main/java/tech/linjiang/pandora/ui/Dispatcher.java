@@ -123,7 +123,7 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
     @Override
     protected void onStop() {
         super.onStop();
-        if (type != Type.NET && type != Type.FILE && type != Type.CONFIG) {
+        if (type != Type.NET && type != Type.FILE && type != Type.CONFIG && type != Type.HIERARCHY) {
             finish();
         }
     }

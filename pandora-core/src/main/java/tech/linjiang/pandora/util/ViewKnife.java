@@ -27,7 +27,7 @@ import java.util.Locale;
 
 public class ViewKnife {
 
-    private static Resources getResouces() {
+    public static Resources getResouces() {
         return Utils.getContext().getResources();
     }
 

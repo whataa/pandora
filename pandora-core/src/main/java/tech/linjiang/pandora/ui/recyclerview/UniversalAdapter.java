@@ -32,10 +32,6 @@ public class UniversalAdapter
         data.addAll(items);
         notifyDataSetChanged();
     }
-    public void addItems(List<? extends BaseItem> items) {
-        data.addAll(items);
-        notifyDataSetChanged();
-    }
 
     public void insertItems(List<? extends BaseItem> items, int index) {
         data.addAll(index, items);
@@ -54,6 +50,10 @@ public class UniversalAdapter
 
     public List<BaseItem> getItems() {
         return data;
+    }
+
+    public <T extends BaseItem> T getItem(int position) {
+        return (T) data.get(position);
     }
 
     public void clearItems() {
