@@ -28,10 +28,6 @@ import tech.linjiang.pandora.util.ViewKnife;
 
 public class ViewFragment extends BaseFragment implements View.OnClickListener {
 
-    public static BaseFragment newInstance() {
-        ViewFragment fragment = new ViewFragment();
-        return fragment;
-    }
 
     @Override
     protected boolean enableToolbar() {
@@ -96,6 +92,9 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            return;
+        }
         view.findViewById(R.id.view_panel_wrapper).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

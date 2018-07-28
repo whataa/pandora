@@ -5,7 +5,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -16,7 +15,6 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -206,23 +204,4 @@ public class Utils {
         return false;
     }
 
-    private static int widthCache;
-    public static int getScreenWidth() {
-        if (widthCache > 0) {
-            return widthCache;
-        }
-        Display display = ((WindowManager) Utils.getContext()
-                .getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        try {
-            Class<?> cls = Display.class;
-            Class<?>[] parameterTypes = {Point.class};
-            Point parameter = new Point();
-            Method method = cls.getMethod("getSize", parameterTypes);
-            method.invoke(display, parameter);
-            widthCache = parameter.x;
-        } catch (Exception e) {
-            widthCache = display.getWidth();
-        }
-        return widthCache;
-    }
 }

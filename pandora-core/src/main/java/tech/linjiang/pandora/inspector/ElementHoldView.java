@@ -147,7 +147,9 @@ public class ElementHoldView extends HintView {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            traverse(targetActivity.getWindow().peekDecorView());
+            try {
+                traverse(targetActivity.getWindow().peekDecorView());
+            } catch (Exception ignore){}
         }
     }
 

@@ -152,6 +152,7 @@
 
 
                         <ImageView
+                            android:id="@+id/i_am_the_longest_id_in_the_hierarchy_of_main_activity"
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             android:scaleType="centerCrop"
@@ -374,11 +375,9 @@
                     android:layout_height="wrap_content">
 
 
-                    <ImageView
+                    <tech.linjiang.android.pandora.ItIsAFactThatIAmTheLongestNameInAllViewsIsThatRight_JUST_FOR_TEST_HIERARCHY
                         android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
+                        android:layout_height="80dp" />
                 </FrameLayout>
             </FrameLayout>
         </FrameLayout>

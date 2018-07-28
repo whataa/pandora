@@ -54,7 +54,7 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
     }
 
     private void dispatch(Bundle savedInstanceState) {
-        View view = null;
+        View view;
         switch (type) {
             case Type.BASELINE:
                 view = new BaseLineView(this);
@@ -68,6 +68,8 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
                     getSupportFragmentManager().beginTransaction()
                             .add(R.id.pd_fragment_container_id, new ViewFragment())
                             .commit();
+                } else {
+                    finish();
                 }
                 break;
             case Type.NET:
@@ -108,6 +110,8 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
                     getSupportFragmentManager().beginTransaction()
                             .add(R.id.pd_fragment_container_id, new HierarchyFragment())
                             .commit();
+                } else {
+                    finish();
                 }
                 break;
         }
@@ -119,15 +123,6 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
         super.finish();
         overridePendingTransition(0, 0);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (type != Type.NET && type != Type.FILE && type != Type.CONFIG && type != Type.HIERARCHY) {
-            finish();
-        }
-    }
-
 
     private View hintView;
 

@@ -40,19 +40,20 @@ public class HierarchyFragment extends BaseListFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Pandora.get().getViewRoot() != null) {
-            if (!Config.getUI_IGNORE_SYS_LAYER()) {
-                rootView = Pandora.get().getViewRoot();
-                sysLayerCount = countSysLayers();
-            } else {
-                rootView = Pandora.get().getViewRoot().findViewById(android.R.id.content);
-                sysLayerCount = 0;
-            }
-            targetView = findViewByDefaultTag();
-            if (targetView != null) {
-                // clear flag
-                targetView.setTag(R.id.pd_view_tag_for_unique, null);
-            }
+        if (savedInstanceState != null) {
+            return;
+        }
+        if (!Config.getUI_IGNORE_SYS_LAYER()) {
+            rootView = Pandora.get().getViewRoot();
+            sysLayerCount = countSysLayers();
+        } else {
+            rootView = Pandora.get().getViewRoot().findViewById(android.R.id.content);
+            sysLayerCount = 0;
+        }
+        targetView = findViewByDefaultTag();
+        if (targetView != null) {
+            // clear flag
+            targetView.setTag(R.id.pd_view_tag_for_unique, null);
         }
     }
 
@@ -90,6 +91,9 @@ public class HierarchyFragment extends BaseListFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            return;
+        }
         getToolbar().setTitle("Hierarchy");
         getToolbar().getMenu().findItem(R.id.menu_switch).setVisible(true);
         SwitchCompat switchCompat = ((SwitchCompat) getToolbar()
