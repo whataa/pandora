@@ -35,12 +35,6 @@ public class MainActivity extends AppCompatActivity {
                 Pandora.get().open();
             }
         });
-        findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Pandora.get().close();
-            }
-        });
         findViewById(R.id.another_activity).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

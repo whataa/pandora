@@ -1,8 +1,6 @@
 an android library for debugging what we care about directly in app.
 
- [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)  [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/whataa/pandora-no-op/blob/master/LICENSE)
-
-# Pandora
+# Pandora [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14) [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)  [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/whataa/pandora-no-op/blob/master/LICENSE) [![Build Status](https://travis-ci.org/whataa/pandora.svg?branch=master)](https://travis-ci.org/whataa/pandora)
 
 Pandora 是一款无需ROOT、可以直接在 **应用内** 查看和修改包括网络、数据库、UI等的Android工具箱，适合开发和测试阶段的各种问题的快速定位。
 
@@ -45,12 +43,12 @@ allprojects {
 ```
 dependencies {
     ...
-    debugImplementation 'com.github.whataa:pandora:v1.0.1'
-    releaseImplementation 'com.github.whataa:pandora-no-op:v1.0.1'
+    debugImplementation 'com.github.whataa:pandora:${RELEASE}'
+    releaseImplementation 'com.github.whataa:pandora-no-op:${RELEASE}'
 }  
 ```
 
-> 最新库版本说明
+> 最新库版本号，具体更新内容请在 [RELEASE](https://github.com/whataa/pandora/releases) 中查看
 
 library name | release version
 ---|---
@@ -59,29 +57,15 @@ pandora-no-op | [![Release](https://jitpack.io/v/whataa/pandora-no-op.svg)](http
 
 ## 使用
 
-在应用的Application中调用以下代码初始化：
+现在，无需添加任何代码，你可以直接在应用内 **“摇一摇”** 开始使用了。
 
-```
-public class MyApp extends Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Pandora.init(this).enableShakeOpen();
-    }
-}
-```
-`enableShakeOpen()` 是可选的，表示启用 “摇一摇打开” 的功能，开启后，在应用内任何页面摇晃手机都可以打开功能面板开始debug。  
+> Pandora将以悬浮窗的形式展现功能面板，所以需要「悬浮窗」权限，请手动开启。
 
-如果该特性和你的应用有冲突，也可以实现自己的触发方式并调用以下方法来打开功能面板：
+
+默认情况下，Pandora是以“摇一摇”打开的，如果该特性和你的应用有冲突，你可以在面板的设置中关闭它，并实现自己的触发方式然后调用以下方法来打开功能面板：
 
 ```
 Pandora.get().open();
-```
-
-关闭功能面板：
-
-```
-Pandora.get().close();
 ```
 
 如果你的项目中使用了OKHttp作为底层网络库，可以为其添加以下拦截器开启网络调试模块的功能：
@@ -91,8 +75,8 @@ Pandora.get().close();
 ```
 new OkHttpClient.Builder()
     ...
+    .addInterceptor(xxx)
     .addInterceptor(Pandora.get().getInterceptor())
-    ...
     .build()
 ```
 

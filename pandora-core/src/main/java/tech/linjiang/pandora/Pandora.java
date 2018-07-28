@@ -106,12 +106,6 @@ public final class Pandora {
         }
     }
 
-    public void close() {
-        if (Utils.checkPermission()) {
-            EntranceView.close();
-        }
-    }
-
     private final SimpleActivityLifecycleCallbacks callbacks = new SimpleActivityLifecycleCallbacks() {
         private int count;
 

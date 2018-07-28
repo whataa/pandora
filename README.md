@@ -46,12 +46,12 @@ allprojects {
 ```
 dependencies {
     ...
-    debugImplementation 'com.github.whataa:pandora:v1.0.1'
-    releaseImplementation 'com.github.whataa:pandora-no-op:v1.0.1'
+    debugImplementation 'com.github.whataa:pandora:${RELEASE}'
+    releaseImplementation 'com.github.whataa:pandora-no-op:${RELEASE}'
 }  
 ```
 
-> the latest version doc
+> the latest version name, Please check the [RELEASE](https://github.com/whataa/pandora/releases) for specific updates.
 
 library name | release version
 ---|---
@@ -61,30 +61,17 @@ pandora-no-op | [![Release](https://jitpack.io/v/whataa/pandora-no-op.svg)](http
 
 ## Usage
 
-init Pandora in Application：
+Now, without adding any code, you can start using it directly in the app by shaking the device.
 
-```
-public class MyApp extends Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Pandora.init(this).enableShakeOpen();
-    }
-}
-```
-`enableShakeOpen()` is optional，indicates to enable the "Shake On" feature，Once turned on, shaking the phone on any Activity in your app can open the function panel to start debugging. 
+> Pandora will display the function panel in the form of a floating window, so it needs the "floating window" permission, please open it manually.
 
-If this feature conflicts with your application, you can also implement your own trigger method and call the following method to open the function panel：
+
+By default, Pandora is opened with a "shake", if this feature conflicts with your application, you can turn it off in the settings of the panel and then implement your own trigger method invoking the following code to open the function panel：
 
 ```
 Pandora.get().open();
 ```
 
-Close the function panel：
-
-```
-Pandora.get().close();
-```
 
 If your project uses OKHttp as the underlying network library, you can add the following interceptor to enable the function of the network debugging module：
 
@@ -92,8 +79,8 @@ If your project uses OKHttp as the underlying network library, you can add the f
 ```
 new OkHttpClient.Builder()
     ...
+    .addInterceptor(xxx)
     .addInterceptor(Pandora.get().getInterceptor())
-    ...
     .build()
 ```
 

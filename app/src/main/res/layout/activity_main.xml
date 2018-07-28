@@ -19,14 +19,6 @@
             android:background="#590bc461"
             android:text="open" />
 
-        <Button
-            android:id="@+id/close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/open"
-            android:layout_marginBottom="12dp"
-            android:layout_toRightOf="@id/open"
-            android:text="close" />
 
         <Button
             android:id="@+id/toast"
