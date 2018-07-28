@@ -41,8 +41,8 @@ public class ViewAttrFragment extends BaseListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Pandora.get().getViewRoot() != null) {
-            targetView = findViewByDefaultTag(Pandora.get().getViewRoot());
+        if (Pandora.get().getBottomActivity() != null) {
+            targetView = findViewByDefaultTag(Pandora.get().getBottomActivity().getWindow().peekDecorView());
             if (targetView != null) {
                 // clear flag
                 targetView.setTag(R.id.pd_view_tag_for_unique, null);

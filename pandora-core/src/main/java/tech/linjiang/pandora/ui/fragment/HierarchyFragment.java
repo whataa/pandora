@@ -44,10 +44,10 @@ public class HierarchyFragment extends BaseListFragment
             return;
         }
         if (!Config.getUI_IGNORE_SYS_LAYER()) {
-            rootView = Pandora.get().getViewRoot();
+            rootView = Pandora.get().getBottomActivity().getWindow().peekDecorView();
             sysLayerCount = countSysLayers();
         } else {
-            rootView = Pandora.get().getViewRoot().findViewById(android.R.id.content);
+            rootView = Pandora.get().getBottomActivity().getWindow().peekDecorView().findViewById(android.R.id.content);
             sysLayerCount = 0;
         }
         targetView = findViewByDefaultTag();

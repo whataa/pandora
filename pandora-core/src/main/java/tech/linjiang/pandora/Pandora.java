@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.view.View;
 
 import tech.linjiang.pandora.database.Databases;
 import tech.linjiang.pandora.inspector.CurInfoView;
@@ -97,14 +96,6 @@ public final class Pandora {
     }
 
     // hide
-    public View getViewRoot() {
-        if (bottomActivity != null) {
-            return bottomActivity.getWindow().peekDecorView();
-        }
-        return null;
-    }
-
-    // hide
     public Activity getBottomActivity() {
         return bottomActivity;
     }
@@ -121,7 +112,7 @@ public final class Pandora {
         }
     }
 
-    private SimpleActivityLifecycleCallbacks callbacks = new SimpleActivityLifecycleCallbacks() {
+    private final SimpleActivityLifecycleCallbacks callbacks = new SimpleActivityLifecycleCallbacks() {
         private int count;
 
         @Override
@@ -178,7 +169,7 @@ public final class Pandora {
         }
     };
 
-    private SensorEventListener sensorEventListener = new SensorEventListener() {
+    private final SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
             if (Config.getSHAKE_SWITCH()) {
