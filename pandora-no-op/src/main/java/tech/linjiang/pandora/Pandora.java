@@ -24,9 +24,20 @@ public class Pandora {
     private Pandora() {
     }
 
-
     public OkHttpInterceptor getInterceptor() {
         return new OkHttpInterceptor();
+    }
+
+    public Pandora enableNetwork(boolean use) {
+        return this;
+    }
+
+    public Pandora enableSandbox(boolean use) {
+        return this;
+    }
+
+    public Pandora enableUiInspect(boolean use) {
+        return this;
     }
 
     public Databases getDatabases() {
@@ -38,6 +49,10 @@ public class Pandora {
     }
 
     public Pandora enableShakeOpen() {
+        return this;
+    }
+
+    public Pandora enableShakeOpen(int threshold) {
         return this;
     }
 

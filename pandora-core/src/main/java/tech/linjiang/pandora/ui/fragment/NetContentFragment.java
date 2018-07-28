@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,8 +135,12 @@ public class NetContentFragment extends BaseListFragment {
             @Override
             public void onPostExecute(String result) {
                 hideLoading();
-                originContent = result;
-                tryFormatJson(result);
+                try {
+                    originContent = URLDecoder.decode(result, "utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    originContent = result;
+                }
+                tryFormatJson(originContent);
             }
         }).execute();
     }
@@ -174,7 +180,7 @@ public class NetContentFragment extends BaseListFragment {
             if (Utils.isNotEmpty(getAdapter().getItems())) {
                 int targetPos = -1;
                 for (int i = 0; i < getAdapter().getItems().size(); i++) {
-                    BaseItem item  = getAdapter().getItems().get(i);
+                    BaseItem item = getAdapter().getItems().get(i);
                     if (item instanceof ContentItem) {
                         ((ContentItem) item).setFocus(false);
                         if (!TextUtils.isEmpty(filter)) {
