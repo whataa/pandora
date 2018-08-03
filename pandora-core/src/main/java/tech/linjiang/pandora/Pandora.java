@@ -173,7 +173,7 @@ public final class Pandora {
                             event.values[0],
                             event.values[1],
                             event.values[2])) {
-                        EntranceView.open();
+                        open();
                     }
                 }
             }

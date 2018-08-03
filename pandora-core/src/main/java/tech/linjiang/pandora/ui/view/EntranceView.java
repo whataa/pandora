@@ -122,7 +122,8 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
             params.y = 0;
             instance.getWindowManager().addView(instance, params);
             instance.isOpen = true;
-        } catch (Throwable ignore) {
+        } catch (Throwable t) {
+            t.printStackTrace();
         }
     }
 
@@ -133,7 +134,8 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
         try {
             instance.getWindowManager().removeView(instance);
             instance.isOpen = false;
-        } catch (Throwable ignore) {
+        } catch (Throwable t) {
+            t.printStackTrace();
         }
     }
 

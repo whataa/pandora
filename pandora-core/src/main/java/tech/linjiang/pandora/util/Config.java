@@ -31,7 +31,7 @@ public class Config {
     private static final String KEY_UI_IGNORE_SYS_LAYER     = "key_ui_ignore_sys_layer";
 
     private static final boolean DEF_KEY_SHAKE_SWITCH = true;
-    private static final int DEF_KEY_SHAKE_THRESHOLD = 1500;
+    private static final int DEF_KEY_SHAKE_THRESHOLD = 1000;
     private static final boolean DEF_KEY_COMMON_NETWORK_SWITCH = true;
     private static final boolean DEF_KEY_COMMON_SANDBOX_SWITCH = true;
     private static final boolean DEF_KEY_COMMON_UI_SWITCH = true;
