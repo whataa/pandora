@@ -76,9 +76,9 @@ abstract class BaseFragment extends Fragment
         if (context instanceof UIStateCallback) {
             uiState = (UIStateCallback) context;
         }
-        if (getArguments() == null) {
-            setArguments(new Bundle());
-        }
+        // BUG FIX
+        // setArguments is not allowed when fragment is active,
+        // it is related to the difference between the version of the fragment.
     }
 
     @Override
