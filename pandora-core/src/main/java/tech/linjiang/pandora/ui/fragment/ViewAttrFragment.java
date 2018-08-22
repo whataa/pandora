@@ -197,12 +197,12 @@ public class ViewAttrFragment extends BaseListFragment {
                                 targetView.getPaddingLeft(),
                                 targetView.getPaddingTop(),
                                 targetView.getPaddingRight(),
-                                pdBottom);
+                                ViewKnife.dip2px(pdBottom));
                         break;
                     case Attribute.Edit.PADDING_LEFT:
                         int pdLeft = Integer.valueOf(value);
                         targetView.setPadding(
-                                pdLeft,
+                                ViewKnife.dip2px(pdLeft),
                                 targetView.getPaddingTop(),
                                 targetView.getPaddingRight(),
                                 targetView.getPaddingBottom());
@@ -212,14 +212,14 @@ public class ViewAttrFragment extends BaseListFragment {
                         targetView.setPadding(
                                 targetView.getPaddingLeft(),
                                 targetView.getPaddingTop(),
-                                pdRight,
+                                ViewKnife.dip2px(pdRight),
                                 targetView.getPaddingBottom());
                         break;
                     case Attribute.Edit.PADDING_TOP:
                         int pdTop = Integer.valueOf(value);
                         targetView.setPadding(
                                 targetView.getPaddingLeft(),
-                                pdTop,
+                                ViewKnife.dip2px(pdTop),
                                 targetView.getPaddingRight(),
                                 targetView.getPaddingBottom());
                         break;
