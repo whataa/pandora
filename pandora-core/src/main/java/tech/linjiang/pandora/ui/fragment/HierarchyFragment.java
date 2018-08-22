@@ -36,6 +36,10 @@ public class HierarchyFragment extends BaseListFragment
     private int sysLayerCount;
     private View rootView;
 
+    @Override
+    protected boolean needDefaultDivider() {
+        return false;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +106,6 @@ public class HierarchyFragment extends BaseListFragment
         switchCompat.setOnCheckedChangeListener(this);
 
         getRecyclerView().setBackgroundColor(Color.WHITE);
-        getRecyclerView().removeItemDecoration(getRecyclerView().getItemDecorationAt(0));
         getAdapter().setListener(new UniversalAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, BaseItem item) {

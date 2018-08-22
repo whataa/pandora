@@ -38,6 +38,10 @@ abstract class BaseFragment extends Fragment
     protected static final String PARAM4 = "param4";
     protected static final String PARAM_TITLE = "param_title";
 
+    public BaseFragment() {
+        setArguments(new Bundle());
+    }
+
     protected final void launch(Class<? extends BaseFragment> target, Bundle extra) {
         launch(target, null, extra);
     }
@@ -78,7 +82,7 @@ abstract class BaseFragment extends Fragment
         }
         // BUG FIX
         // setArguments is not allowed when fragment is active,
-        // it is related to the difference between the version of the fragment.
+        // it is related to the diff in the version of the fragment.
     }
 
     @Override

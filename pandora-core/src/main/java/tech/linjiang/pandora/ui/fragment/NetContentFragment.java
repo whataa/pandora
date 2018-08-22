@@ -58,10 +58,14 @@ public class NetContentFragment extends BaseListFragment {
     }
 
     @Override
+    protected boolean needDefaultDivider() {
+        return false;
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getToolbar().setTitle("Content");
-        getRecyclerView().removeItemDecoration(getRecyclerView().getItemDecorationAt(0));
         setSearchView();
         getAdapter().setListener(new UniversalAdapter.OnItemClickListener() {
             @Override

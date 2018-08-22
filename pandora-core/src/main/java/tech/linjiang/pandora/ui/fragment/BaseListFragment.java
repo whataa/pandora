@@ -26,11 +26,17 @@ public class BaseListFragment extends BaseFragment {
         recyclerView = new MenuRecyclerView(getContext());
         recyclerView.setBackgroundColor(ViewKnife.getColor(R.color.pd_main_bg));
         recyclerView.setLayoutManager(onCreateLayoutManager());
-        DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        divider.setDrawable(ViewKnife.getDrawable(R.drawable.pd_divider_horizontal));
-        recyclerView.addItemDecoration(divider);
+        if (needDefaultDivider()) {
+            DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+            divider.setDrawable(ViewKnife.getDrawable(R.drawable.pd_divider_horizontal));
+            recyclerView.addItemDecoration(divider);
+        }
         recyclerView.setAdapter(adapter);
         return recyclerView;
+    }
+
+    protected boolean needDefaultDivider() {
+        return true;
     }
 
     private MenuRecyclerView recyclerView;

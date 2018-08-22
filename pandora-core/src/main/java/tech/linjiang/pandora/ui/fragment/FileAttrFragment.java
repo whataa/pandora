@@ -31,6 +31,11 @@ public class FileAttrFragment extends BaseListFragment {
     private File file;
 
     @Override
+    protected boolean needDefaultDivider() {
+        return false;
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         file = (File) getArguments().getSerializable(PARAM1);
@@ -38,7 +43,6 @@ public class FileAttrFragment extends BaseListFragment {
             showError(null);
             return;
         }
-        getRecyclerView().removeItemDecoration(getRecyclerView().getItemDecorationAt(0));
         getToolbar().setTitle(file.getName());
         getToolbar().getMenu().findItem(R.id.menu_open).setVisible(true);
         getToolbar().getMenu().findItem(R.id.menu_open_txt).setVisible(true);
