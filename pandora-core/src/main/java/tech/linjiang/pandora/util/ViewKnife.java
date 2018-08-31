@@ -1,5 +1,8 @@
 package tech.linjiang.pandora.util;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -12,12 +15,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -187,5 +194,73 @@ public class ViewKnife {
 
     private static boolean existGravity(int value, int attr) {
         return (value & attr) == attr;
+    }
+
+
+    public static View tryGetTheFrontView(Activity targetActivity) {
+        try {
+            WindowManager windowManager = targetActivity.getWindowManager();
+            Field mGlobalField = Class.forName("android.view.WindowManagerImpl").getDeclaredField("mGlobal");
+            mGlobalField.setAccessible(true);
+
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+                Field mViewsField = Class.forName("android.view.WindowManagerGlobal").getDeclaredField("mViews");
+                mViewsField.setAccessible(true);
+                List<View> views = (List<View>) mViewsField.get(mGlobalField.get(windowManager));
+                for (int i = views.size() - 1; i >= 0; i--) {
+                    View targetView = getTargetDecorView(targetActivity, views.get(i));
+                    if (targetView != null) {
+                        return targetView;
+                    }
+                }
+            } else {
+                Field mRootsField = Class.forName("android.view.WindowManagerGlobal").getDeclaredField("mRoots");
+                mRootsField.setAccessible(true);
+                List viewRootImpls;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    viewRootImpls = (List) mRootsField.get(mGlobalField.get(windowManager));
+                } else {
+                    viewRootImpls = Arrays.asList((Object[]) mRootsField.get(mGlobalField.get(windowManager)));
+                }
+                for (int i = viewRootImpls.size() - 1; i >= 0; i--) {
+                    Class clazz = Class.forName("android.view.ViewRootImpl");
+                    Object object = viewRootImpls.get(i);
+                    Field mWindowAttributesField = clazz.getDeclaredField("mWindowAttributes");
+                    mWindowAttributesField.setAccessible(true);
+                    Field mViewField = clazz.getDeclaredField("mView");
+                    mViewField.setAccessible(true);
+                    View decorView = (View) mViewField.get(object);
+                    WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) mWindowAttributesField.get(object);
+                    if (layoutParams.getTitle().toString().contains(targetActivity.getClass().getName())
+                            || getTargetDecorView(targetActivity, decorView) != null) {
+                        return decorView;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return targetActivity.getWindow().peekDecorView();
+    }
+
+    private static View getTargetDecorView(Activity targetActivity, View decorView) {
+        View targetView = null;
+        Context context = decorView.getContext();
+        if (context == targetActivity) {
+            targetView = decorView;
+        } else {
+            while (context instanceof ContextWrapper && !(context instanceof Activity)) {
+                Context baseContext = ((ContextWrapper) context).getBaseContext();
+                if (baseContext == null) {
+                    break;
+                }
+                if (baseContext == targetActivity) {
+                    targetView = decorView;
+                    break;
+                }
+                context = baseContext;
+            }
+        }
+        return targetView;
     }
 }

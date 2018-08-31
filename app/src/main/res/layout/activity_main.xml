@@ -72,19 +72,19 @@
             android:text="test" />
 
         <Button
-            android:id="@+id/test"
+            android:id="@+id/dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/open"
             android:layout_toRightOf="@id/open"
-            android:text="test" />
+            android:text="dialog" />
 
         <TextView
             android:id="@+id/another_activity"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/test"
-            android:layout_below="@id/test"
+            android:layout_alignLeft="@id/dialog"
+            android:layout_below="@id/dialog"
             android:layout_marginLeft="-10dp"
             android:layout_marginTop="16dp"
             android:background="#b4c2cf"

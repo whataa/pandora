@@ -57,6 +57,8 @@
         </LinearLayout>
 
         <TextView
+            android:singleLine="true"
+            android:ellipsize="start"
             android:id="@+id/view_panel_path"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

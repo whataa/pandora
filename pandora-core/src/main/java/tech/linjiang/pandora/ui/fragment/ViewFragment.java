@@ -59,7 +59,7 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         panelViewParams.setBehavior(behavior = new BottomSheetBehavior());
         // shadow's height is 18dp
-        behavior.setPeekHeight(ViewKnife.dip2px(124));
+        behavior.setPeekHeight(ViewKnife.dip2px(122));
         behavior.setHideable(true);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         layout.addView(panelView, panelViewParams);

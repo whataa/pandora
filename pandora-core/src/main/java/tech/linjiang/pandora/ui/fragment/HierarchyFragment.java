@@ -23,6 +23,7 @@ import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
 import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.Utils;
+import tech.linjiang.pandora.util.ViewKnife;
 
 /**
  * Created by linjiang on 2018/7/26.
@@ -47,11 +48,13 @@ public class HierarchyFragment extends BaseListFragment
         if (savedInstanceState != null) {
             return;
         }
+        rootView = ViewKnife.tryGetTheFrontView(Pandora.get().getBottomActivity());
         if (!Config.getUI_IGNORE_SYS_LAYER()) {
-            rootView = Pandora.get().getBottomActivity().getWindow().peekDecorView();
             sysLayerCount = countSysLayers();
         } else {
-            rootView = Pandora.get().getBottomActivity().getWindow().peekDecorView().findViewById(android.R.id.content);
+            if (rootView != null) {
+                rootView = rootView.findViewById(android.R.id.content);
+            }
             sysLayerCount = 0;
         }
         targetView = findViewByDefaultTag();

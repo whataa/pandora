@@ -3,7 +3,6 @@ package tech.linjiang.pandora.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -42,7 +41,10 @@ public class ViewAttrFragment extends BaseListFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Pandora.get().getBottomActivity() != null) {
-            targetView = findViewByDefaultTag(Pandora.get().getBottomActivity().getWindow().peekDecorView());
+            View decor = ViewKnife.tryGetTheFrontView(Pandora.get().getBottomActivity());
+            if (decor != null) {
+                targetView = findViewByDefaultTag(decor);
+            }
             if (targetView != null) {
                 // clear flag
                 targetView.setTag(R.id.pd_view_tag_for_unique, null);

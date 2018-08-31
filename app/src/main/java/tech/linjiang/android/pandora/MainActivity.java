@@ -1,5 +1,6 @@
 package tech.linjiang.android.pandora;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -47,10 +48,12 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "click", Toast.LENGTH_SHORT).show();
             }
         });
-        findViewById(R.id.toast).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.dialog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "click", Toast.LENGTH_SHORT).show();
+                Dialog dialog = new Dialog(v.getContext());
+                dialog.setContentView(R.layout.activity_another);
+                dialog.show();
             }
         });
         findViewById(R.id.http).setOnClickListener(new View.OnClickListener() {
