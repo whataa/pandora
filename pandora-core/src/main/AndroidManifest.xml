@@ -4,7 +4,9 @@
     <application>
         <activity android:name="tech.linjiang.pandora.ui.Dispatcher"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/TransTheme"/>
+            android:theme="@style/PdTheme"/>
+        <activity android:name="tech.linjiang.pandora.ui.TransActivity"
+            android:theme="@style/PdTheme.Trans"/>
 
         <provider
             android:name="tech.linjiang.pandora.PdFileProvider"

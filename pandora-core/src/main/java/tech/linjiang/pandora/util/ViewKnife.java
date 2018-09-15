@@ -200,9 +200,21 @@ public class ViewKnife {
     public static View tryGetTheFrontView(Activity targetActivity) {
         try {
             WindowManager windowManager = targetActivity.getWindowManager();
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
+                Field mWindowManagerField = Class.forName("android.view.WindowManagerImpl$CompatModeWrapper").getDeclaredField("mWindowManager");
+                mWindowManagerField.setAccessible(true);
+                Field mViewsField = Class.forName("android.view.WindowManagerImpl").getDeclaredField("mViews");
+                mViewsField.setAccessible(true);
+                List<View> views = Arrays.asList((View[]) mViewsField.get(mWindowManagerField.get(windowManager)));
+                for (int i = views.size() - 1; i >= 0; i--) {
+                    View targetView = getTargetDecorView(targetActivity, views.get(i));
+                    if (targetView != null) {
+                        return targetView;
+                    }
+                }
+            }
             Field mGlobalField = Class.forName("android.view.WindowManagerImpl").getDeclaredField("mGlobal");
             mGlobalField.setAccessible(true);
-
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
                 Field mViewsField = Class.forName("android.view.WindowManagerGlobal").getDeclaredField("mViews");
                 mViewsField.setAccessible(true);
@@ -239,6 +251,10 @@ public class ViewKnife {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            //Accessing hidden field Landroid/view/WindowManagerImpl;->mGlobal:Landroid/view/WindowManagerGlobal; (light greylist, reflection)
+            //Accessing hidden field Landroid/view/WindowManagerGlobal;->mRoots:Ljava/util/ArrayList; (light greylist, reflection)
+            //Accessing hidden field Landroid/view/ViewRootImpl;->mWindowAttributes:Landroid/view/WindowManager$LayoutParams; (dark greylist, reflection)
+            //Accessing hidden field Landroid/view/ViewRootImpl;->mView:Landroid/view/View; (light greylist, reflection)
         }
         return targetActivity.getWindow().peekDecorView();
     }

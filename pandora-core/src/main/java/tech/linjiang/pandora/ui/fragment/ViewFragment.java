@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,12 +117,15 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
         tvId = view.findViewById(R.id.view_panel_id);
         tvSize = view.findViewById(R.id.view_panel_size);
         parentRv = view.findViewById(R.id.view_panel_parent);
+        parentRv.setLayoutManager(new LinearLayoutManager(getContext()));
         parentRv.setAdapter(parentAdapter);
         parentAdapter.setListener(clickListener);
         currentRv = view.findViewById(R.id.view_panel_current);
+        currentRv.setLayoutManager(new LinearLayoutManager(getContext()));
         currentRv.setAdapter(currentAdapter);
         currentAdapter.setListener(clickListener);
         childRv = view.findViewById(R.id.view_panel_child);
+        childRv.setLayoutManager(new LinearLayoutManager(getContext()));
         childRv.setAdapter(childAdapter);
         childAdapter.setListener(clickListener);
 

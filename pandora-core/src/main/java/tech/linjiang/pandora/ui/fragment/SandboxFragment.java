@@ -27,6 +27,10 @@ import tech.linjiang.pandora.util.SimpleTask;
 
 public class SandboxFragment extends BaseListFragment {
 
+    @Override
+    protected boolean enableSwipeBack() {
+        return false;
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

@@ -43,6 +43,11 @@ public class HierarchyFragment extends BaseListFragment
     }
 
     @Override
+    protected boolean enableSwipeBack() {
+        return targetView != null;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {

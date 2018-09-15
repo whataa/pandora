@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.os.Bundle;
 
 import tech.linjiang.pandora.database.Databases;
 import tech.linjiang.pandora.inspector.CurInfoView;
@@ -17,7 +18,6 @@ import tech.linjiang.pandora.network.OkHttpInterceptor;
 import tech.linjiang.pandora.preference.SharedPref;
 import tech.linjiang.pandora.ui.Dispatcher;
 import tech.linjiang.pandora.ui.connector.OnEntranceClick;
-import tech.linjiang.pandora.ui.connector.SimpleActivityLifecycleCallbacks;
 import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.ui.view.EntranceView;
 import tech.linjiang.pandora.util.Config;
@@ -33,8 +33,8 @@ public final class Pandora {
 
 
     static void init(Application application) {
-        INSTANCE = new Pandora();
         Utils.init(application);
+        INSTANCE = new Pandora();
         application.registerActivityLifecycleCallbacks(INSTANCE.callbacks);
         application.registerComponentCallbacks(new ComponentCallbacks() {
             @Override
@@ -106,12 +106,16 @@ public final class Pandora {
         }
     }
 
-    private final SimpleActivityLifecycleCallbacks callbacks = new SimpleActivityLifecycleCallbacks() {
+    private final Application.ActivityLifecycleCallbacks callbacks = new Application.ActivityLifecycleCallbacks() {
         private int count;
 
         @Override
+        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+        }
+
+        @Override
         public void onActivityStarted(Activity activity) {
-            super.onActivityStarted(activity);
             count++;
             if (count == 1) {
                 showOverlays();
@@ -123,7 +127,6 @@ public final class Pandora {
 
         @Override
         public void onActivityResumed(Activity activity) {
-            super.onActivityResumed(activity);
             if (!(activity instanceof Dispatcher)) {
                 INSTANCE.bottomActivity = activity;
             }
@@ -132,7 +135,6 @@ public final class Pandora {
 
         @Override
         public void onActivityPaused(Activity activity) {
-            super.onActivityPaused(activity);
             if (activity == INSTANCE.bottomActivity) {
                 if (!INSTANCE.preventFree) {
                     INSTANCE.bottomActivity = null;
@@ -143,7 +145,6 @@ public final class Pandora {
 
         @Override
         public void onActivityStopped(Activity activity) {
-            super.onActivityStopped(activity);
             count--;
             if (count <= 0) {
                 hideOverlays();
@@ -155,8 +156,12 @@ public final class Pandora {
         }
 
         @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+        }
+
+        @Override
         public void onActivityDestroyed(Activity activity) {
-            super.onActivityDestroyed(activity);
             if (activity instanceof Dispatcher) {
                 INSTANCE.preventFree = false;
             }

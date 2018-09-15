@@ -40,6 +40,11 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
     private List<BaseItem> tmpFilter = new ArrayList<>();
 
     @Override
+    protected boolean enableSwipeBack() {
+        return false;
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getToolbar().setTitle("Network");

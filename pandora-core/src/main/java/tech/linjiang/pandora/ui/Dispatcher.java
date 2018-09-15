@@ -33,7 +33,8 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
     public static final String PARAM1 = "param1";
 
     public static void start(Context context, @Type int type) {
-        Intent intent = new Intent(context, Dispatcher.class)
+        boolean needTrans = type == Type.BASELINE || type == Type.SELECT;
+        Intent intent = new Intent(context, needTrans ? TransActivity.class : Dispatcher.class)
                 .putExtra(PARAM1, type);
         // This flag is very ridiculous in different android versions, like a bug
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

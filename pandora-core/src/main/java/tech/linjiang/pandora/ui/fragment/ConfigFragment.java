@@ -27,6 +27,10 @@ import tech.linjiang.pandora.util.ViewKnife;
 
 public class ConfigFragment extends BaseListFragment {
 
+    @Override
+    protected boolean enableSwipeBack() {
+        return false;
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

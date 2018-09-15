@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -50,19 +49,7 @@ public class Utils {
     @SuppressLint("PrivateApi")
     public static @NonNull
     Context getContext() {
-        if (CONTEXT != null) {
-            return CONTEXT;
-        } else {
-            ///////// test //////////
-            try {
-                Class activityThreadClass = Class.forName("android.app.ActivityThread");
-                Method method = activityThreadClass.getMethod("currentApplication");
-                CONTEXT = (Context) method.invoke(null);
-                return CONTEXT;
-            } catch (Exception e) {
-                return null;
-            }
-        }
+        return CONTEXT;
     }
 
     public static <V> boolean isNotEmpty(List<V> sourceList) {
