@@ -143,6 +143,12 @@ public class UniversalAdapter
             return this;
         }
 
+        public ViewPool setCompoundDrawableLeft(@IdRes int id, @DrawableRes int left) {
+            TextView tv = getView(id);
+            tv.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
+            return this;
+        }
+
         public ViewPool setTextColor(@IdRes int id, @ColorInt int color) {
             TextView tv = getView(id);
             tv.setTextColor(color);

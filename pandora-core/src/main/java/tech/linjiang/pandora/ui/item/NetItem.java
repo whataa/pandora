@@ -1,6 +1,7 @@
 package tech.linjiang.pandora.ui.item;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 
 import java.util.Locale;
 
@@ -44,10 +45,21 @@ public class NetItem extends BaseItem<Summary> {
                                         ? Utils.formatSize(data.response_size) + "    " : "",
                                 done && data.end_time > 0 && data.start_time > 0
                                         ? String.valueOf(data.end_time - data.start_time) + "ms" : ""));
+
+        if (done) {
+            pool.setCompoundDrawableLeft(R.id.item_net_url, isImage(data.response_content_type) ? R.drawable.pd_image : 0);
+        } else {
+            pool.setCompoundDrawableLeft(R.id.item_net_url, 0);
+        }
     }
 
     @Override
     public int getLayout() {
         return R.layout.pd_item_net;
     }
+
+    private boolean isImage(String contentType) {
+        return !TextUtils.isEmpty(contentType) && contentType.contains("image");
+    }
+
 }

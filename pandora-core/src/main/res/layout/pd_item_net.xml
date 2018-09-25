@@ -28,6 +28,8 @@
         android:orientation="vertical">
 
         <TextView
+            android:gravity="center_vertical"
+            android:drawablePadding="6dp"
             android:id="@+id/item_net_url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
