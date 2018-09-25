@@ -21,6 +21,7 @@ public class Summary {
     public boolean ssl;
     public long start_time;
     public long end_time;
+    public String request_content_type;
     public String response_content_type;
     public long request_size;
     public long response_size;

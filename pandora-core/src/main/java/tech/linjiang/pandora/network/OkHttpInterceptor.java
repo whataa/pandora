@@ -20,7 +20,7 @@ import okio.GzipSource;
 import okio.Okio;
 import okio.Source;
 import tech.linjiang.pandora.util.Config;
-import tech.linjiang.pandora.util.JsonUtil;
+import tech.linjiang.pandora.util.FormatUtil;
 import tech.linjiang.pandora.util.Utils;
 
 /**
@@ -32,6 +32,7 @@ public class OkHttpInterceptor implements Interceptor {
     private static final String TAG = "OkHttpInterceptor";
 
     private NetStateListener listener;
+    private JsonFormatter formatter;
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -92,7 +93,7 @@ public class OkHttpInterceptor implements Interceptor {
         values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_METHOD, request.method());
         values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_SSL, request.isHttps());
         values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_TIME_START, System.currentTimeMillis());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_HEADER_REQUEST, JsonUtil.formatHeaders(request.headers()));
+        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_HEADER_REQUEST, FormatUtil.formatHeaders(request.headers()));
 
         String query = request.url().encodedQuery();
         if (!TextUtils.isEmpty(query)) {
@@ -105,6 +106,9 @@ public class OkHttpInterceptor implements Interceptor {
                 values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_SIZE_REQUEST, requestBody.contentLength());
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            if (requestBody.contentType() != null) {
+                values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_CONTENT_TYPE_REQUEST, requestBody.contentType().toString());
             }
         }
 
@@ -124,7 +128,7 @@ public class OkHttpInterceptor implements Interceptor {
         values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_TIME_END, System.currentTimeMillis());
         values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_CODE, response.code());
         values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_PROTOCOL, response.protocol().toString());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_HEADER_RESPONSE, JsonUtil.formatHeaders(response.headers()));
+        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_HEADER_RESPONSE, FormatUtil.formatHeaders(response.headers()));
 
         ResponseBody body = response.body();
         if (body != null) {
@@ -260,5 +264,13 @@ public class OkHttpInterceptor implements Interceptor {
 
     public void removeListener() {
         listener = null;
+    }
+
+    public void setJsonFormatter(JsonFormatter formatter) {
+        this.formatter = formatter;
+    }
+
+    public JsonFormatter getJsonFormatter() {
+        return formatter;
     }
 }

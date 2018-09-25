@@ -28,4 +28,5 @@ dependencies {
 
     api "com.squareup.retrofit2:retrofit:2.2.0"
     api "com.squareup.retrofit2:converter-gson:2.2.0"
+    api 'com.alibaba:fastjson:1.2.45'
 }

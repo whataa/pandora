@@ -17,7 +17,7 @@ import java.util.List;
 import tech.linjiang.pandora.network.model.Content;
 import tech.linjiang.pandora.network.model.Summary;
 import tech.linjiang.pandora.util.Config;
-import tech.linjiang.pandora.util.JsonUtil;
+import tech.linjiang.pandora.util.FormatUtil;
 import tech.linjiang.pandora.util.Utils;
 
 /**
@@ -26,7 +26,7 @@ import tech.linjiang.pandora.util.Utils;
 
 public class CacheDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "pd_cache.db";
 
     private CacheDbHelper(Context context) {
@@ -101,6 +101,7 @@ public class CacheDbHelper extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_SSL = "ssl";
         public static final String COLUMN_NAME_TIME_START = "start_time";
         public static final String COLUMN_NAME_TIME_END = "end_time";
+        public static final String COLUMN_NAME_CONTENT_TYPE_REQUEST = "request_content_type";
         public static final String COLUMN_NAME_CONTENT_TYPE_RESPONSE = "response_content_type";
         public static final String COLUMN_NAME_SIZE_REQUEST = "request_size";
         public static final String COLUMN_NAME_SIZE_RESPONSE = "response_size";
@@ -121,6 +122,7 @@ public class CacheDbHelper extends SQLiteOpenHelper {
                         SummaryEntry.COLUMN_NAME_SSL + " INTEGER," +
                         SummaryEntry.COLUMN_NAME_TIME_START + " INTEGER," +
                         SummaryEntry.COLUMN_NAME_TIME_END + " INTEGER," +
+                        SummaryEntry.COLUMN_NAME_CONTENT_TYPE_REQUEST + " TEXT," +
                         SummaryEntry.COLUMN_NAME_CONTENT_TYPE_RESPONSE + " TEXT," +
                         SummaryEntry.COLUMN_NAME_SIZE_REQUEST + " INTEGER," +
                         SummaryEntry.COLUMN_NAME_SIZE_RESPONSE + " INTEGER," +
@@ -203,12 +205,13 @@ public class CacheDbHelper extends SQLiteOpenHelper {
             summary.start_time = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_TIME_START));
             summary.end_time = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_TIME_END));
             summary.response_content_type = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_CONTENT_TYPE_RESPONSE));
+            summary.request_content_type = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_CONTENT_TYPE_REQUEST));
             summary.request_size = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_SIZE_REQUEST));
             summary.response_size = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_SIZE_RESPONSE));
             String reqHeaders = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_HEADER_REQUEST));
-            summary.request_header = JsonUtil.parseHeaders(reqHeaders);
+            summary.request_header = FormatUtil.parseHeaders(reqHeaders);
             String resHeaders = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_HEADER_RESPONSE));
-            summary.response_header = JsonUtil.parseHeaders(resHeaders);
+            summary.response_header = FormatUtil.parseHeaders(resHeaders);
             return summary;
         }
 

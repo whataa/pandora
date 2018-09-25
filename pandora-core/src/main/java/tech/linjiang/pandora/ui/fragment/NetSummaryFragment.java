@@ -24,6 +24,7 @@ import tech.linjiang.pandora.util.Utils;
 
 public class NetSummaryFragment extends BaseListFragment {
 
+    private Summary originData;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -39,8 +40,10 @@ public class NetSummaryFragment extends BaseListFragment {
                         Bundle bundle = new Bundle();
                         if (PARAM1.equals(tag)) {
                             bundle.putBoolean(PARAM1, false);
+                            bundle.putString(PARAM3, originData.request_content_type);
                         } else if (PARAM2.equals(tag)) {
                             bundle.putBoolean(PARAM1, true);
+                            bundle.putString(PARAM3, originData.response_content_type);
                         }
                         if (!bundle.isEmpty()) {
                             bundle.putLong(PARAM2, id);
@@ -71,6 +74,7 @@ public class NetSummaryFragment extends BaseListFragment {
                 if (summary == null) {
                     showError(null);
                 }
+                originData = summary;
                 getToolbar().setTitle(summary.url);
                 getToolbar().setSubtitle(String.valueOf(summary.code));
 
@@ -83,7 +87,8 @@ public class NetSummaryFragment extends BaseListFragment {
                 data.add(new KeyValueItem(Utils.newArray("ssl", String.valueOf(summary.ssl))));
                 data.add(new KeyValueItem(Utils.newArray("start_time", Utils.millis2String(summary.start_time))));
                 data.add(new KeyValueItem(Utils.newArray("end_time", Utils.millis2String(summary.end_time))));
-                data.add(new KeyValueItem(Utils.newArray("content-type", summary.response_content_type)));
+                data.add(new KeyValueItem(Utils.newArray("req content-type", summary.request_content_type)));
+                data.add(new KeyValueItem(Utils.newArray("res content-type", summary.response_content_type)));
                 data.add(new KeyValueItem(Utils.newArray("request_size", Utils.formatSize(summary.request_size))));
                 data.add(new KeyValueItem(Utils.newArray("response_size", Utils.formatSize(summary.response_size))));
 

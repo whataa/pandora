@@ -11,11 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.network.CacheDbHelper;
 import tech.linjiang.pandora.network.model.Content;
@@ -24,7 +25,7 @@ import tech.linjiang.pandora.ui.connector.SimpleOnQueryTextListener;
 import tech.linjiang.pandora.ui.item.ContentItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
-import tech.linjiang.pandora.util.JsonUtil;
+import tech.linjiang.pandora.util.FormatUtil;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
 import tech.linjiang.pandora.util.ViewKnife;
@@ -37,6 +38,7 @@ public class NetContentFragment extends BaseListFragment {
 
     private boolean showResponse;
     private long id;
+    private String contentType;
     private String originContent;
     private String filter;
 
@@ -45,6 +47,7 @@ public class NetContentFragment extends BaseListFragment {
         super.onCreate(savedInstanceState);
         showResponse = getArguments().getBoolean(PARAM1, true);
         id = getArguments().getLong(PARAM2);
+        contentType = getArguments().getString(PARAM3);
     }
 
     @Override
@@ -141,19 +144,43 @@ public class NetContentFragment extends BaseListFragment {
                 hideLoading();
                 try {
                     originContent = URLDecoder.decode(result, "utf-8");
-                } catch (UnsupportedEncodingException e) {
+                } catch (Exception e) {
                     originContent = result;
                 }
-                tryFormatJson(originContent);
+                handlePlainText(originContent);
             }
         }).execute();
     }
 
-    private void tryFormatJson(final String content) {
-        new SimpleTask<>(new SimpleTask.Callback<Void, List<String>>() {
+    private void handlePlainText(final String content) {
+        new SimpleTask<>(new SimpleTask.Callback<String, List<String>>() {
             @Override
-            public List<String> doInBackground(Void[] params) {
-                return JsonUtil.print(content);
+            public List<String> doInBackground(String[] params) {
+                if (TextUtils.isEmpty(params[0])) {
+                    return null;
+                }
+                if (TextUtils.isEmpty(contentType)) {
+                    return Collections.singletonList(params[0]);
+                }
+                if (contentType.toLowerCase().contains("json")) {
+                    if (Pandora.get().getInterceptor().getJsonFormatter() != null) {
+                        try {
+                            String formatResult = Pandora.get()
+                                    .getInterceptor().getJsonFormatter().format(params[0]);
+                            if (!TextUtils.isEmpty(formatResult)) {
+                                params[0] = formatResult;
+                            }
+                        } catch (Exception e) {// may not be json
+                            e.printStackTrace();
+                            return Collections.singletonList(params[0]);
+                        }
+                    }
+                    return FormatUtil.printJson(params[0]);
+                } else if (contentType.toLowerCase().contains("xml")) {
+                    return FormatUtil.printXml(params[0]);
+                } else {
+                    return Collections.singletonList(params[0]);
+                }
             }
 
             @Override
@@ -169,7 +196,7 @@ public class NetContentFragment extends BaseListFragment {
                     showError(null);
                 }
             }
-        }).execute();
+        }).execute(content);
     }
 
     private void readyFilter() {

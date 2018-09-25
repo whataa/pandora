@@ -4,6 +4,8 @@ import android.app.Application;
 import android.os.Build;
 
 import tech.linjiang.android.pandora.db.StoreDatabase;
+import tech.linjiang.android.pandora.net.GsonFormatterImpl;
+import tech.linjiang.android.pandora.net.JsonFormatterImpl;
 import tech.linjiang.pandora.Pandora;
 
 /**
@@ -23,6 +25,10 @@ public class MyApp extends Application {
             createDeviceProtectedStorageContext().moveDatabaseFrom(this, StoreDatabase.NAME);
             createDeviceProtectedStorageContext().moveSharedPreferencesFrom(this, "testAllType");
         }
+
+        // choose one to let your network json result looks more pretty
+        Pandora.get().getInterceptor().setJsonFormatter(new JsonFormatterImpl());
+//        Pandora.get().getInterceptor().setJsonFormatter(new GsonFormatterImpl());
     }
 
     public static Application getContext() {

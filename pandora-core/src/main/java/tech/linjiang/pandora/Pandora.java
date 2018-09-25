@@ -3,8 +3,6 @@ package tech.linjiang.pandora;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
-import android.content.ComponentCallbacks;
-import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -36,17 +34,6 @@ public final class Pandora {
         Utils.init(application);
         INSTANCE = new Pandora();
         application.registerActivityLifecycleCallbacks(INSTANCE.callbacks);
-        application.registerComponentCallbacks(new ComponentCallbacks() {
-            @Override
-            public void onConfigurationChanged(Configuration newConfig) {
-
-            }
-
-            @Override
-            public void onLowMemory() {
-
-            }
-        });
         Utils.registerSensor(INSTANCE.sensorEventListener);
     }
 
