@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tech.linjiang.pandora.Pandora;
-import tech.linjiang.pandora.ui.connector.SimpleOnActionExpandListener;
-import tech.linjiang.pandora.ui.connector.SimpleOnQueryTextListener;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.database.DatabaseResult;
 import tech.linjiang.pandora.ui.connector.EditCallback;
 import tech.linjiang.pandora.ui.connector.EventCallback;
+import tech.linjiang.pandora.ui.connector.SimpleOnActionExpandListener;
+import tech.linjiang.pandora.ui.connector.SimpleOnQueryTextListener;
 import tech.linjiang.pandora.ui.item.GridItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.GridDividerDecoration;
@@ -174,7 +174,7 @@ public class TableFragment extends BaseFragment {
                 return true;
             }
         });
-        menuItem.setOnActionExpandListener(new SimpleOnActionExpandListener() {
+        SimpleOnActionExpandListener.bind(menuItem, new SimpleOnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 if (!TextUtils.isEmpty(realTimeQueryCondition)) {

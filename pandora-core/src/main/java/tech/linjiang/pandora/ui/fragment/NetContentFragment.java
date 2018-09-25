@@ -116,7 +116,7 @@ public class NetContentFragment extends BaseListFragment {
             }
 
         });
-        menuItem.setOnActionExpandListener(new SimpleOnActionExpandListener() {
+        SimpleOnActionExpandListener.bind(menuItem, new SimpleOnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 filter = null;
@@ -132,22 +132,24 @@ public class NetContentFragment extends BaseListFragment {
             @Override
             public String doInBackground(Void[] params) {
                 Content content = CacheDbHelper.getContent(id);
+                String result;
                 if (showResponse) {
-                    return content.responseBody;
+                    result = content.responseBody;
                 } else {
-                    return content.requestBody;
+                    result = content.requestBody;
+                }
+                try {
+                    return URLDecoder.decode(result, "utf-8");
+                } catch (Exception e) {
+                    return result;
                 }
             }
 
             @Override
             public void onPostExecute(String result) {
                 hideLoading();
-                try {
-                    originContent = URLDecoder.decode(result, "utf-8");
-                } catch (Exception e) {
-                    originContent = result;
-                }
-                handlePlainText(originContent);
+                originContent = result;
+                handlePlainText(result);
             }
         }).execute();
     }

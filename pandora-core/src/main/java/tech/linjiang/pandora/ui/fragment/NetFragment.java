@@ -145,7 +145,7 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
                 return true;
             }
         });
-        menuItem.setOnActionExpandListener(new SimpleOnActionExpandListener() {
+        SimpleOnActionExpandListener.bind(menuItem, new SimpleOnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 loadData();
