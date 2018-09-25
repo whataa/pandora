@@ -3,7 +3,8 @@ package tech.linjiang.pandora.util;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
+import android.text.TextUtils;
+import android.webkit.MimeTypeMap;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -14,83 +15,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import tech.linjiang.pandora.core.R;
 
 /**
  * Created by linjiang on 05/06/2018.
  */
 
 public class FileUtil {
-    private static final String TAG = "FileUtil";
-    private static final HashMap<String, String> mFileTypes = new HashMap<>();
-
-    static {
-        mFileTypes.put("apk", "application/vnd.android.package-archive");
-        mFileTypes.put("avi", "video/x-msvideo");
-        mFileTypes.put("bmp", "image/bmp");
-        mFileTypes.put("c", "text/plain");
-        mFileTypes.put("class", "application/octet-stream");
-        mFileTypes.put("conf", "text/plain");
-        mFileTypes.put("doc", "application/msword");
-        mFileTypes.put("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        mFileTypes.put("xls", "application/vnd.ms-excel");
-        mFileTypes.put("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        mFileTypes.put("gif", "image/gif");
-        mFileTypes.put("gtar", "application/x-gtar");
-        mFileTypes.put("gz", "application/x-gzip");
-        mFileTypes.put("htm", "text/html");
-        mFileTypes.put("html", "text/html");
-        mFileTypes.put("jar", "application/java-archive");
-        mFileTypes.put("java", "text/plain");
-        mFileTypes.put("jpeg", "image/jpeg");
-        mFileTypes.put("jpg", "image/jpeg");
-        mFileTypes.put("js", "application/x-javascript");
-        mFileTypes.put("log", "text/plain");
-        mFileTypes.put("mov", "video/quicktime");
-        mFileTypes.put("mp3", "audio/x-mpeg");
-        mFileTypes.put("mp4", "video/mp4");
-        mFileTypes.put("mpeg", "video/mpeg");
-        mFileTypes.put("mpg", "video/mpeg");
-        mFileTypes.put("mpg4", "video/mp4");
-        mFileTypes.put("ogg", "audio/ogg");
-        mFileTypes.put("pdf", "application/pdf");
-        mFileTypes.put("png", "image/png");
-        mFileTypes.put("ppt", "application/vnd.ms-powerpoint");
-        mFileTypes.put("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation");
-        mFileTypes.put("prop", "text/plain");
-        mFileTypes.put("rc", "text/plain");
-        mFileTypes.put("rmvb", "audio/x-pn-realaudio");
-        mFileTypes.put("rtf", "application/rtf");
-        mFileTypes.put("sh", "text/plain");
-        mFileTypes.put("tar", "application/x-tar");
-        mFileTypes.put("tgz", "application/x-compressed");
-        mFileTypes.put("txt", "text/plain");
-        mFileTypes.put("wav", "audio/x-wav");
-        mFileTypes.put("wps", "application/vnd.ms-works");
-        mFileTypes.put("xml", "text/plain");
-        mFileTypes.put("zip", "application/x-zip-compressed");
-        mFileTypes.put("", "*/*");
-    }
-
 
     public static String getFileType(String filePath) {
-        File file = new File(filePath);
-        if (!file.exists()) {
-            return "";
-        }
-        String name = file.getName();
-        try {
-            String suffix = !name.contains(".") ? "" : name.substring(name.lastIndexOf(".") + 1);
-            String type = mFileTypes.get(suffix);
-            Log.d(TAG, "getFileType: " + type);
-            return type;
-        } catch (Throwable t) {
-            t.printStackTrace();
-            return "";
-        }
+        String ext = MimeTypeMap.getFileExtensionFromUrl(filePath);
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
     }
 
     public static String bytesToHexString(byte[] src) {
@@ -110,6 +45,9 @@ public class FileUtil {
     }
 
     public static Intent getFileIntent(String filePath) {
+        return getFileIntent(filePath, null);
+    }
+    public static Intent getFileIntent(String filePath, String fileType) {
         File file = new File(filePath);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -117,14 +55,13 @@ public class FileUtil {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri = FileProvider.getUriForFile(Utils.getContext(),
                 Utils.getContext().getPackageName() + ".pdFileProvider", file);
-        intent.setDataAndType(uri, getFileType(filePath));
+        intent.setDataAndType(uri, TextUtils.isEmpty(fileType) ? getFileType(filePath) : fileType);
         return intent;
     }
 
     public static String fileSize(File file) {
         return Utils.formatSize(getFolderSize(file));
     }
-
 
 
     private static long getFolderSize(File f) {
@@ -183,6 +120,27 @@ public class FileUtil {
         return "--";
     }
 
+    public static String md5String(String plaintext) {
+        char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'a', 'b', 'c', 'd', 'e', 'f'};
+        try {
+            byte[] btInput = plaintext.getBytes();
+            MessageDigest mdInst = MessageDigest.getInstance("MD5");
+            mdInst.update(btInput);
+            byte[] md = mdInst.digest();
+            int j = md.length;
+            char str[] = new char[j * 2];
+            int k = 0;
+            for (byte byte0 : md) {
+                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+                str[k++] = hexDigits[byte0 & 0xf];
+            }
+            return new String(str);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private static byte[] getFileBytes(File file) throws IOException {
         byte[] buffer;
         FileInputStream fis = new FileInputStream(file);
@@ -232,5 +190,26 @@ public class FileUtil {
             }
         }
         return text;
+    }
+
+    public static String saveFile(byte[] bytes, String name) {
+        File cacheDir = Utils.getContext().getCacheDir();
+        if (!cacheDir.exists()) {
+            cacheDir.mkdirs();
+        }
+        File newFile = new File(cacheDir, md5String(name));
+        if (newFile.exists()) {
+            newFile.delete();
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(newFile);
+            fos.write(bytes, 0, bytes.length);
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return newFile.getPath();
     }
 }

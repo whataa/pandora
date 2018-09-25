@@ -20,6 +20,7 @@ import okio.GzipSource;
 import okio.Okio;
 import okio.Source;
 import tech.linjiang.pandora.util.Config;
+import tech.linjiang.pandora.util.FileUtil;
 import tech.linjiang.pandora.util.FormatUtil;
 import tech.linjiang.pandora.util.Utils;
 
@@ -142,6 +143,20 @@ public class OkHttpInterceptor implements Interceptor {
     }
 
     private void updateContent(long reqId, Response response) {
+        ResponseBody body = response.body();
+        if (body != null) {
+            MediaType type = body.contentType();
+            if (type != null && type.toString().contains("image")) {
+                byte[] bytes = responseBodyAsBytes(response);
+                if (bytes != null) {
+                    String path = FileUtil.saveFile(bytes, response.request().url().toString());
+                    ContentValues values = new ContentValues();
+                    values.put(CacheDbHelper.ContentEntry.COLUMN_NAME_RESPONSE, path);
+                    CacheDbHelper.ContentEntry.update(reqId, values);
+                }
+                return;
+            }
+        }
         boolean canRecognize = checkContentEncoding(response.header("Content-Encoding"));
         if (canRecognize) {
             ContentValues values = new ContentValues();
@@ -256,6 +271,51 @@ public class OkHttpInterceptor implements Interceptor {
             }
         }
         return tempStr;
+    }
+
+    private static byte[] requestBodyAsBytes(Request request) {
+        RequestBody requestBody = request.body();
+        if (requestBody == null) {
+            return null;
+        }
+        Buffer buffer = new Buffer();
+        try {
+            requestBody.writeTo(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return sourceToBytesInternal(buffer);
+    }
+
+    private static byte[] responseBodyAsBytes(Response response) {
+        ResponseBody responseBody = response.body();
+        if (responseBody == null || !HttpHeaders.hasBody(response)) {
+            return null;
+        }
+        try {
+            return sourceToBytesInternal(response.peekBody(Long.MAX_VALUE).source());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static byte[] sourceToBytesInternal(Source source) {
+        BufferedSource bufferedSource = Okio.buffer(source);
+        byte[] result = null;
+        try {
+            result = bufferedSource.readByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bufferedSource.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     public void setListener(NetStateListener listener) {

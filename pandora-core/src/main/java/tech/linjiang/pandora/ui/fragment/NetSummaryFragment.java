@@ -1,20 +1,24 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.network.CacheDbHelper;
 import tech.linjiang.pandora.network.model.Summary;
 import tech.linjiang.pandora.ui.item.KeyValueItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
+import tech.linjiang.pandora.util.FileUtil;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
 
@@ -42,6 +46,10 @@ public class NetSummaryFragment extends BaseListFragment {
                             bundle.putBoolean(PARAM1, false);
                             bundle.putString(PARAM3, originData.request_content_type);
                         } else if (PARAM2.equals(tag)) {
+                            if (originData.response_content_type.contains("image")) {
+                                tryOpen(originData.id);
+                                return;
+                            }
                             bundle.putBoolean(PARAM1, true);
                             bundle.putString(PARAM3, originData.response_content_type);
                         }
@@ -73,6 +81,7 @@ public class NetSummaryFragment extends BaseListFragment {
                 hideLoading();
                 if (summary == null) {
                     showError(null);
+                    return;
                 }
                 originData = summary;
                 getToolbar().setTitle(summary.url);
@@ -125,5 +134,52 @@ public class NetSummaryFragment extends BaseListFragment {
                 getAdapter().setItems(data);
             }
         }).execute();
+    }
+
+    private void tryOpen(final long id) {
+        new SimpleTask<>(new SimpleTask.Callback<Void, String>() {
+            @Override
+            public String doInBackground(Void[] params) {
+                return CacheDbHelper.getContent(id).responseBody;
+            }
+
+            @Override
+            public void onPostExecute(String result) {
+                if (TextUtils.isEmpty(result)) {
+                    Utils.toast(R.string.pd_failed);
+                    return;
+                }
+                tryOpenInternal(result);
+            }
+        }).execute();
+    }
+
+    private void tryOpenInternal(String path) {
+        new SimpleTask<>(new SimpleTask.Callback<File, Intent>() {
+            @Override
+            public Intent doInBackground(File[] params) {
+                String result = FileUtil.fileCopy2Tmp(params[0]);
+                if (!TextUtils.isEmpty(result)) {
+                    return FileUtil.getFileIntent(result, "image/*");
+                }
+                return null;
+            }
+
+            @Override
+            public void onPostExecute(Intent result) {
+                hideLoading();
+                if (result != null) {
+                    try {
+                        startActivity(result);
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                        Utils.toast(t.getMessage());
+                    }
+                } else {
+                    Utils.toast(R.string.pd_not_support);
+                }
+            }
+        }).execute(new File(path));
+        showLoading();
     }
 }
