@@ -153,7 +153,11 @@ Pandora.get().getSharedPref().addProvider(new XXProvider());
 
 ## 致谢
 
-Pandora是站在巨人的肩膀上开发而来，非常感谢以下开源项目：
+logo及icon由设计师[Zularizal]{https://github.com/zularizal}制作。
+
+Pandora是站在巨人的肩膀上开发而来，非常感谢以下开源项目或作者：
+
+- Logo及Icon由设计师 [Zularizal](https://github.com/zularizal) 制作。
 
 - 灵感来源于 Flipboard 开源的iOS平台调试工具 [FLEX](https://github.com/Flipboard/FLEX)；
 

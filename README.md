@@ -159,7 +159,9 @@ Pandora.get().getSharedPref().addProvider(new XXProvider());
 
 ## Thanks
 
-Pandora was developed on the shoulders of giants. Thanks to the following open source projects:
+Pandora was developed on the shoulders of giants. Thanks to the following open source projects or person:
+
+- Logo and Icon are produced by the designer [Zularizal](https://github.com/zularizal).
 
 - Inspired by Flipboard's open source iOS platform debugging tool [FLEX](https://github.com/Flipboard/FLEX)；
 
