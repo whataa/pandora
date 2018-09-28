@@ -3,7 +3,12 @@ an android library for debugging what we care about directly in app.
  [[点击查看中文版]](https://github.com/whataa/pandora/blob/master/README_CN.md) 
 
 
+
 # Pandora [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14) [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)  [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/whataa/pandora-no-op/blob/master/LICENSE) [![Build Status](https://travis-ci.org/whataa/pandora.svg?branch=master)](https://travis-ci.org/whataa/pandora)
+
+<h1 align=center>
+<img src="pandora-logo/horizontal.png" width=40%>
+</h1>
 
 Pandora is a tool box that allows you to inspect and modify what includes networks, databases, UIs, etc. directly in your application. It is suitable for rapid position of various problems in the development and testing stages.
 
