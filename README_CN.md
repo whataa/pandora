@@ -1,3 +1,7 @@
+<h1 align=center>
+<img src="pandora-logo/horizontal.png" width=40%>
+</h1>
+
 an android library for debugging what we care about directly in app.
 
 # Pandora [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14) [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)  [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/whataa/pandora-no-op/blob/master/LICENSE) [![Build Status](https://travis-ci.org/whataa/pandora.svg?branch=master)](https://travis-ci.org/whataa/pandora)
