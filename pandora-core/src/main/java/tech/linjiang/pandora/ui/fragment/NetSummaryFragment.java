@@ -46,7 +46,8 @@ public class NetSummaryFragment extends BaseListFragment {
                             bundle.putBoolean(PARAM1, false);
                             bundle.putString(PARAM3, originData.request_content_type);
                         } else if (PARAM2.equals(tag)) {
-                            if (originData.response_content_type.contains("image")) {
+                            if (!TextUtils.isEmpty(originData.response_content_type)
+                                    && originData.response_content_type.contains("image")) {
                                 tryOpen(originData.id);
                                 return;
                             }
