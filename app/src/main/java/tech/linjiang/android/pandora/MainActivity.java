@@ -36,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
                 Pandora.get().open();
             }
         });
+        findViewById(R.id.open2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Pandora.get().open();
+            }
+        });
         findViewById(R.id.another_activity).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +66,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 doHttp();
+            }
+        });
+        findViewById(R.id.download).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ApiService.getInstance().download().enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
             }
         });
 

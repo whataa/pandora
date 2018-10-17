@@ -3,10 +3,10 @@ package tech.linjiang.pandora.network;
 import android.content.ContentValues;
 import android.text.TextUtils;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import okhttp3.Connection;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -37,11 +37,6 @@ public class OkHttpInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Connection connection = chain.connection();
-        if (connection != null) {
-            throw new IllegalStateException(
-                    "should use addInterceptor instead of addNetworkInterceptor");
-        }
 
         long id = -1;
 
@@ -198,6 +193,29 @@ public class OkHttpInterceptor implements Interceptor {
         }
     }
 
+    /**
+     * Returns true if the body in question probably contains human readable text. Uses a small sample
+     * of code points to detect unicode control characters commonly used in binary file signatures.
+     */
+    private static boolean isPlaintext(Buffer buffer) {
+        try {
+            Buffer prefix = new Buffer();
+            long byteCount = buffer.size() < 64 ? buffer.size() : 64;
+            buffer.copyTo(prefix, 0, byteCount);
+            for (int i = 0; i < 16; i++) {
+                if (prefix.exhausted()) {
+                    break;
+                }
+                int codePoint = prefix.readUtf8CodePoint();
+                if (Character.isISOControl(codePoint) && !Character.isWhitespace(codePoint)) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (EOFException e) {
+            return false; // Truncated UTF-8 sequence.
+        }
+    }
 
     private boolean checkContentEncoding(String contentEncoding) {
         return contentEncoding == null ||
@@ -221,6 +239,14 @@ public class OkHttpInterceptor implements Interceptor {
             e.printStackTrace();
             return null;
         }
+        if (!isPlaintext(buffer)) {
+            try {
+                return " (binary " + requestBody.contentLength() + "-byte body omitted)";
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
         return sourceToStrInternal(buffer, gzip, requestBody.contentType());
     }
 
@@ -235,6 +261,18 @@ public class OkHttpInterceptor implements Interceptor {
         if (responseBody == null || !HttpHeaders.hasBody(response)) {
             return null;
         }
+        try {
+            BufferedSource source = responseBody.source();
+            source.request(64); // Buffer the entire body.
+            Buffer buffer = source.buffer();
+            if (!isPlaintext(buffer)) {
+                return "(binary " + responseBody.contentLength() + "-byte body omitted)";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
         String contentEncoding = response.header("Content-Encoding");
         boolean gzip = "gzip".equalsIgnoreCase(contentEncoding);
         try {

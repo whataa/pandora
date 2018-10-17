@@ -88,6 +88,9 @@ public class ApiService {
         Call<Void> cache(@Header("If-Modified-Since") String ifModifiedSince);
         @GET("/cache/{seconds}")
         Call<Void> cache(@Path("seconds") int seconds);
+
+        @GET("http://imtt.dd.qq.com/16891/5734AD8416A77A38134C21EE3D2E1D01.apk?fsname=com.qqgame.hlddz_6.052.001_196.apk&csr=db5e")
+        Call<Void> download();
     }
 
     public static class Data {

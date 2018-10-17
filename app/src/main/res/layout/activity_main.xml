@@ -1,120 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#8aa6c2"
+    android:fillViewport="true"
     android:orientation="vertical">
 
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#8aa6c2"
+        android:orientation="vertical">
 
         <Button
-            android:id="@+id/open"
+            android:id="@+id/open2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="open pandora" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="30dp"
-            android:background="#590bc461"
-            android:text="open" />
-
-
-        <Button
-            android:id="@+id/toast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/open"
-            android:layout_marginTop="12dp"
-            android:layout_toLeftOf="@id/open"
-            android:text="toast" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/open"
-            android:layout_toLeftOf="@id/open"
-            android:rotation="45"
-            android:text="test" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/open"
-            android:layout_alignLeft="@id/open"
-            android:layout_marginLeft="12dp"
-            android:text="test" />
+            android:drawableLeft="@drawable/pd_done"
+            android:drawablePadding="8dp"
+            android:padding="8dp"
+            android:text="test netWork" />
 
         <Button
             android:id="@+id/http"
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"
-            android:layout_above="@id/open"
-            android:layout_marginBottom="12dp"
-            android:layout_toRightOf="@id/open"
-            android:text="http test" />
-
-        <Button
-            android:layout_width="60dp"
-            android:layout_height="120dp"
-            android:layout_below="@id/open"
-            android:layout_marginTop="12dp"
-            android:layout_toLeftOf="@id/open"
-            android:text="test" />
-
-        <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@id/open"
-            android:layout_below="@id/open"
-            android:layout_marginRight="12dp"
-            android:scaleY="0.8"
-            android:text="test" />
+            android:text="do Http" />
 
         <Button
-            android:id="@+id/dialog"
-            android:layout_width="wrap_content"
+            android:id="@+id/download"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/open"
-            android:layout_toRightOf="@id/open"
-            android:text="dialog" />
+            android:text="download binary file (91MB)" />
 
         <TextView
-            android:id="@+id/another_activity"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/dialog"
-            android:layout_below="@id/dialog"
-            android:layout_marginLeft="-10dp"
-            android:layout_marginTop="16dp"
-            android:background="#b4c2cf"
+            android:drawableLeft="@drawable/pd_done"
+            android:drawablePadding="8dp"
+            android:padding="8dp"
+            android:text="test select" />
+
+        <Button
+            android:id="@+id/another_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.6"
             android:gravity="center"
             android:padding="8dp"
             android:text="open transluent activity" />
-    </RelativeLayout>
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="open dialog" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+            <Button
+                android:id="@+id/open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="24dp"
+                android:background="#590bc461"
+                android:text="open" />
+
+
+            <Button
+                android:id="@+id/toast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/open"
+                android:layout_marginTop="12dp"
+                android:layout_toLeftOf="@id/open"
+                android:text="toast" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/open"
+                android:layout_toLeftOf="@id/open"
+                android:rotation="45"
+                android:text="test" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/open"
+                android:layout_alignLeft="@id/open"
+                android:layout_marginLeft="12dp"
+                android:text="test" />
+
+
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="12dp"
+                android:layout_toRightOf="@id/open"
+                android:text="test" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@id/open"
+                android:layout_below="@id/open"
+                android:layout_marginRight="12dp"
+                android:scaleY="0.8"
+                android:text="test" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/pd_done"
+            android:drawablePadding="8dp"
+            android:padding="8dp"
+            android:text="test hierarchy" />
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
-
-            <ImageView
-                android:visibility="gone"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher" />
-
-            <ImageView
-                android:visibility="gone"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher" />
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -125,7 +141,15 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@mipmap/ic_launcher"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_launcher"
+                    android:visibility="gone" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -144,7 +168,6 @@
 
 
                         <ImageView
-                            android:id="@+id/i_am_the_longest_id_in_the_hierarchy_of_main_activity"
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             android:scaleType="centerCrop"
@@ -156,6 +179,7 @@
 
 
                             <ImageView
+                                android:id="@+id/i_am_the_longest_id_in_the_hierarchy_of_main_activity"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:scaleType="centerCrop"
@@ -167,7 +191,6 @@
 
 
                                 <ImageView
-                                    android:visibility="gone"
                                     android:layout_width="80dp"
                                     android:layout_height="80dp"
                                     android:scaleType="centerCrop"
@@ -182,7 +205,8 @@
                                         android:layout_width="80dp"
                                         android:layout_height="80dp"
                                         android:scaleType="centerCrop"
-                                        android:src="@mipmap/ic_launcher" />
+                                        android:src="@mipmap/ic_launcher"
+                                        android:visibility="gone" />
 
                                     <FrameLayout
                                         android:layout_width="wrap_content"
@@ -205,6 +229,18 @@
                                                 android:layout_height="80dp"
                                                 android:scaleType="centerCrop"
                                                 android:src="@mipmap/ic_launcher" />
+
+                                            <FrameLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content">
+
+
+                                                <ImageView
+                                                    android:layout_width="80dp"
+                                                    android:layout_height="80dp"
+                                                    android:scaleType="centerCrop"
+                                                    android:src="@mipmap/ic_launcher" />
+                                            </FrameLayout>
                                         </FrameLayout>
                                     </FrameLayout>
                                 </FrameLayout>
@@ -212,7 +248,93 @@
                         </FrameLayout>
                     </FrameLayout>
                 </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_launcher" />
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_launcher" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_launcher"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_launcher" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_launcher" />
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_launcher" />
+                    </FrameLayout>
+                </FrameLayout>
             </FrameLayout>
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher"
+                android:visibility="gone" />
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher" />
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -229,78 +351,11 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher" />
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-
-                    <ImageView
-                        android:visibility="gone"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
-                </FrameLayout>
+                    android:src="@mipmap/ic_launcher"
+                    android:visibility="gone" />
             </FrameLayout>
         </FrameLayout>
 
-        <ImageView
-            android:visibility="gone"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
-
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -311,38 +366,6 @@
                 android:layout_height="80dp"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/ic_launcher" />
-
-            <ImageView
-                android:visibility="gone"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher" />
-        </FrameLayout>
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher" />
-
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -350,35 +373,48 @@
 
 
                 <ImageView
-                    android:visibility="gone"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/ic_launcher" />
 
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
 
-                    <tech.linjiang.android.pandora.ItIsAFactThatIAmTheLongestNameInAllViewsIsThatRight_JUST_FOR_TEST_HIERARCHY
+                    <ImageView
                         android:layout_width="80dp"
-                        android:layout_height="80dp" />
+                        android:layout_height="80dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_launcher"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <tech.linjiang.android.pandora.ItIsAFactThatIAmTheLongestNameInAllViewsIsThatRight_JUST_FOR_TEST_HIERARCHY
+                            android:layout_width="80dp"
+                            android:layout_height="80dp" />
+                    </FrameLayout>
                 </FrameLayout>
             </FrameLayout>
-        </FrameLayout>
 
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
-    </FrameLayout>
-    <!--test layout tree-->
-</RelativeLayout>
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher" />
+        </FrameLayout>
+        <!--test layout tree-->
+    </LinearLayout>
+</ScrollView>
