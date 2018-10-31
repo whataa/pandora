@@ -11,5 +11,5 @@
     <string name="pd_net_search_hint">query url</string>
     <string name="pd_can_not_edit">can not edit</string>
     <string name="pd_please_open_net_log">TURN ON THE SWITCH TO LOG</string>
-    <string name="pd_please_allow_permission">Pandora needs OVERLAY_PERMISSION to show the function panel, please click allow and try open again</string>
+    <string name="pd_please_allow_permission">Pandora needs OVERLAY_PERMISSION to show the function panel, please click "allow" and try again</string>
 </resources>
