@@ -93,6 +93,10 @@ public final class Pandora {
         }
     }
 
+    public void disableShakeSwitch() {
+        Utils.unRegisterSensor(sensorEventListener);
+    }
+
     private final Application.ActivityLifecycleCallbacks callbacks = new Application.ActivityLifecycleCallbacks() {
         private int count;
 

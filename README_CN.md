@@ -66,11 +66,14 @@ pandora-no-op | [![Release](https://jitpack.io/v/whataa/pandora-no-op.svg)](http
 > Pandora将以悬浮窗的形式展现功能面板，所以需要「悬浮窗」权限，请手动开启。
 
 
-默认情况下，Pandora是以“摇一摇”打开的，如果该特性和你的应用有冲突，你可以在面板的设置中关闭它，并实现自己的触发方式然后调用以下方法来打开功能面板：
+默认情况下，Pandora是以“摇一摇”打开的，如果该特性和你的应用有冲突，你可以通过以下两种方案解决，然后实现自己的触发方式调用 `Pandora.get().open()` 方法打开功能面板。
 
-```
-Pandora.get().open();
-```
+1. 你可以在面板的设置中关闭它；
+
+2. 或者直接在Application的onCreate方法中调用以下方法：（面板的对应开关将无效）
+    ```
+    Pandora.get().disableShakeSwitch();
+    ```
 
 如果你的项目中使用了OKHttp作为底层网络库，可以为其添加以下拦截器开启网络调试模块的功能：
 

@@ -171,6 +171,17 @@ public class Utils {
         }
     }
 
+    public static void unRegisterSensor(SensorEventListener listener) {
+        try {
+            SensorManager manager = (SensorManager) CONTEXT.getSystemService(Context.SENSOR_SERVICE);
+            Sensor sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            manager.unregisterListener(listener, sensor);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            toast(t.getMessage());
+        }
+    }
+
 
     private static long lastCheckTime;
     private static float[] lastXyz = new float[3];

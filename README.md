@@ -71,11 +71,14 @@ Now, without adding any code, you can start using it directly in the app by shak
 > Pandora will display the function panel in the form of a floating window, so it needs the "floating window" permission, please open it manually.
 
 
-By default, Pandora is opened with a "shake", if this feature conflicts with your application, you can turn it off in the settings of the panel and then implement your own trigger method invoking the following code to open the function panel：
+By default, Pandora is opened with a "shake", if this feature conflicts with your application, you can solve it by the following two ways and then implement your own trigger method invoking `Pandora.get().open()` to open the function panel：
 
-```
-Pandora.get().open();
-```
+1. Turn it off in the settings of the panel;
+
+2. Or directly call the following method in the application's onCreate: (the corresponding switch of the panel will be invalid)
+    ```
+    Pandora.get().disableShakeSwitch();
+    ```
 
 
 If your project uses OKHttp as the underlying network library, you can add the following interceptor to enable the function of the network debugging module：
