@@ -93,23 +93,6 @@ new OkHttpClient.Builder()
 
 ## Extended features
 
-### Make the response of Http more readable
-The result of Http request is usually the json format. In order to be more beautiful when viewing json, you can add a formatter to json in the following way:
-
-1. implement `tech.linjiang.pandora.network.JsonFormatter` interface，You can refer to the specific implementation of `JsonFormatterImpl` in the app-module:
-```
-public class JsonFormatterImpl implements JsonFormatter {
-    @Override
-    public String format(String result) {
-        return JSON.toJSONString(JSON.parse(result));
-    }
-}
-```
-
-2. Add new formatter to Pandora：
-```
-Pandora.get().getInterceptor().setJsonFormatter(new JsonFormatterImpl());
-```
 
 ### Inspect the View property
 Pandora supports viewing and partially modifying the properties of View, ViewGroup, and common TextView and ImageView by default. If you want to inspect more view attributes, you can expand them in the following ways:

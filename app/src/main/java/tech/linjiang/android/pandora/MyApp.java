@@ -5,8 +5,6 @@ import android.os.Build;
 import android.os.StrictMode;
 
 import tech.linjiang.android.pandora.db.StoreDatabase;
-import tech.linjiang.android.pandora.net.JsonFormatterImpl;
-import tech.linjiang.pandora.Pandora;
 
 /**
  * Created by linjiang on 30/05/2018.
@@ -27,9 +25,6 @@ public class MyApp extends Application {
             createDeviceProtectedStorageContext().moveSharedPreferencesFrom(this, "testAllType");
         }
 
-        // choose one to let your network json result looks more pretty
-        Pandora.get().getInterceptor().setJsonFormatter(new JsonFormatterImpl());
-//        Pandora.get().getInterceptor().setJsonFormatter(new GsonFormatterImpl());
     }
 
     public static Application getContext() {

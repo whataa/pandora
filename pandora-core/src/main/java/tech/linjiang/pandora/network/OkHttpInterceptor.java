@@ -33,7 +33,6 @@ public class OkHttpInterceptor implements Interceptor {
     private static final String TAG = "OkHttpInterceptor";
 
     private NetStateListener listener;
-    private JsonFormatter formatter;
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -364,11 +363,8 @@ public class OkHttpInterceptor implements Interceptor {
         listener = null;
     }
 
+    @Deprecated
     public void setJsonFormatter(JsonFormatter formatter) {
-        this.formatter = formatter;
     }
 
-    public JsonFormatter getJsonFormatter() {
-        return formatter;
-    }
 }

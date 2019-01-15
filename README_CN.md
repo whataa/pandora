@@ -90,23 +90,6 @@ new OkHttpClient.Builder()
 
 ## 扩展特性
 
-### 让Http的response更具可读性
-Http请求的结果通常是json格式，为了在查看json时更美观，可以通过以下方式为json增加formatter：
-
-1. 实现`tech.linjiang.pandora.network.JsonFormatter`接口，可以参考app模块下的`JsonFormatterImpl`的具体实现：
-```
-public class JsonFormatterImpl implements JsonFormatter {
-    @Override
-    public String format(String result) {
-        return JSON.toJSONString(JSON.parse(result));
-    }
-}
-```
-
-2. 将实现的formatter添加到Pandora：
-```
-Pandora.get().getInterceptor().setJsonFormatter(new JsonFormatterImpl());
-```
 
 ### 查看View属性
 Pandora默认支持动态查看和部分修改View、ViewGroup以及常见的TextView、ImageView控件的属性，如果想查看更多控件的属性，可以通过以下方式进行扩展：

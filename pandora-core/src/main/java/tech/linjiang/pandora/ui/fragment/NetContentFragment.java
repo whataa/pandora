@@ -1,5 +1,6 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -35,10 +36,12 @@ public class NetContentFragment extends BaseFragment {
         contentType = getArguments().getString(PARAM3);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected View getLayoutView() {
         webView = new WebView(getContext());
         webView.getSettings().setDefaultTextEncodingName("UTF-8");
+        webView.getSettings().setJavaScriptEnabled(true);
         return webView;
     }
 
@@ -104,6 +107,27 @@ public class NetContentFragment extends BaseFragment {
                 hideLoading();
                 setSearchView();
                 originContent = result;
+                if (contentType.toLowerCase().contains("json")) {
+                    result = "<!DOCTYPE html>\n" +
+                            "<html>\n" +
+                            "<head>\n" +
+                            "    <meta charset=utf-8>\n" +
+                            "    <meta name=viewport content=\"width=device-width\">\n" +
+                            "    <script type=\"text/javascript\">\n" +
+                            "    function output(content) {\n" +
+                            "        document.body.appendChild(document.createElement('pre')).innerHTML = content;\n" +
+                            "    }\n" +
+                            "    function start() {\n" +
+                            "        var obj = \n" + result + ";\n" +
+                            "        var str = JSON.stringify(obj, undefined, 4);\n" +
+                            "        output(str);\n" +
+                            "    }\n" +
+                            "    </script>\n" +
+                            "</head>\n" +
+                            "<body onLoad=\"javascript:start();\">\n" +
+                            "</body>\n" +
+                            "</html>";
+                }
                 webView.loadData(result,  decideMimeType(), "utf-8");
             }
         }).execute();
@@ -112,14 +136,11 @@ public class NetContentFragment extends BaseFragment {
 
 
     private String decideMimeType() {
-        if (contentType.toLowerCase().contains("json")) {
-            return "text/json";
-        } else if (contentType.toLowerCase().contains("xml")) {
+        if (contentType.toLowerCase().contains("xml")) {
             return "text/xml";
-        } else if (contentType.toLowerCase().contains("html")) {
-            return "text/html";
         } else {
             return "text/html";
         }
     }
+
 }

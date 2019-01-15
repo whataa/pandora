@@ -16,6 +16,7 @@ public class OkHttpInterceptor implements Interceptor {
         return chain.proceed(chain.request());
     }
 
+    @Deprecated
     public void setJsonFormatter(JsonFormatter formatter) {
     }
 }
