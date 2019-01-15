@@ -1,5 +1,6 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.ui.connector.EditCallback;
 import tech.linjiang.pandora.ui.item.ContentItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
@@ -61,8 +61,7 @@ public class FileAttrFragment extends BaseListFragment {
                 } else if (item.getItemId() == R.id.pd_menu_id_3) {
                     Bundle bundle = new Bundle();
                     bundle.putString(PARAM1, file.getName());
-                    bundle.putSerializable(PARAM2, callback);
-                    launch(EditFragment.class, bundle);
+                    launch(EditFragment.class, bundle, CODE1);
                 } else if (item.getItemId() == R.id.pd_menu_id_4) {
                     tryDel();
                 }
@@ -189,9 +188,11 @@ public class FileAttrFragment extends BaseListFragment {
         showLoading();
     }
 
-    private EditCallback callback = new EditCallback() {
-        @Override
-        public void onValueChanged(final String value) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE1 && resultCode == Activity.RESULT_OK) {
+            final String value = data.getStringExtra("value");
             new SimpleTask<>(new SimpleTask.Callback<Void, Boolean>() {
                 @Override
                 public Boolean doInBackground(Void[] params) {
@@ -207,5 +208,6 @@ public class FileAttrFragment extends BaseListFragment {
             }).execute();
             showLoading();
         }
-    };
+    }
+
 }

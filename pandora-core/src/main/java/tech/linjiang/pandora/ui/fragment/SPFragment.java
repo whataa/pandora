@@ -1,5 +1,7 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -15,7 +17,6 @@ import java.util.Map;
 
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.ui.connector.EditCallback;
 import tech.linjiang.pandora.ui.item.KeyValueItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
@@ -50,8 +51,7 @@ public class SPFragment extends BaseListFragment {
                     clickKey = ((KeyValueItem) item).data[0];
                     Bundle bundle = new Bundle();
                     bundle.putString(PARAM1, ((KeyValueItem) item).data[1]);
-                    bundle.putSerializable(PARAM2, callback);
-                    launch(EditFragment.class, bundle);
+                    launch(EditFragment.class, bundle, CODE1);
                 }
             }
         });
@@ -118,9 +118,11 @@ public class SPFragment extends BaseListFragment {
         }
     }
 
-    private EditCallback callback = new EditCallback() {
-        @Override
-        public void onValueChanged(final String value) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE1 && resultCode == Activity.RESULT_OK) {
+            final String value = data.getStringExtra("value");
             if (!TextUtils.isEmpty(clickKey)) {
 
                 new SimpleTask<>(new SimpleTask.Callback<Void, String>() {
@@ -143,5 +145,6 @@ public class SPFragment extends BaseListFragment {
                 showLoading();
             }
         }
-    };
+    }
+
 }

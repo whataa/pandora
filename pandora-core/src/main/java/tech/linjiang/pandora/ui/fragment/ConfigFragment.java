@@ -1,5 +1,7 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -11,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.ui.connector.EditCallback;
 import tech.linjiang.pandora.ui.item.CheckBoxItem;
 import tech.linjiang.pandora.ui.item.NameArrowItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
@@ -73,14 +74,14 @@ public class ConfigFragment extends BaseListFragment {
                         case Config.Type.SHAKE_THRESHOLD:
                             editingType = type;
                             Bundle bundle = new Bundle();
-                            bundle.putSerializable(PARAM2, callback);
+                            bundle.putBoolean(PARAM2, true);
                             if (type == Config.Type.SHAKE_THRESHOLD) {
                                 bundle.putStringArray(PARAM3, Utils.newArray("800", "1000", "1200", "1400", "1600"));
                             } else if (type == Config.Type.UI_ACTIVITY_GRAVITY) {
                                 bundle.putStringArray(PARAM3, Utils.newArray("start|top", "end|top", "start|bottom", "end|bottom"));
                                 bundle.putBoolean(PARAM4, true);
                             }
-                            launch(EditFragment.class, bundle);
+                            launch(EditFragment.class, bundle, CODE1);
                             break;
                         case Config.Type.SANDBOX_DPM:
                             Config.setSANDBOX_DPM(!Config.getSANDBOX_DPM());
@@ -126,9 +127,12 @@ public class ConfigFragment extends BaseListFragment {
     }
 
     private int editingType;
-    private EditCallback callback = new EditCallback() {
-        @Override
-        public void onValueChanged(String value) {
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE1 && resultCode == Activity.RESULT_OK) {
+            String value = data.getStringExtra("value");
             try {
                 switch (editingType) {
                     case Config.Type.NETWORK_DELAY_REQ:
@@ -181,5 +185,6 @@ public class ConfigFragment extends BaseListFragment {
                 Utils.toast(t.getMessage());
             }
         }
-    };
+    }
+
 }

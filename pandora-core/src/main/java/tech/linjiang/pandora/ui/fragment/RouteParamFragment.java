@@ -30,7 +30,7 @@ import tech.linjiang.pandora.util.ViewKnife;
  * Created by linjiang on 2019/1/13.
  */
 
-public class RouteParamFragment extends BaseListFragment {
+public class RouteParamFragment extends BaseListFragment implements RouteParamItem.EditListener {
 
     @Override
     protected View getLayoutView() {
@@ -79,16 +79,18 @@ public class RouteParamFragment extends BaseListFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getToolbar().setTitle(getArguments().getString(PARAM1));
+        getToolbar().setSubtitle(getArguments().getString(PARAM2));
         initToolbar();
         registerForContextMenu(getRecyclerView());
 
         List<BaseItem> data = new ArrayList<>();
-        data.add(new RouteParamItem(RouteParamItem.Type.STRING));
-        data.add(new RouteParamItem(RouteParamItem.Type.BOOLEAN));
-        data.add(new RouteParamItem(RouteParamItem.Type.INT));
-        data.add(new RouteParamItem(RouteParamItem.Type.LONG));
-        data.add(new RouteParamItem(RouteParamItem.Type.FLOAT));
-        data.add(new RouteParamItem(RouteParamItem.Type.DOUBLE));
+        data.add(new RouteParamItem(RouteParamItem.Type.STRING, this));
+        data.add(new RouteParamItem(RouteParamItem.Type.BOOLEAN, this));
+        data.add(new RouteParamItem(RouteParamItem.Type.INT, this));
+        data.add(new RouteParamItem(RouteParamItem.Type.LONG, this));
+        data.add(new RouteParamItem(RouteParamItem.Type.FLOAT, this));
+        data.add(new RouteParamItem(RouteParamItem.Type.DOUBLE, this));
         getAdapter().setItems(data);
         getAdapter().setListener(new UniversalAdapter.OnItemClickListener() {
             @Override
@@ -103,7 +105,11 @@ public class RouteParamFragment extends BaseListFragment {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         if (menuInfo instanceof MenuRecyclerView.RvContextMenuInfo) {
-            menu.add(-1, R.id.pd_menu_id_1, 0, "add");
+            MenuRecyclerView.RvContextMenuInfo info = (MenuRecyclerView.RvContextMenuInfo) menuInfo;
+            RouteParamItem paramItem = getAdapter().getItem(info.position);
+            if (paramItem.data != RouteParamItem.Type.NONE) {
+                menu.add(-1, R.id.pd_menu_id_1, 0, "add");
+            }
             menu.add(-1, R.id.pd_menu_id_2, 0, "delete");
         }
     }
@@ -116,7 +122,7 @@ public class RouteParamFragment extends BaseListFragment {
             if (item.getItemId() == R.id.pd_menu_id_2) {
                 getAdapter().removeItem(info.position);
             } else if (item.getItemId() == R.id.pd_menu_id_1) {
-                getAdapter().insertItem(new RouteParamItem(paramItem.data), info.position);
+                getAdapter().insertItem(new RouteParamItem(paramItem.data, this), info.position);
             }
         }
         return super.onContextItemSelected(item);
@@ -141,7 +147,7 @@ public class RouteParamFragment extends BaseListFragment {
                     return true;
                 } else {
                     if (item.getGroupId() == R.id.pd_menu_id_1) {
-                        RouteParamItem paramItem = new RouteParamItem(RouteParamItem.Type.FLAG);
+                        RouteParamItem paramItem = new RouteParamItem(RouteParamItem.Type.NONE);
                         switch (item.getOrder()) {
                             case 0:
                                 paramItem.setFlagType(Intent.FLAG_ACTIVITY_NEW_TASK, item.getTitle().toString());
@@ -167,7 +173,7 @@ public class RouteParamFragment extends BaseListFragment {
     }
 
     private Intent assembleTargetIntent() throws ClassNotFoundException {
-        String clazz = getArguments().getString("clazz");
+        String clazz = getArguments().getString(PARAM2);
         Intent intent = new Intent(getContext(), Class.forName(clazz));
         List<BaseItem> items = getAdapter().getItems();
         if (Utils.isNotEmpty(items)) {
@@ -184,7 +190,7 @@ public class RouteParamFragment extends BaseListFragment {
                             intent.putExtra(item.getInput1(), Double.valueOf(item.getInput2()));
                         }
                         break;
-                    case RouteParamItem.Type.FLAG:
+                    case RouteParamItem.Type.NONE:
                         intent.addFlags(item.getFlagType());
                         break;
                     case RouteParamItem.Type.FLOAT:
@@ -211,5 +217,38 @@ public class RouteParamFragment extends BaseListFragment {
             }
         }
         return intent;
+    }
+
+    @Override
+    public void onEditReq(String def, @RouteParamItem.Type int type) {
+        Bundle bundle = new Bundle();
+        bundle.putString(PARAM1, def);
+        if (type == RouteParamItem.Type.BOOLEAN) {
+            bundle.putStringArray(PARAM3, Utils.newArray("true", "false"));
+            bundle.putBoolean(PARAM4, true);
+        } else {
+            bundle.putBoolean(PARAM2, type != RouteParamItem.Type.STRING);
+        }
+        launch(EditFragment.class, bundle, CODE1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE1 && resultCode == Activity.RESULT_OK) {
+            String value = data.getStringExtra("value");
+            RouteParamItem selectedItem = null;
+            for (int i = 0; i < getAdapter().getItemCount(); i++) {
+                RouteParamItem item = getAdapter().getItem(i);
+                if (item.isEditRequesting()) {
+                    selectedItem = item;
+                    break;
+                }
+            }
+            if (selectedItem != null) {
+                selectedItem.setTheEditResult(value);
+                getAdapter().notifyDataSetChanged();
+            }
+        }
     }
 }

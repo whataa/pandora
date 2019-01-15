@@ -28,7 +28,7 @@ public class RouteItem extends BaseItem<String> {
             @Override
             public void onClick(View v) {
                 if (callback != null) {
-                    callback.onClick(data, false);
+                    callback.onClick(simpleName, data, false);
                 }
             }
         });
@@ -36,7 +36,7 @@ public class RouteItem extends BaseItem<String> {
             @Override
             public void onClick(View v) {
                 if (callback != null) {
-                    callback.onClick(data, true);
+                    callback.onClick(simpleName, data, true);
                 }
             }
         });
@@ -48,6 +48,6 @@ public class RouteItem extends BaseItem<String> {
     }
 
     public interface Callback {
-        void onClick(String clazz, boolean needParam);
+        void onClick(String simpleName, String clazz, boolean needParam);
     }
 }

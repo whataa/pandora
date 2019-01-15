@@ -2,6 +2,7 @@ package tech.linjiang.pandora.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +18,6 @@ import java.util.List;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.inspector.model.Attribute;
-import tech.linjiang.pandora.ui.connector.EditCallback;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.item.ViewAttrItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
@@ -68,9 +68,8 @@ public class ViewAttrFragment extends BaseListFragment {
                     editType = ((ViewAttrItem) item).data.attrType;
                     if (editType != Attribute.Edit.NORMAL) {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable(PARAM2, callback);
                         bundle.putStringArray(PARAM3, assembleOption(editType));
-                        launch(EditFragment.class, bundle);
+                        launch(EditFragment.class, bundle, CODE1);
                     } else {
                         Utils.toast(R.string.pd_can_not_edit);
                     }
@@ -154,9 +153,11 @@ public class ViewAttrFragment extends BaseListFragment {
         }
     }
 
-    private EditCallback callback = new EditCallback() {
-        @Override
-        public void onValueChanged(String value) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE1 && resultCode == Activity.RESULT_OK) {
+            final String value = data.getStringExtra("value");
             try {
                 switch (editType) {
                     case Attribute.Edit.ALPHA:
@@ -311,5 +312,6 @@ public class ViewAttrFragment extends BaseListFragment {
                 Utils.toast(t.getMessage());
             }
         }
-    };
+    }
+
 }

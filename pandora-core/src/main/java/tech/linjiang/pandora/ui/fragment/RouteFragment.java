@@ -46,10 +46,11 @@ public class RouteFragment extends BaseListFragment {
 
     private final RouteItem.Callback callback = new RouteItem.Callback() {
         @Override
-        public void onClick(String clazz, boolean needParam) {
+        public void onClick(String simpleName, String clazz, boolean needParam) {
             if (needParam) {
                 Bundle bundle = new Bundle();
-                bundle.putString("clazz", clazz);
+                bundle.putString(PARAM1, simpleName);
+                bundle.putString(PARAM2, clazz);
                 launch(RouteParamFragment.class, bundle, CODE1);
                 return;
             }
