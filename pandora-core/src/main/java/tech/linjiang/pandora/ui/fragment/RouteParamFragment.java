@@ -36,6 +36,7 @@ public class RouteParamFragment extends BaseListFragment implements RouteParamIt
     protected View getLayoutView() {
         LinearLayout layout = new LinearLayout(getContext());
         layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setBackgroundColor(ViewKnife.getColor(R.color.pd_main_bg));
         layout.addView(super.getLayoutView(), new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 0,
