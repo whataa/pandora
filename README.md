@@ -50,8 +50,8 @@ allprojects {
 ```
 dependencies {
     ...
-    debugImplementation 'com.github.whataa:pandora:${RELEASE}'
-    releaseImplementation 'com.github.whataa:pandora-no-op:${RELEASE}'
+    debugImplementation 'com.github.whataa:pandora:v${RELEASE}'
+    releaseImplementation 'com.github.whataa:pandora-no-op:v${RELEASE}'
 }  
 ```
 
