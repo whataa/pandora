@@ -48,13 +48,18 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getToolbar().setTitle("Network");
-        getToolbar().getMenu().findItem(R.id.menu_switch).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_search).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_clear).setVisible(true);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "switch")
+                .setActionView(new SwitchCompat(getContext()))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_2, 1, "search")
+                .setActionView(new SearchView(getContext()))
+                .setIcon(R.drawable.pd_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, "clear");
         setSearchView();
         getToolbar().setOnMenuItemClickListener(this);
         SwitchCompat switchCompat = ((SwitchCompat) getToolbar()
-                .getMenu().findItem(R.id.menu_switch).getActionView());
+                .getMenu().findItem(R.id.pd_menu_id_1).getActionView());
         switchCompat.setOnCheckedChangeListener(this);
         if (Config.isNetLogEnable()) {
             switchCompat.setChecked(true);
@@ -127,7 +132,7 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
     }
 
     private void setSearchView() {
-        MenuItem menuItem = getToolbar().getMenu().findItem(R.id.menu_search);
+        MenuItem menuItem = getToolbar().getMenu().findItem(R.id.pd_menu_id_2);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         searchView.setQueryHint(ViewKnife.getString(R.string.pd_net_search_hint));
@@ -156,7 +161,7 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.menu_clear) {
+        if (item.getItemId() == R.id.pd_menu_id_3) {
             if (!Config.isNetLogEnable()) {
                 return false;
             }

@@ -36,7 +36,7 @@ public class ConfigFragment extends BaseListFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getToolbar().setTitle("Setting");
-        getToolbar().getMenu().findItem(R.id.menu_reset).setVisible(true);
+        getToolbar().getMenu().add(-1, -1, 0, "reset").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

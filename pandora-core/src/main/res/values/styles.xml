@@ -13,6 +13,24 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
-    <style name="ToolbarTheme" parent="Theme.AppCompat.Light">
+    <style name="pd_toolbar" parent="Theme.AppCompat.Light">
+        <item name="actionOverflowButtonStyle">@style/pd_overflow</item>
+    </style>
+
+    <style name="pd_overflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/pd_add</item>
+    </style>
+
+    <style name="pd_entrance_text">
+        <item name="android:clickable">true</item>
+        <item name="android:minWidth">50dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">10dp</item>
     </style>
 </resources>

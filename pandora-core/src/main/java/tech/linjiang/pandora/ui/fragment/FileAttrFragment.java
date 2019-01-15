@@ -44,23 +44,26 @@ public class FileAttrFragment extends BaseListFragment {
             return;
         }
         getToolbar().setTitle(file.getName());
-        getToolbar().getMenu().findItem(R.id.menu_open).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_open_txt).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_rename).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_delete).setVisible(true);
+
+
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "open");
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_2, 1, "open as text");
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, "rename");
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_4, 3, "delete");
+
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.menu_open) {
+                if (item.getItemId() == R.id.pd_menu_id_1) {
                     tryOpen();
-                } else if (item.getItemId() == R.id.menu_open_txt) {
+                } else if (item.getItemId() == R.id.pd_menu_id_2) {
                     tryOpenAsText();
-                } else if (item.getItemId() == R.id.menu_rename) {
+                } else if (item.getItemId() == R.id.pd_menu_id_3) {
                     Bundle bundle = new Bundle();
                     bundle.putString(PARAM1, file.getName());
                     bundle.putSerializable(PARAM2, callback);
                     launch(EditFragment.class, bundle);
-                } else if (item.getItemId() == R.id.menu_delete) {
+                } else if (item.getItemId() == R.id.pd_menu_id_4) {
                     tryDel();
                 }
                 return true;

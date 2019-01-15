@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.util.DisplayMetrics;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -107,9 +108,12 @@ public class HierarchyFragment extends BaseListFragment
             return;
         }
         getToolbar().setTitle("Hierarchy");
-        getToolbar().getMenu().findItem(R.id.menu_switch).setVisible(true);
+
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "switch")
+                .setActionView(new SwitchCompat(getContext()))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         SwitchCompat switchCompat = ((SwitchCompat) getToolbar()
-                .getMenu().findItem(R.id.menu_switch).getActionView());
+                .getMenu().findItem(R.id.pd_menu_id_1).getActionView());
         switchCompat.setChecked(isExpand);
         switchCompat.setOnCheckedChangeListener(this);
 

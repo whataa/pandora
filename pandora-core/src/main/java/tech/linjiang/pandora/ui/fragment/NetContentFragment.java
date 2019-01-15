@@ -89,21 +89,24 @@ public class NetContentFragment extends BaseListFragment {
     }
 
     private void setSearchView() {
-        getToolbar().getMenu().findItem(R.id.menu_copy).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_search).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_share).setVisible(true);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "copy");
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_2, 1, "search")
+                .setActionView(new SearchView(getContext()))
+                .setIcon(R.drawable.pd_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, "share");
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.menu_copy) {
+                if (item.getItemId() == R.id.pd_menu_id_1) {
                     Utils.copy2ClipBoard(originContent);
-                } else if (item.getItemId() == R.id.menu_share) {
+                } else if (item.getItemId() == R.id.pd_menu_id_3) {
                     Utils.shareText(originContent);
                 }
                 return true;
             }
         });
-        MenuItem menuItem = getToolbar().getMenu().findItem(R.id.menu_search);
+        MenuItem menuItem = getToolbar().getMenu().findItem(R.id.pd_menu_id_2);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         searchView.setQueryHint(ViewKnife.getString(R.string.pd_net_search_hint));

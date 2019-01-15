@@ -6,6 +6,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -23,6 +26,7 @@ import android.widget.Toast;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -207,4 +211,20 @@ public class Utils {
         return false;
     }
 
+
+    public static List<String> getActivities() {
+        List<String> result = new ArrayList<>();
+        try {
+            PackageManager packageManager = CONTEXT.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(
+                    CONTEXT.getPackageName(), PackageManager.GET_ACTIVITIES);
+
+            for (ActivityInfo activity : packageInfo.activities) {
+                result.add(activity.name);
+            }
+        } catch (PackageManager.NameNotFoundException ignore) {
+
+        }
+        return result;
+    }
 }

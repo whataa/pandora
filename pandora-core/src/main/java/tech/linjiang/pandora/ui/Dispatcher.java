@@ -3,7 +3,6 @@ package tech.linjiang.pandora.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +19,7 @@ import tech.linjiang.pandora.ui.connector.UIStateCallback;
 import tech.linjiang.pandora.ui.fragment.ConfigFragment;
 import tech.linjiang.pandora.ui.fragment.HierarchyFragment;
 import tech.linjiang.pandora.ui.fragment.NetFragment;
+import tech.linjiang.pandora.ui.fragment.RouteFragment;
 import tech.linjiang.pandora.ui.fragment.SandboxFragment;
 import tech.linjiang.pandora.ui.fragment.ViewFragment;
 import tech.linjiang.pandora.util.ViewKnife;
@@ -112,6 +112,16 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
                             .commit();
                 } else {
                     finish();
+                }
+                break;
+            case Type.ROUTE:
+                view = new FrameLayout(this);
+                view.setId(R.id.pd_fragment_container_id);
+                setContentView(view);
+                if (savedInstanceState == null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.pd_fragment_container_id, new RouteFragment())
+                            .commit();
                 }
                 break;
         }

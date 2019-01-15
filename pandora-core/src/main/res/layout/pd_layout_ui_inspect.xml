@@ -9,93 +9,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingBottom="6dp"
-        android:paddingTop="6dp">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/entrance_config"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/pd_entrance_text"
             android:drawableTop="@drawable/pd_config"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:scaleType="centerInside"
-            android:text="setting"
-            android:textColor="#000"
-            android:textSize="10dp" />
+            android:text="setting" />
 
         <TextView
             android:id="@+id/ui_hierarchy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/pd_entrance_text"
             android:drawableTop="@drawable/pd_layer"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:scaleType="centerInside"
-            android:text="hierarchy"
-            android:textColor="#000"
-            android:textSize="10dp" />
+            android:text="hierarchy" />
 
         <TextView
             android:id="@+id/ui_grid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/pd_entrance_text"
             android:drawableTop="@drawable/pd_grid"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:scaleType="centerInside"
-            android:text="gridline"
-            android:textColor="#000"
-            android:textSize="10dp" />
+            android:text="gridline" />
 
         <TextView
             android:id="@+id/ui_window"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/pd_entrance_text"
             android:drawableTop="@drawable/pd_windows"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:scaleType="centerInside"
-            android:text="activity"
-            android:textColor="#000"
-            android:textSize="10dp" />
+            android:text="activity" />
 
         <TextView
             android:id="@+id/ui_baseline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/pd_entrance_text"
             android:drawableTop="@drawable/pd_ruler"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:scaleType="centerInside"
-            android:text="baseline"
-            android:textColor="#000"
-            android:textSize="10dp" />
+            android:text="baseline" />
+
+        <TextView
+            android:id="@+id/ui_route"
+            style="@style/pd_entrance_text"
+            android:drawableTop="@drawable/pd_map"
+            android:text="navigate" />
 
         <TextView
             android:id="@+id/ui_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/pd_entrance_text"
             android:drawableTop="@drawable/pd_back"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:paddingLeft="8dp"
-            android:paddingRight="16dp"
-            android:scaleType="centerInside"
-            android:text="goBack"
-            android:textColor="#000"
-            android:textSize="10dp" />
+            android:text="goBack" />
 
 
     </LinearLayout>

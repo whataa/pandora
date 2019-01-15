@@ -81,6 +81,7 @@ public class EntranceView extends LinearLayout implements View.OnClickListener {
         inspectWrapper.findViewById(R.id.ui_grid).setOnClickListener(this);
         inspectWrapper.findViewById(R.id.ui_window).setOnClickListener(this);
         inspectWrapper.findViewById(R.id.ui_baseline).setOnClickListener(this);
+        inspectWrapper.findViewById(R.id.ui_route).setOnClickListener(this);
         addView(entranceWrapper);
         addView(inspectWrapper);
     }

@@ -8,4 +8,12 @@
     <item name="pd_toolbar_id" type="id"/>
     <!--To identify the uniqueness of view temporarily when launching to other fragments-->
     <item name="pd_view_tag_for_unique" type="id"/>
+    <!---->
+    <item name="pd_menu_id_1" type="id"/>
+    <item name="pd_menu_id_2" type="id"/>
+    <item name="pd_menu_id_3" type="id"/>
+    <item name="pd_menu_id_4" type="id"/>
+    <item name="pd_menu_id_5" type="id"/>
+    <item name="pd_menu_id_6" type="id"/>
+    <item name="pd_menu_id_7" type="id"/>
 </resources>

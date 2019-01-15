@@ -29,6 +29,8 @@ public class OnEntranceClick implements View.OnClickListener {
             onClick(Type.GRID);
         } else if (v.getId() == R.id.ui_window) {
             onClick(Type.WINDOW);
+        } else if (v.getId() == R.id.ui_route) {
+            onClick(Type.ROUTE);
         }
     }
 

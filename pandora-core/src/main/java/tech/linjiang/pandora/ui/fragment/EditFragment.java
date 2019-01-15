@@ -119,7 +119,7 @@ public class EditFragment extends BaseFragment {
             editText.requestFocus();
         }
 
-        getToolbar().getMenu().findItem(R.id.menu_save).setVisible(true);
+        getToolbar().getMenu().add(-1, -1, 0, "save").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

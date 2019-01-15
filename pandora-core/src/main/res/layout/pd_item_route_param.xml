@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="#fff"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="String"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/input1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="0.6"
+        android:background="@drawable/pd_shape_btn_bg"
+        android:gravity="center_vertical|left"
+        android:hint="name"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:singleLine="true"
+        android:textSize="14dp"
+        tools:text="1111111111111111111" />
+
+    <TextView
+        android:id="@+id/input2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:background="@drawable/pd_shape_btn_bg"
+        android:gravity="center_vertical|left"
+        android:hint="value"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:singleLine="true"
+        android:textSize="14dp" />
+
+    <ImageView
+        android:id="@+id/modify"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/pd_edit"
+        android:textColor="@color/pd_label_dark" />
+</LinearLayout>

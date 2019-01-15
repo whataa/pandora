@@ -14,6 +14,7 @@ import java.lang.annotation.RetentionPolicy;
         Type.CONFIG,
         Type.GRID,
         Type.WINDOW,
+        Type.ROUTE,
 })
 @Retention(RetentionPolicy.SOURCE)
 public @interface Type {
@@ -25,4 +26,5 @@ public @interface Type {
     int CONFIG = 0x07;
     int GRID = 0x08;
     int WINDOW = 0x09;
+    int ROUTE = 0x10;
 }

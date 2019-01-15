@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.ContextMenu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -67,10 +66,8 @@ public class SPFragment extends BaseListFragment {
             MenuRecyclerView.RvContextMenuInfo info = (MenuRecyclerView.RvContextMenuInfo) menuInfo;
             if (getAdapter().getItems().get(info.position) instanceof KeyValueItem) {
                 if (!((KeyValueItem) getAdapter().getItems().get(info.position)).isTitle) {
-                    MenuInflater inflater = getActivity().getMenuInflater();
-                    inflater.inflate(R.menu.pd_menu_common, menu);
-                    menu.findItem(R.id.menu_copy_value).setVisible(true);
-                    menu.findItem(R.id.menu_delete_key).setVisible(true);
+                    menu.add(-1, R.id.pd_menu_id_1, 0, "copy");
+                    menu.add(-1, R.id.pd_menu_id_2, 0, "delete key");
                 }
             }
         }
@@ -89,12 +86,12 @@ public class SPFragment extends BaseListFragment {
                     return true;
                 }
 
-                if (item.getItemId() == R.id.menu_copy_value) {
+                if (item.getItemId() == R.id.pd_menu_id_1) {
                     Utils.copy2ClipBoard(
                             "KEY :: " + keyValueItem.data[0] + "\nVALUE  :: " + keyValueItem.data[1]
                     );
                     return true;
-                } else if (item.getItemId() == R.id.menu_delete_key) {
+                } else if (item.getItemId() == R.id.pd_menu_id_2) {
                     String clickedKey = keyValueItem.data[0];
                     Pandora.get().getSharedPref().removeSharedPrefKey(descriptor, clickedKey);
                     getAdapter().removeItem(info.position);

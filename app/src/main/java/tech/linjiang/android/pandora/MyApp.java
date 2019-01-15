@@ -20,7 +20,7 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
         mThis = this;
-        strictMode();
+//        strictMode();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // the store.db and testAllType.xml if exist will be moved to the Device encrypted storage area.
             createDeviceProtectedStorageContext().moveDatabaseFrom(this, StoreDatabase.NAME);

@@ -6,6 +6,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +30,9 @@ import tech.linjiang.pandora.util.ViewKnife;
 
 public class ViewFragment extends BaseFragment implements View.OnClickListener {
 
-
     @Override
-    protected boolean enableToolbar() {
-        return false;
+    protected Toolbar onCreateToolbar() {
+        return null;
     }
 
     @Override

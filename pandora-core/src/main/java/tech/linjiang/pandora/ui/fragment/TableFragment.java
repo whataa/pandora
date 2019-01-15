@@ -7,7 +7,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.ContextMenu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,10 +132,8 @@ public class TableFragment extends BaseFragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.pd_menu_common, menu);
-        menu.findItem(R.id.menu_copy_value).setVisible(true);
-        menu.findItem(R.id.menu_delete_row).setVisible(true);
+        menu.add(-1, R.id.pd_menu_id_1, 0, "copy value");
+        menu.add(-1, R.id.pd_menu_id_2, 1, "delete row");
     }
 
     @Override
@@ -144,10 +141,10 @@ public class TableFragment extends BaseFragment {
         MenuRecyclerView.RvContextMenuInfo info = (MenuRecyclerView.RvContextMenuInfo) item.getMenuInfo();
         BaseItem gridItem = adapter.getItems().get(info.position);
         if (gridItem instanceof GridItem) {
-            if (item.getItemId() == R.id.menu_copy_value) {
+            if (item.getItemId() == R.id.pd_menu_id_1) {
                 Utils.copy2ClipBoard((String) gridItem.data);
                 return true;
-            } else if (item.getItemId() == R.id.menu_delete_row) {
+            } else if (item.getItemId() == R.id.pd_menu_id_2) {
                 String pkValue = ((GridItem) gridItem).primaryKeyValue;
                 delete(pkValue);
                 return true;
@@ -157,12 +154,16 @@ public class TableFragment extends BaseFragment {
     }
 
     private void initMenu() {
-        getToolbar().getMenu().findItem(R.id.menu_search).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_info).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_add).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_delete_all).setVisible(true);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "search")
+                .setActionView(new SearchView(getContext()))
+                .setIcon(R.drawable.pd_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
-        MenuItem menuItem = getToolbar().getMenu().findItem(R.id.menu_search);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_2, 1, "info");
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, "add");
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_4, 3, "delete all");
+
+        MenuItem menuItem = getToolbar().getMenu().findItem(R.id.pd_menu_id_1);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint(ViewKnife.getString(R.string.pd_search_hint));
         searchView.setOnQueryTextListener(new SimpleOnQueryTextListener() {
@@ -187,19 +188,19 @@ public class TableFragment extends BaseFragment {
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.menu_info) {
+                if (item.getItemId() == R.id.pd_menu_id_2) {
                     Bundle bundle = new Bundle();
                     bundle.putInt(PARAM1, key);
                     bundle.putString(PARAM2, table);
                     bundle.putBoolean(PARAM3, true);
                     launch(TableFragment.class, bundle);
-                } else if (item.getItemId() == R.id.menu_add) {
+                } else if (item.getItemId() == R.id.pd_menu_id_3) {
                     Bundle bundle = new Bundle();
                     bundle.putInt(PARAM1, key);
                     bundle.putString(PARAM2, table);
                     bundle.putSerializable(PARAM3, eventCallback);
                     launch(AddRowFragment.class, bundle);
-                } else if (item.getItemId() == R.id.menu_delete_all) {
+                } else if (item.getItemId() == R.id.pd_menu_id_4) {
                     delete(null);
                 }
                 closeSoftInput();
