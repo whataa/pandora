@@ -120,6 +120,7 @@ public class NetContentFragment extends BaseFragment {
                     // help me
                     result = result.replaceAll("\n", "");
                     result = result.replace("\\", "\\\\");
+                    result = result.replace("'", "\\\'");
                     // https://issuetracker.google.com/issues/36995865
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                         webView.loadUrl(String.format("javascript:showJson('%s')", result));
