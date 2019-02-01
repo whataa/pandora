@@ -5,6 +5,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@null</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="PdTheme.Trans">

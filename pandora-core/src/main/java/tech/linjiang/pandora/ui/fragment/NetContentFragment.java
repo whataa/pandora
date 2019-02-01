@@ -1,14 +1,16 @@
 package tech.linjiang.pandora.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-
-import java.net.URLDecoder;
+import android.webkit.WebViewClient;
 
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.network.CacheDbHelper;
@@ -42,6 +44,12 @@ public class NetContentFragment extends BaseFragment {
         webView = new WebView(getContext());
         webView.getSettings().setDefaultTextEncodingName("UTF-8");
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                loadData();
+            }
+        });
         return webView;
     }
 
@@ -49,11 +57,8 @@ public class NetContentFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getToolbar().setTitle("Content");
-    }
+        webView.loadUrl("file:///android_asset/tmp_json.html");
 
-    @Override
-    protected void onViewEnterAnimEnd(View container) {
-        loadData();
     }
 
     @Override
@@ -95,40 +100,35 @@ public class NetContentFragment extends BaseFragment {
                 } else {
                     result = content.requestBody;
                 }
-                try {
-                    return URLDecoder.decode(result, "utf-8");
-                } catch (Exception e) {
-                    return result;
-                }
+
+                return result;
             }
 
             @Override
             public void onPostExecute(String result) {
+                Log.d(TAG, "onPostExecute: " + result);
                 hideLoading();
+                if (TextUtils.isEmpty(result)) {
+                    Utils.toast("empty");
+                    return;
+                }
                 setSearchView();
                 originContent = result;
-                if (contentType.toLowerCase().contains("json")) {
-                    result = "<!DOCTYPE html>\n" +
-                            "<html>\n" +
-                            "<head>\n" +
-                            "    <meta charset=utf-8>\n" +
-                            "    <meta name=viewport content=\"width=device-width\">\n" +
-                            "    <script type=\"text/javascript\">\n" +
-                            "    function output(content) {\n" +
-                            "        document.body.appendChild(document.createElement('pre')).innerHTML = content;\n" +
-                            "    }\n" +
-                            "    function start() {\n" +
-                            "        var obj = \n" + result + ";\n" +
-                            "        var str = JSON.stringify(obj, undefined, 4);\n" +
-                            "        output(str);\n" +
-                            "    }\n" +
-                            "    </script>\n" +
-                            "</head>\n" +
-                            "<body onLoad=\"javascript:start();\">\n" +
-                            "</body>\n" +
-                            "</html>";
+                webView.setWebViewClient(null);
+
+                if (contentType != null && contentType.toLowerCase().contains("json")) {
+                    // help me
+                    result = result.replaceAll("\n", "");
+                    result = result.replace("\\", "\\\\");
+                    // https://issuetracker.google.com/issues/36995865
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                        webView.loadUrl(String.format("javascript:showJson('%s')", result));
+                    } else {
+                        webView.evaluateJavascript(String.format("showJson('%s')", result), null);
+                    }
+                } else {
+                    webView.loadDataWithBaseURL(null, result,  decideMimeType(), "utf-8", null);
                 }
-                webView.loadData(result,  decideMimeType(), "utf-8");
             }
         }).execute();
     }
@@ -136,7 +136,7 @@ public class NetContentFragment extends BaseFragment {
 
 
     private String decideMimeType() {
-        if (contentType.toLowerCase().contains("xml")) {
+        if (contentType != null && contentType.toLowerCase().contains("xml")) {
             return "text/xml";
         } else {
             return "text/html";

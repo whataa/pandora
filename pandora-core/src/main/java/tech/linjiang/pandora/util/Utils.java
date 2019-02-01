@@ -132,7 +132,7 @@ public class Utils {
         shareIntent.putExtra(Intent.EXTRA_TEXT, content);
         shareIntent.setType("text/plain");
         try {
-            CONTEXT.startActivity(Intent.createChooser(shareIntent, "share to"));
+            CONTEXT.startActivity(Intent.createChooser(shareIntent, "share to").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         } catch (Throwable t) {
             t.printStackTrace();
             toast(t.getMessage());
