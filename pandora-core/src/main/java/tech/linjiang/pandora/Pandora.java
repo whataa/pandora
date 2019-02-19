@@ -93,6 +93,10 @@ public final class Pandora {
         }
     }
 
+    public void close() {
+        EntranceView.close();
+    }
+
     public void disableShakeSwitch() {
         Utils.unRegisterSensor(sensorEventListener);
     }
