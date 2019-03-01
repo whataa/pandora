@@ -62,7 +62,7 @@ public class OkHttpInterceptor implements Interceptor {
             response = chain.proceed(request);
         } catch (IOException e) {
             if (Config.getCOMMON_NETWORK_SWITCH() && Config.isNetLogEnable() && id >= 0) {
-                markFailed(id);
+                markFailed(id, Utils.collectThrow(e));
                 notifyEnd(id);
             }
             throw e;
@@ -164,11 +164,15 @@ public class OkHttpInterceptor implements Interceptor {
         }
     }
 
-    private void markFailed(long id) {
+    private void markFailed(long id, String err) {
         ContentValues values = new ContentValues();
         values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_STATUS, CacheDbHelper.SummaryEntry.Status.ERROR);
         values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_TIME_END, System.currentTimeMillis());
         CacheDbHelper.SummaryEntry.update(id, values);
+
+        ContentValues responseValues = new ContentValues();
+        responseValues.put(CacheDbHelper.ContentEntry.COLUMN_NAME_RESPONSE, err);
+        CacheDbHelper.ContentEntry.update(id, responseValues);
     }
 
     private void notifyStart(final long id) {

@@ -13,7 +13,9 @@ import java.util.List;
 
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.network.CacheDbHelper;
+import tech.linjiang.pandora.network.model.Content;
 import tech.linjiang.pandora.network.model.Summary;
+import tech.linjiang.pandora.ui.item.ExceptionItem;
 import tech.linjiang.pandora.ui.item.KeyValueItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
@@ -86,9 +88,15 @@ public class NetSummaryFragment extends BaseListFragment {
                 }
                 originData = summary;
                 getToolbar().setTitle(summary.url);
-                getToolbar().setSubtitle(String.valueOf(summary.code));
+                getToolbar().setSubtitle(String.valueOf(summary.code == 0 ? "- -" : summary.code));
 
                 List<BaseItem> data = new ArrayList<>();
+
+                if (summary.status == 1) {
+                    Content content = CacheDbHelper.getContent(id);
+                    data.add(new ExceptionItem(content.responseBody));
+                }
+
                 data.add(new TitleItem("GENERAL"));
                 data.add(new KeyValueItem(Utils.newArray("url", summary.url)));
                 data.add(new KeyValueItem(Utils.newArray("host", summary.host)));
