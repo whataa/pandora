@@ -30,13 +30,19 @@
             android:id="@+id/http"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="do Http" />
+            android:text="do OKHttp" />
+
+        <Button
+            android:id="@+id/url_connection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="do Android UrlConnection" />
 
         <Button
             android:id="@+id/download"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="download binary file (91MB)" />
+            android:text="download binary file" />
 
         <TextView
             android:layout_width="wrap_content"

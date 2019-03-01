@@ -19,6 +19,7 @@ import okio.BufferedSource;
 import okio.GzipSource;
 import okio.Okio;
 import okio.Source;
+import tech.linjiang.pandora.network.okhttp3.OkUrlFactory;
 import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.FileUtil;
 import tech.linjiang.pandora.util.FormatUtil;
@@ -31,6 +32,10 @@ import tech.linjiang.pandora.util.Utils;
 public class OkHttpInterceptor implements Interceptor {
 
     private static final String TAG = "OkHttpInterceptor";
+
+    public OkHttpInterceptor() {
+        OkUrlFactory.init();
+    }
 
     private NetStateListener listener;
 
@@ -363,8 +368,5 @@ public class OkHttpInterceptor implements Interceptor {
         listener = null;
     }
 
-    @Deprecated
-    public void setJsonFormatter(JsonFormatter formatter) {
-    }
 
 }

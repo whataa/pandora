@@ -10,6 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashSet;
 
 import retrofit2.Call;
@@ -66,6 +70,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 doHttp();
+            }
+        });
+        findViewById(R.id.url_connection).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL("https://httpbin.org/get");
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.getInputStream();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
             }
         });
         findViewById(R.id.download).setOnClickListener(new View.OnClickListener() {
