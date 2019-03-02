@@ -12,9 +12,8 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import tech.linjiang.pandora.cache.Content;
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.network.CacheDbHelper;
-import tech.linjiang.pandora.network.model.Content;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
 
@@ -93,7 +92,7 @@ public class NetContentFragment extends BaseFragment {
         new SimpleTask<>(new SimpleTask.Callback<Void, String>() {
             @Override
             public String doInBackground(Void[] params) {
-                Content content = CacheDbHelper.getContent(id);
+                Content content = Content.query(id);
                 String result;
                 if (showResponse) {
                     result = content.responseBody;

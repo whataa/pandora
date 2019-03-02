@@ -1,6 +1,5 @@
 package tech.linjiang.pandora.network;
 
-import android.content.ContentValues;
 import android.text.TextUtils;
 
 import java.io.EOFException;
@@ -19,6 +18,8 @@ import okio.BufferedSource;
 import okio.GzipSource;
 import okio.Okio;
 import okio.Source;
+import tech.linjiang.pandora.cache.Content;
+import tech.linjiang.pandora.cache.Summary;
 import tech.linjiang.pandora.network.okhttp3.OkUrlFactory;
 import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.FileUtil;
@@ -34,6 +35,8 @@ public class OkHttpInterceptor implements Interceptor {
     private static final String TAG = "OkHttpInterceptor";
 
     public OkHttpInterceptor() {
+//        Summary.clear();
+//        Content.clear();
         OkUrlFactory.init();
     }
 
@@ -84,61 +87,61 @@ public class OkHttpInterceptor implements Interceptor {
     }
 
     private long insert(Request request) {
-        ContentValues values = new ContentValues();
-        ContentValues contentValues = new ContentValues();
+        Summary summary = new Summary();
+        Content content = new Content();
 
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_STATUS, CacheDbHelper.SummaryEntry.Status.REQUESTING);
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_URL, request.url().encodedPath());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_HOST, request.url().host() + ":" + request.url().port());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_METHOD, request.method());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_SSL, request.isHttps());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_TIME_START, System.currentTimeMillis());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_HEADER_REQUEST, FormatUtil.formatHeaders(request.headers()));
+        summary.status = Summary.Status.REQUESTING;
+        summary.url = request.url().encodedPath();
+        summary.host = request.url().host() + ":" + request.url().port();
+        summary.method = request.method();
+        summary.ssl = request.isHttps();
+        summary.start_time = System.currentTimeMillis();
+        summary.requestHeader = FormatUtil.formatHeaders(request.headers());
 
         String query = request.url().encodedQuery();
         if (!TextUtils.isEmpty(query)) {
-            values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_QUERY, query);
+            summary.query = query;
         }
 
         RequestBody requestBody = request.body();
         if (requestBody != null) {
             try {
-                values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_SIZE_REQUEST, requestBody.contentLength());
+                summary.request_size = requestBody.contentLength();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             if (requestBody.contentType() != null) {
-                values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_CONTENT_TYPE_REQUEST, requestBody.contentType().toString());
+                summary.request_content_type = requestBody.contentType().toString();
             }
         }
 
         boolean canRecognize = checkContentEncoding(request.header("Content-Encoding"));
         if (canRecognize) {
-            contentValues.put(CacheDbHelper.ContentEntry.COLUMN_NAME_REQUEST, requestBodyAsStr(request));
+            content.requestBody = requestBodyAsStr(request);
         }
-        long id = CacheDbHelper.SummaryEntry.insert(values);
-        contentValues.put(CacheDbHelper.ContentEntry.COLUMN_NAME_SUMMARY_ID, id);
-        CacheDbHelper.ContentEntry.insert(contentValues);
+        long id = Summary.insert(summary);
+        content.id = id;
+        Content.insert(content);
         return id;
     }
 
     private void updateSummary(long reqId, Response response) {
-        ContentValues values = new ContentValues();
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_STATUS, CacheDbHelper.SummaryEntry.Status.COMPLETE);
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_TIME_END, System.currentTimeMillis());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_CODE, response.code());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_PROTOCOL, response.protocol().toString());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_HEADER_RESPONSE, FormatUtil.formatHeaders(response.headers()));
+        Summary summary =Summary.query(reqId);
+        summary.status = Summary.Status.COMPLETE;
+        summary.end_time = System.currentTimeMillis();
+        summary.code = response.code();
+        summary.protocol = response.protocol().toString();
+        summary.responseHeader = FormatUtil.formatHeaders(response.headers());
 
         ResponseBody body = response.body();
         if (body != null) {
             MediaType type = body.contentType();
             if (type != null) {
-                values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_CONTENT_TYPE_RESPONSE, type.toString());
+                summary.response_content_type = type.toString();
             }
-            values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_SIZE_RESPONSE, body.contentLength());
+            summary.response_size = body.contentLength();
         }
-        CacheDbHelper.SummaryEntry.update(reqId, values);
+        Summary.update(summary);
     }
 
     private void updateContent(long reqId, Response response) {
@@ -149,30 +152,33 @@ public class OkHttpInterceptor implements Interceptor {
                 byte[] bytes = responseBodyAsBytes(response);
                 if (bytes != null) {
                     String path = FileUtil.saveFile(bytes, response.request().url().toString());
-                    ContentValues values = new ContentValues();
-                    values.put(CacheDbHelper.ContentEntry.COLUMN_NAME_RESPONSE, path);
-                    CacheDbHelper.ContentEntry.update(reqId, values);
+                    Content content = Content.query(reqId);
+                    content.responseBody = path;
+                    Content.update(content);
                 }
                 return;
             }
         }
         boolean canRecognize = checkContentEncoding(response.header("Content-Encoding"));
         if (canRecognize) {
-            ContentValues values = new ContentValues();
-            values.put(CacheDbHelper.ContentEntry.COLUMN_NAME_RESPONSE, responseBodyAsStr(response));
-            CacheDbHelper.ContentEntry.update(reqId, values);
+            String bodyStr = responseBodyAsStr(response);
+            if (!TextUtils.isEmpty(bodyStr)) {
+                Content content = Content.query(reqId);
+                content.responseBody = bodyStr;
+                Content.update(content);
+            }
         }
     }
 
     private void markFailed(long id, String err) {
-        ContentValues values = new ContentValues();
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_STATUS, CacheDbHelper.SummaryEntry.Status.ERROR);
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_TIME_END, System.currentTimeMillis());
-        CacheDbHelper.SummaryEntry.update(id, values);
+        Summary summary = Summary.query(id);
+        summary.status = Summary.Status.ERROR;
+        summary.end_time = System.currentTimeMillis();
+        Summary.update(summary);
 
-        ContentValues responseValues = new ContentValues();
-        responseValues.put(CacheDbHelper.ContentEntry.COLUMN_NAME_RESPONSE, err);
-        CacheDbHelper.ContentEntry.update(id, responseValues);
+        Content content = Content.query(id);
+        content.responseBody = err;
+        Content.update(content);
     }
 
     private void notifyStart(final long id) {

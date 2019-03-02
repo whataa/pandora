@@ -11,16 +11,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import tech.linjiang.pandora.cache.Content;
+import tech.linjiang.pandora.cache.Summary;
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.network.CacheDbHelper;
-import tech.linjiang.pandora.network.model.Content;
-import tech.linjiang.pandora.network.model.Summary;
 import tech.linjiang.pandora.ui.item.ExceptionItem;
 import tech.linjiang.pandora.ui.item.KeyValueItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
 import tech.linjiang.pandora.util.FileUtil;
+import tech.linjiang.pandora.util.FormatUtil;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
 
@@ -76,7 +76,10 @@ public class NetSummaryFragment extends BaseListFragment {
         new SimpleTask<>(new SimpleTask.Callback<Void, Summary>() {
             @Override
             public Summary doInBackground(Void[] params) {
-                return CacheDbHelper.getSummary(id);
+                Summary summary =  Summary.query(id);
+                summary.request_header = FormatUtil.parseHeaders(summary.requestHeader);
+                summary.response_header = FormatUtil.parseHeaders(summary.responseHeader);
+                return summary;
             }
 
             @Override
@@ -93,7 +96,7 @@ public class NetSummaryFragment extends BaseListFragment {
                 List<BaseItem> data = new ArrayList<>();
 
                 if (summary.status == 1) {
-                    Content content = CacheDbHelper.getContent(id);
+                    Content content = Content.query(id);
                     data.add(new ExceptionItem(content.responseBody));
                 }
 
@@ -149,7 +152,7 @@ public class NetSummaryFragment extends BaseListFragment {
         new SimpleTask<>(new SimpleTask.Callback<Void, String>() {
             @Override
             public String doInBackground(Void[] params) {
-                return CacheDbHelper.getContent(id).responseBody;
+                return Content.query(id).responseBody;
             }
 
             @Override

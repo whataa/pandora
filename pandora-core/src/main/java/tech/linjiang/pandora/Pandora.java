@@ -8,6 +8,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
 
+import tech.linjiang.pandora.crash.CrashHandler;
 import tech.linjiang.pandora.database.Databases;
 import tech.linjiang.pandora.inspector.CurInfoView;
 import tech.linjiang.pandora.inspector.GridLineView;
@@ -35,6 +36,7 @@ public final class Pandora {
         INSTANCE = new Pandora();
         application.registerActivityLifecycleCallbacks(INSTANCE.callbacks);
         Utils.registerSensor(INSTANCE.sensorEventListener);
+        CrashHandler.init();
     }
 
     public static Pandora get() {

@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tech.linjiang.pandora.Pandora;
+import tech.linjiang.pandora.cache.Content;
+import tech.linjiang.pandora.cache.Summary;
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.network.CacheDbHelper;
 import tech.linjiang.pandora.network.NetStateListener;
-import tech.linjiang.pandora.network.model.Summary;
 import tech.linjiang.pandora.ui.connector.SimpleOnActionExpandListener;
 import tech.linjiang.pandora.ui.connector.SimpleOnQueryTextListener;
 import tech.linjiang.pandora.ui.item.NetItem;
@@ -91,7 +91,7 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
         new SimpleTask<>(new SimpleTask.Callback<Void, List<Summary>>() {
             @Override
             public List<Summary> doInBackground(Void[] params) {
-                return CacheDbHelper.getSummaries();
+                return Summary.queryList();
             }
 
             @Override
@@ -118,7 +118,8 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
         new SimpleTask<>(new SimpleTask.Callback<Void, Void>() {
             @Override
             public Void doInBackground(Void[] params) {
-                CacheDbHelper.deleteAll();
+                Summary.clear();
+                Content.clear();
                 return null;
             }
 
@@ -219,7 +220,7 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
         new SimpleTask<>(new SimpleTask.Callback<Void, Summary>() {
             @Override
             public Summary doInBackground(Void[] params) {
-                return CacheDbHelper.getSummary(id);
+                return Summary.query(id);
             }
 
             @Override

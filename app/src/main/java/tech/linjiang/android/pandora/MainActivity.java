@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Pandora.get().open();
+                throw new RuntimeException("for test");
             }
         });
         findViewById(R.id.open2).setOnClickListener(new View.OnClickListener() {
