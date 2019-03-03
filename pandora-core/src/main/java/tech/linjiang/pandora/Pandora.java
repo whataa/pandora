@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import tech.linjiang.pandora.crash.CrashHandler;
 import tech.linjiang.pandora.database.Databases;
+import tech.linjiang.pandora.history.HistoryRecorder;
 import tech.linjiang.pandora.inspector.CurInfoView;
 import tech.linjiang.pandora.inspector.GridLineView;
 import tech.linjiang.pandora.inspector.attribute.AttrFactory;
@@ -33,17 +34,22 @@ public final class Pandora {
 
     static void init(Application application) {
         Utils.init(application);
-        INSTANCE = new Pandora();
-        application.registerActivityLifecycleCallbacks(INSTANCE.callbacks);
-        Utils.registerSensor(INSTANCE.sensorEventListener);
-        CrashHandler.init();
+        INSTANCE = new Pandora(application);
     }
 
     public static Pandora get() {
         return INSTANCE;
     }
 
-    private Pandora() {
+    private Pandora(Application app) {
+        interceptor = new OkHttpInterceptor();
+        databases = new Databases();
+        sharedPref = new SharedPref();
+        attrFactory = new AttrFactory();
+        crashHandler = CrashHandler.init();
+        historyRecorder = HistoryRecorder.register(app);
+        app.registerActivityLifecycleCallbacks(callbacks);
+        Utils.registerSensor(sensorEventListener);
         EntranceView.setListener(new OnEntranceClick() {
             @Override
             protected void onClick(int type) {
@@ -60,10 +66,12 @@ public final class Pandora {
         });
     }
 
-    private final OkHttpInterceptor interceptor = new OkHttpInterceptor();
-    private final Databases databases = new Databases();
-    private final SharedPref sharedPref = new SharedPref();
-    private final AttrFactory attrFactory = new AttrFactory();
+    private final OkHttpInterceptor interceptor;
+    private final Databases databases;
+    private final SharedPref sharedPref;
+    private final AttrFactory attrFactory;
+    private final CrashHandler crashHandler;
+    private final HistoryRecorder historyRecorder;
     private Activity bottomActivity;
     // let dispatcher doesn't looks like an activity
     private boolean preventFree;

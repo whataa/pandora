@@ -35,8 +35,6 @@ public class OkHttpInterceptor implements Interceptor {
     private static final String TAG = "OkHttpInterceptor";
 
     public OkHttpInterceptor() {
-//        Summary.clear();
-//        Content.clear();
         OkUrlFactory.init();
     }
 

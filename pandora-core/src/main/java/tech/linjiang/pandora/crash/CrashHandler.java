@@ -13,17 +13,14 @@ public class CrashHandler implements UncaughtExceptionHandler {
     private static final String TAG = "CrashHandler";
 
     private Thread.UncaughtExceptionHandler mDefaultHandler;
-    private final static CrashHandler INSTANCE = new CrashHandler();
     private CrashHandler() {
     }
 
-    private static CrashHandler getInstance() {
-        return INSTANCE;
-    }
-
-    public static void init() {
-        getInstance().mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
-        Thread.setDefaultUncaughtExceptionHandler(getInstance());
+    public static CrashHandler init() {
+        CrashHandler handler = new CrashHandler();
+        handler.mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(handler);
+        return handler;
     }
 
     @Override

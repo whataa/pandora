@@ -53,6 +53,7 @@ class CacheDatabase extends SQLiteOpenHelper {
         for (Class table : tables) {
             db.execSQL("DROP TABLE IF EXISTS " + getTableName(table));
         }
+        onCreate(db);
     }
 
     @Override
@@ -119,7 +120,6 @@ class CacheDatabase extends SQLiteOpenHelper {
 
     static void delete(Class<?> clazz) {
         getWDb().delete(getTableName(clazz), null, null);
-//        getWDb().execSQL("DELETE FROM " + getTableName(clazz));
     }
 
     static void update(Object obj) {
