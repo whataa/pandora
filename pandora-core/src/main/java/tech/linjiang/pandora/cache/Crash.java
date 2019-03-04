@@ -18,10 +18,16 @@ public class Crash {
 
     @CacheDatabase.Column("createTime")
     public long createTime;
+    @CacheDatabase.Column("type")
+    public String type;
     @CacheDatabase.Column("cause")
     public String cause;
     @CacheDatabase.Column("stack")
     public String stack;
+
+    public static void clear() {
+        CacheDatabase.delete(Crash.class);
+    }
 
     public static List<Crash> query() {
         List<Crash> result = CacheDatabase.queryList(Crash.class, null, "order by createTime DESC");
@@ -30,9 +36,10 @@ public class Crash {
 
     public static void insert(Throwable t) {
         Crash crash = new Crash();
+        crash.type = t.getClass().getSimpleName();
         crash.cause = t.getMessage();
         crash.stack = Utils.collectThrow(t);
-        crash.createTime = System.nanoTime();
+        crash.createTime = System.currentTimeMillis();
         CacheDatabase.insert(crash);
     }
 

@@ -41,7 +41,7 @@ public class Utils {
 
     public static final DateFormat DEFAULT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS", Locale.ENGLISH);
     public static final DateFormat NO_MILLIS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-    public static final DateFormat HHMMSS = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+    public static final DateFormat HHMMSS = new SimpleDateFormat("HH:mm:ss SSS", Locale.ENGLISH);
 
     private static Context CONTEXT;
     private static Handler mainHandler;

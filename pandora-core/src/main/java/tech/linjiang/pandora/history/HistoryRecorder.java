@@ -69,7 +69,7 @@ public class HistoryRecorder implements Application.ActivityLifecycleCallbacks {
 
     private void record(Activity activity, String event) {
         History history = new History();
-        history.createTime = System.nanoTime();
+        history.createTime = System.currentTimeMillis();
         history.activity = activity.getClass().getSimpleName();
         history.event = event;
         handler.sendMessage(Message.obtain(handler, CODE, history));

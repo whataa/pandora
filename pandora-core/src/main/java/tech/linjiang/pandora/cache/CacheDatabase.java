@@ -272,7 +272,7 @@ class CacheDatabase extends SQLiteOpenHelper {
     @Target(ElementType.FIELD)
     public @interface Column {
         String value();
-        boolean primaryKey() default false;;
+        boolean primaryKey() default false;
     }
 
     @Retention(RetentionPolicy.RUNTIME)

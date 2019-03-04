@@ -1,6 +1,7 @@
 package tech.linjiang.pandora.ui.item;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 
@@ -16,6 +17,7 @@ import tech.linjiang.pandora.util.ViewKnife;
 public class KeyValueItem extends BaseItem<String[]> {
     public boolean isTitle;
     public boolean clickable;
+    private String prefix;
 
 
     public KeyValueItem(String[] data) {
@@ -33,8 +35,18 @@ public class KeyValueItem extends BaseItem<String[]> {
         this.clickable = clickable;
     }
 
+    public KeyValueItem(String[] data, boolean isTitle, boolean clickable, String prefix) {
+        super(data);
+        this.isTitle = isTitle;
+        this.clickable = clickable;
+        this.prefix = prefix;
+    }
+
+
     @Override
     public void onBinding(int position, UniversalAdapter.ViewPool pool, String[] data) {
+        pool.setVisibility(R.id.item_prefix, TextUtils.isEmpty(prefix) ? View.GONE : View.VISIBLE);
+        pool.setText(R.id.item_prefix, prefix);
         pool
                 .setTextGravity(R.id.item_key, isTitle ? Gravity.CENTER : Gravity.CENTER_VERTICAL)
                 .setText(R.id.item_key, data[0])
