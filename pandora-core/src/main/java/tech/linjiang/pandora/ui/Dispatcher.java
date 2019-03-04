@@ -17,7 +17,9 @@ import tech.linjiang.pandora.inspector.BaseLineView;
 import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.ui.connector.UIStateCallback;
 import tech.linjiang.pandora.ui.fragment.ConfigFragment;
+import tech.linjiang.pandora.ui.fragment.CrashFragment;
 import tech.linjiang.pandora.ui.fragment.HierarchyFragment;
+import tech.linjiang.pandora.ui.fragment.HistoryFragment;
 import tech.linjiang.pandora.ui.fragment.NetFragment;
 import tech.linjiang.pandora.ui.fragment.RouteFragment;
 import tech.linjiang.pandora.ui.fragment.SandboxFragment;
@@ -89,6 +91,26 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
                 if (savedInstanceState == null) {
                     getSupportFragmentManager().beginTransaction()
                             .add(R.id.pd_fragment_container_id, new SandboxFragment())
+                            .commit();
+                }
+                break;
+            case Type.BUG:
+                view = new FrameLayout(this);
+                view.setId(R.id.pd_fragment_container_id);
+                setContentView(view);
+                if (savedInstanceState == null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.pd_fragment_container_id, new CrashFragment())
+                            .commit();
+                }
+                break;
+            case Type.HISTORY:
+                view = new FrameLayout(this);
+                view.setId(R.id.pd_fragment_container_id);
+                setContentView(view);
+                if (savedInstanceState == null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.pd_fragment_container_id, new HistoryFragment())
                             .commit();
                 }
                 break;

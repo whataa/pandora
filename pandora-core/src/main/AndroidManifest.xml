@@ -3,13 +3,14 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <application>
         <activity android:name="tech.linjiang.pandora.ui.Dispatcher"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/PdTheme"/>
         <activity android:name="tech.linjiang.pandora.ui.TransActivity"
             android:theme="@style/PdTheme.Trans"/>
 
         <provider
-            android:name="tech.linjiang.pandora.PdFileProvider"
+            android:name="tech.linjiang.pandora.Pandora"
             android:authorities="${applicationId}.pdFileProvider"
             android:grantUriPermissions="true"
             android:exported="false">

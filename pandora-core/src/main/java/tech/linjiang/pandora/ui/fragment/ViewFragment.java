@@ -49,7 +49,7 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
     protected View getLayoutView() {
         View panelView = LayoutInflater.from(getContext()).inflate(R.layout.pd_layout_view_panel, null);
         operableView = new OperableView(getContext());
-        operableView.tryGetFrontView(Pandora.get().getBottomActivity());
+        operableView.tryGetFrontView(Pandora.get().getTopActivity());
         operableView.setOnClickListener(this);
 
         CoordinatorLayout layout = new CoordinatorLayout(getContext());

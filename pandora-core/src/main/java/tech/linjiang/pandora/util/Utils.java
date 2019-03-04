@@ -149,6 +149,20 @@ public class Utils {
         } catch (Throwable ignore){}
     }
 
+    public static void addViewToWindow(View v, WindowManager.LayoutParams params) {
+        try {
+            WindowManager windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
+            windowManager.addView(v, params);
+        } catch (Throwable ignore){}
+    }
+
+    public static void updateViewLayoutInWindow(View v, WindowManager.LayoutParams params) {
+        try {
+            WindowManager windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
+            windowManager.updateViewLayout(v, params);
+        } catch (Throwable ignore){}
+    }
+
     public static boolean checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(CONTEXT)) {

@@ -8,6 +8,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 
 import tech.linjiang.pandora.cache.History;
+import tech.linjiang.pandora.ui.Dispatcher;
 
 /**
  * Created by linjiang on 2019/3/4.
@@ -17,7 +18,7 @@ public class HistoryRecorder implements Application.ActivityLifecycleCallbacks {
 
     private static final int CODE = 0x02;
     private Handler handler;
-    private String topActivity;
+    private Activity topActivity;
 
     public static HistoryRecorder register(Application application) {
         HistoryRecorder recorder = new HistoryRecorder();
@@ -44,7 +45,9 @@ public class HistoryRecorder implements Application.ActivityLifecycleCallbacks {
     @Override
     public void onActivityResumed(Activity activity) {
         record(activity, "onResume");
-        topActivity = activity.getClass().getSimpleName();
+        if (!(activity instanceof Dispatcher)) {
+            topActivity = activity;
+        }
     }
 
     @Override
@@ -65,6 +68,9 @@ public class HistoryRecorder implements Application.ActivityLifecycleCallbacks {
     @Override
     public void onActivityDestroyed(Activity activity) {
         record(activity, "onDestroy");
+        if (topActivity == activity) {
+            topActivity = null;
+        }
     }
 
     private void record(Activity activity, String event) {
@@ -75,7 +81,7 @@ public class HistoryRecorder implements Application.ActivityLifecycleCallbacks {
         handler.sendMessage(Message.obtain(handler, CODE, history));
     }
 
-    public String getTopActivity() {
+    public Activity getTopActivity() {
         return topActivity;
     }
 

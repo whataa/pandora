@@ -22,7 +22,12 @@ import tech.linjiang.pandora.util.Utils;
  * Created by linjiang on 2019/3/4.
  */
 
-public class HistoryFragement extends BaseListFragment {
+public class HistoryFragment extends BaseListFragment {
+
+    @Override
+    protected boolean enableSwipeBack() {
+        return false;
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

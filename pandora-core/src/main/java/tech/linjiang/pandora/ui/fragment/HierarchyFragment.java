@@ -54,7 +54,7 @@ public class HierarchyFragment extends BaseListFragment
         if (savedInstanceState != null) {
             return;
         }
-        rootView = ViewKnife.tryGetTheFrontView(Pandora.get().getBottomActivity());
+        rootView = ViewKnife.tryGetTheFrontView(Pandora.get().getTopActivity());
         if (!Config.getUI_IGNORE_SYS_LAYER()) {
             sysLayerCount = countSysLayers();
         } else {

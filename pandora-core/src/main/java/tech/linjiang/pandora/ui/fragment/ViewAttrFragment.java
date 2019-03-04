@@ -40,8 +40,8 @@ public class ViewAttrFragment extends BaseListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Pandora.get().getBottomActivity() != null) {
-            View decor = ViewKnife.tryGetTheFrontView(Pandora.get().getBottomActivity());
+        if (Pandora.get().getTopActivity() != null) {
+            View decor = ViewKnife.tryGetTheFrontView(Pandora.get().getTopActivity());
             if (decor != null) {
                 targetView = findViewByDefaultTag(decor);
             }
