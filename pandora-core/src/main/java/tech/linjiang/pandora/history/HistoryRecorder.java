@@ -20,16 +20,11 @@ public class HistoryRecorder implements Application.ActivityLifecycleCallbacks {
     private Handler handler;
     private Activity topActivity;
 
-    public static HistoryRecorder register(Application application) {
-        HistoryRecorder recorder = new HistoryRecorder();
-        application.registerActivityLifecycleCallbacks(recorder);
-        return recorder;
-    }
-
-    private HistoryRecorder() {
+    public HistoryRecorder(Application application) {
         WorkThread thread = new WorkThread();
         thread.start();
         handler = new Handler(thread.getLooper(), thread);
+        application.registerActivityLifecycleCallbacks(this);
     }
 
     @Override

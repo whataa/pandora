@@ -18,6 +18,7 @@ import java.util.List;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.inspector.OperableView;
+import tech.linjiang.pandora.ui.GeneralDialog;
 import tech.linjiang.pandora.ui.item.ViewItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
@@ -129,6 +130,11 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
         childRv.setAdapter(childAdapter);
         childAdapter.setListener(clickListener);
 
+        GeneralDialog.build(1)
+                .title(R.string.pd_help_title)
+                .message(R.string.pd_help_operate)
+                .positiveButton(R.string.pd_ok)
+                .show(this);
     }
 
     private void refreshViewInfo(View target) {

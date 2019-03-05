@@ -2,6 +2,8 @@
     <string name="pd_lib_name">pandora</string>
     <string name="pd_error_msg">EMPTY</string>
     <!--toast-->
+    <string name="pd_ok">OK</string>
+    <string name="pd_cancel">Cancel</string>
     <string name="pd_not_support">not support file type</string>
     <string name="pd_success">success</string>
     <string name="pd_failed">failed</string>
@@ -11,5 +13,9 @@
     <string name="pd_net_search_hint">query url</string>
     <string name="pd_can_not_edit">can not edit</string>
     <string name="pd_please_open_net_log">TURN ON THE SWITCH TO LOG</string>
-    <string name="pd_please_allow_permission">Pandora needs OVERLAY_PERMISSION to show the function panel, please click "allow" and try again</string>
+    <string name="pd_permission_title">Permission Denied</string>
+    <string name="pd_please_allow_permission">Pandora needs OVERLAY permission to show the function panel, please allow and try again.</string>
+    <string name="pd_help_title">Hint</string>
+    <string name="pd_help_operate">① SingleTap to select views.\n② LongPress to start moving the selected view.\n③ Click the panel to see attributes.\n④ Drag the panel to see more.\n⑤ Press back to exit.</string>
+    <string name="pd_help_baseline">① Click to reset the position.\n② Drag to measure.\n③ Unit is 5 dp and can modify in the Config.\n⑤ Press back to exit.</string>
 </resources>

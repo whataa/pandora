@@ -4,6 +4,8 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -20,6 +22,7 @@ import tech.linjiang.pandora.inspector.canvas.GridCanvas;
 import tech.linjiang.pandora.inspector.canvas.RelativeCanvas;
 import tech.linjiang.pandora.inspector.canvas.SelectCanvas;
 import tech.linjiang.pandora.inspector.model.Element;
+import tech.linjiang.pandora.util.ViewKnife;
 
 /**
  * Created by linjiang on 11/06/2018.
@@ -38,13 +41,6 @@ public class OperableView extends ElementHoldView {
         relativeCanvas = new RelativeCanvas(this);
         gridCanvas = new GridCanvas(this);
         clickInfoCanvas = new ClickInfoCanvas(this);
-    }
-
-
-    @Override
-    protected String getViewHint() {
-        return "① singleTap to select views." +
-                "\n② LongPress to start moving the selected view.";
     }
 
     private int searchCount = 0;
@@ -67,6 +63,12 @@ public class OperableView extends ElementHoldView {
     private float alpha;
     // anim for indicating longPress action
     private ValueAnimator gridAnimator;
+
+    private final Paint defPaint = new Paint(Paint.ANTI_ALIAS_FLAG) {{
+        setColor(Color.YELLOW);
+        setStrokeWidth(ViewKnife.dip2px(2));
+        setStyle(Style.STROKE);
+    }};
 
 
     @IntDef({
@@ -140,6 +142,7 @@ public class OperableView extends ElementHoldView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), defPaint);
         if (state == State.DRAGGING) {
             gridCanvas.draw(canvas, 1);
         } else if (state == State.PRESSING) {

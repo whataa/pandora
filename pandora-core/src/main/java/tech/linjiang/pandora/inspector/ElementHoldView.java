@@ -18,7 +18,7 @@ import tech.linjiang.pandora.util.ViewKnife;
  * https://github.com/eleme/UETool/
  */
 
-public class ElementHoldView extends HintView {
+public class ElementHoldView extends View {
     private static final String TAG = "ElementHoldView";
 
     public ElementHoldView(Context context) {

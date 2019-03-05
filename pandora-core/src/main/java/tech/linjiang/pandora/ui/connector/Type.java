@@ -15,6 +15,7 @@ import java.lang.annotation.RetentionPolicy;
         Type.BUG,
         Type.HISTORY,
         Type.ROUTE,
+        Type.PERMISSION
 })
 @Retention(RetentionPolicy.SOURCE)
 public @interface Type {
@@ -27,4 +28,5 @@ public @interface Type {
     int BUG = 0x08;
     int HISTORY = 0x09;
     int ROUTE = 0x10;
+    int PERMISSION = 0x11;
 }

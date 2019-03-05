@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -70,7 +71,7 @@ abstract class BaseFragment extends Fragment
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right_, 0, 0, R.anim.slide_out_right_)
-                    .add(R.id.pd_fragment_container_id, fragment)
+                    .add(Window.ID_ANDROID_CONTENT, fragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } catch (Throwable t) {

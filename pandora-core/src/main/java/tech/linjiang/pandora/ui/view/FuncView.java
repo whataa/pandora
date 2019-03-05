@@ -106,34 +106,34 @@ public class FuncView extends LinearLayout {
         });
     }
 
-    public void open() {
+    public boolean open() {
         if (ViewCompat.isAttachedToWindow(this)) {
-            return;
+            return true;
         }
-        try {
-            WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-            params.width = WindowManager.LayoutParams.WRAP_CONTENT;
-            params.height = ViewKnife.dip2px(62);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-            } else {
-                params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-            }
-            params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-            params.format = PixelFormat.TRANSLUCENT;
-            params.gravity = Gravity.TOP | Gravity.START;
-            params.x = 0;
-            params.y = 0;
-            Utils.addViewToWindow(this, params);
-        } catch (Throwable t) {
-            t.printStackTrace();
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.height = ViewKnife.dip2px(62);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        } else {
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         }
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        params.format = PixelFormat.TRANSLUCENT;
+        params.gravity = Gravity.TOP | Gravity.START;
+        params.x = 0;
+        params.y = 0;
+        return Utils.addViewToWindow(this, params);
     }
 
     public void close() {
         if (ViewCompat.isAttachedToWindow(this)) {
             Utils.removeViewFromWindow(this);
         }
+    }
+
+    public boolean isVisible() {
+        return getVisibility() == VISIBLE;
     }
 
     public interface OnItemClickListener {

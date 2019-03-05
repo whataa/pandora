@@ -2,9 +2,6 @@ package tech.linjiang.pandora;
 
 import android.app.Activity;
 import android.app.Application;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,29 +10,31 @@ import java.util.List;
 
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.function.IFunc;
+import tech.linjiang.pandora.inspector.CurInfoView;
+import tech.linjiang.pandora.inspector.GridLineView;
 import tech.linjiang.pandora.ui.Dispatcher;
 import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.ui.view.FuncView;
-import tech.linjiang.pandora.inspector.CurInfoView;
-import tech.linjiang.pandora.inspector.GridLineView;
-import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.Utils;
 
 /**
  * Created by linjiang on 2019/3/4.
  */
 
-class FuncController implements Application.ActivityLifecycleCallbacks, SensorEventListener, FuncView.OnItemClickListener {
+class FuncController implements Application.ActivityLifecycleCallbacks, FuncView.OnItemClickListener {
 
     private final FuncView funcView;
+    private final CurInfoView curInfoView;
+    private final GridLineView gridLineView;
     private int activeCount;
     private final List<IFunc> functions = new ArrayList<>();
 
     FuncController(Application app) {
         funcView = new FuncView(app);
         funcView.setOnItemClickListener(this);
+        curInfoView = new CurInfoView(app);
+        gridLineView = new GridLineView(app);
         app.registerActivityLifecycleCallbacks(this);
-        Utils.registerSensor(this);
         addDefaultFunctions();
     }
 
@@ -44,12 +43,13 @@ class FuncController implements Application.ActivityLifecycleCallbacks, SensorEv
         funcView.addItem(func.getIcon(), func.getName());
     }
 
-    void disable() {
-        Utils.unRegisterSensor(this);
-    }
-
     void open() {
-        funcView.open();
+        if (funcView.isVisible()) {
+            boolean succeed = funcView.open();
+            if (!succeed) {
+                Dispatcher.start(Utils.getContext(), Type.PERMISSION);
+            }
+        }
     }
 
     void close() {
@@ -58,14 +58,14 @@ class FuncController implements Application.ActivityLifecycleCallbacks, SensorEv
 
     private void showOverlay() {
         funcView.setVisibility(View.VISIBLE);
-        CurInfoView.show();
-        GridLineView.show();
+        curInfoView.setVisibility(View.VISIBLE);
+        gridLineView.setVisibility(View.VISIBLE);
     }
 
     private void hideOverlay() {
         funcView.setVisibility(View.GONE);
-        CurInfoView.hide();
-        GridLineView.hide();
+        curInfoView.setVisibility(View.GONE);
+        gridLineView.setVisibility(View.GONE);
     }
 
     @Override
@@ -91,7 +91,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, SensorEv
         if (activity instanceof Dispatcher) {
             hideOverlay();
         }
-        CurInfoView.updateText(activity.getClass().getName());
+        curInfoView.updateText(activity.getClass().getName());
     }
 
     @Override
@@ -101,7 +101,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, SensorEv
                 showOverlay();
             }
         }
-        CurInfoView.updateText(null);
+        curInfoView.updateText(null);
     }
 
     @Override
@@ -119,26 +119,6 @@ class FuncController implements Application.ActivityLifecycleCallbacks, SensorEv
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (Config.getSHAKE_SWITCH()) {
-            if (event.sensor.getType() == 1) {
-                // app-window will only receive event at the top
-                if (Utils.checkIfShake(
-                        event.values[0],
-                        event.values[1],
-                        event.values[2])) {
-                    open();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
@@ -199,44 +179,12 @@ class FuncController implements Application.ActivityLifecycleCallbacks, SensorEv
 
             @Override
             public String getName() {
-                return "bug";
+                return "crash";
             }
 
             @Override
             public void onClick() {
                 Dispatcher.start(Utils.getContext(), Type.BUG);
-            }
-        });
-        addFunc(new IFunc() {
-            @Override
-            public int getIcon() {
-                return R.drawable.pd_history;
-            }
-
-            @Override
-            public String getName() {
-                return "history";
-            }
-
-            @Override
-            public void onClick() {
-                Dispatcher.start(Utils.getContext(), Type.HISTORY);
-            }
-        });
-        addFunc(new IFunc() {
-            @Override
-            public int getIcon() {
-                return R.drawable.pd_config;
-            }
-
-            @Override
-            public String getName() {
-                return "config";
-            }
-
-            @Override
-            public void onClick() {
-                Dispatcher.start(Utils.getContext(), Type.CONFIG);
             }
         });
         addFunc(new IFunc() {
@@ -258,44 +206,12 @@ class FuncController implements Application.ActivityLifecycleCallbacks, SensorEv
         addFunc(new IFunc() {
             @Override
             public int getIcon() {
-                return R.drawable.pd_grid;
-            }
-
-            @Override
-            public String getName() {
-                return "GridLine";
-            }
-
-            @Override
-            public void onClick() {
-                GridLineView.toggle();
-            }
-        });
-        addFunc(new IFunc() {
-            @Override
-            public int getIcon() {
-                return R.drawable.pd_windows;
-            }
-
-            @Override
-            public String getName() {
-                return "activity";
-            }
-
-            @Override
-            public void onClick() {
-                CurInfoView.toggle();
-            }
-        });
-        addFunc(new IFunc() {
-            @Override
-            public int getIcon() {
                 return R.drawable.pd_ruler;
             }
 
             @Override
             public String getName() {
-                return "BaseLine";
+                return "baseline";
             }
 
             @Override
@@ -317,6 +233,70 @@ class FuncController implements Application.ActivityLifecycleCallbacks, SensorEv
             @Override
             public void onClick() {
                 Dispatcher.start(Utils.getContext(), Type.ROUTE);
+            }
+        });
+        addFunc(new IFunc() {
+            @Override
+            public int getIcon() {
+                return R.drawable.pd_history;
+            }
+
+            @Override
+            public String getName() {
+                return "history";
+            }
+
+            @Override
+            public void onClick() {
+                Dispatcher.start(Utils.getContext(), Type.HISTORY);
+            }
+        });
+        addFunc(new IFunc() {
+            @Override
+            public int getIcon() {
+                return R.drawable.pd_windows;
+            }
+
+            @Override
+            public String getName() {
+                return "activity";
+            }
+
+            @Override
+            public void onClick() {
+                curInfoView.toggle();
+            }
+        });
+        addFunc(new IFunc() {
+            @Override
+            public int getIcon() {
+                return R.drawable.pd_grid;
+            }
+
+            @Override
+            public String getName() {
+                return "gridLine";
+            }
+
+            @Override
+            public void onClick() {
+                gridLineView.toggle();
+            }
+        });
+        addFunc(new IFunc() {
+            @Override
+            public int getIcon() {
+                return R.drawable.pd_config;
+            }
+
+            @Override
+            public String getName() {
+                return "config";
+            }
+
+            @Override
+            public void onClick() {
+                Dispatcher.start(Utils.getContext(), Type.CONFIG);
             }
         });
     }

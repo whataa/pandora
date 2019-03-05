@@ -6,23 +6,26 @@ import android.support.v4.content.FileProvider;
 
 import tech.linjiang.pandora.crash.CrashHandler;
 import tech.linjiang.pandora.database.Databases;
-import tech.linjiang.pandora.database.protocol.IDescriptor;
-import tech.linjiang.pandora.database.protocol.IDriver;
 import tech.linjiang.pandora.function.IFunc;
 import tech.linjiang.pandora.history.HistoryRecorder;
 import tech.linjiang.pandora.inspector.attribute.AttrFactory;
-import tech.linjiang.pandora.inspector.attribute.IParser;
 import tech.linjiang.pandora.network.OkHttpInterceptor;
 import tech.linjiang.pandora.preference.SharedPref;
-import tech.linjiang.pandora.preference.protocol.IProvider;
+import tech.linjiang.pandora.util.SensorDetector;
 import tech.linjiang.pandora.util.Utils;
 
 /**
  * Created by linjiang on 29/05/2018.
  */
-public final class Pandora extends FileProvider {
+public final class Pandora extends FileProvider implements SensorDetector.Callback {
 
     private static Pandora INSTANCE;
+
+    public Pandora() {
+        if (INSTANCE != null) {
+            throw new RuntimeException();
+        }
+    }
 
     @Override
     public boolean onCreate() {
@@ -34,12 +37,13 @@ public final class Pandora extends FileProvider {
     private void init(Application app) {
         Utils.init(app);
         funcController = new FuncController(app);
+        sensorDetector = new SensorDetector(this);
         interceptor = new OkHttpInterceptor();
         databases = new Databases();
         sharedPref = new SharedPref();
         attrFactory = new AttrFactory();
         crashHandler = new CrashHandler();
-        historyRecorder = HistoryRecorder.register(app);
+        historyRecorder = new HistoryRecorder(app);
     }
 
     public static Pandora get() {
@@ -53,21 +57,22 @@ public final class Pandora extends FileProvider {
     private CrashHandler crashHandler;
     private HistoryRecorder historyRecorder;
     private FuncController funcController;
+    private SensorDetector sensorDetector;
 
     public OkHttpInterceptor getInterceptor() {
         return interceptor;
     }
 
-    public void addDbDriver(IDriver<? extends IDescriptor> driver) {
-        databases.addDriver(driver);
+    public Databases getDatabases() {
+        return databases;
     }
 
-    public void addSpProvider(IProvider provider) {
-        sharedPref.addProvider(provider);
+    public SharedPref getSharedPref() {
+        return sharedPref;
     }
 
-    public void addViewParser(IParser parser) {
-        attrFactory.addParser(parser);
+    public AttrFactory getAttrFactory() {
+        return attrFactory;
     }
 
     // hide
@@ -80,9 +85,7 @@ public final class Pandora extends FileProvider {
     }
 
     public void open() {
-        if (Utils.checkPermission()) {
-            funcController.open();
-        }
+        funcController.open();
     }
 
     public void close() {
@@ -90,6 +93,11 @@ public final class Pandora extends FileProvider {
     }
 
     public void disableShakeSwitch() {
-        funcController.disable();
+        sensorDetector.unRegister();
+    }
+
+    @Override
+    public void shakeValid() {
+        open();
     }
 }

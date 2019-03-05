@@ -1,7 +1,6 @@
 package tech.linjiang.pandora.util;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -9,14 +8,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.view.View;
@@ -146,14 +139,21 @@ public class Utils {
         try {
             WindowManager windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
             windowManager.removeView(v);
-        } catch (Throwable ignore){}
+        } catch (Throwable t){
+            t.printStackTrace();
+        }
     }
 
-    public static void addViewToWindow(View v, WindowManager.LayoutParams params) {
+    public static boolean addViewToWindow(View v, WindowManager.LayoutParams params) {
         try {
             WindowManager windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
             windowManager.addView(v, params);
-        } catch (Throwable ignore){}
+            return true;
+        } catch (Throwable t){
+            t.printStackTrace();
+            removeViewFromWindow(v);
+            return false;
+        }
     }
 
     public static void updateViewLayoutInWindow(View v, WindowManager.LayoutParams params) {
@@ -162,73 +162,6 @@ public class Utils {
             windowManager.updateViewLayout(v, params);
         } catch (Throwable ignore){}
     }
-
-    public static boolean checkPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(CONTEXT)) {
-                Toast.makeText(CONTEXT, R.string.pd_please_allow_permission, Toast.LENGTH_LONG).show();
-                try {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                    intent.setData(Uri.parse("package:" + CONTEXT.getPackageName()));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    CONTEXT.startActivity(intent);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                }
-                return false;
-            }
-        }
-        // if failed, let user to allow manually
-        return true;
-    }
-
-    public static void registerSensor(SensorEventListener listener) {
-        try {
-            SensorManager manager = (SensorManager) CONTEXT.getSystemService(Context.SENSOR_SERVICE);
-            Sensor sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            manager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            toast(t.getMessage());
-        }
-    }
-
-    public static void unRegisterSensor(SensorEventListener listener) {
-        try {
-            SensorManager manager = (SensorManager) CONTEXT.getSystemService(Context.SENSOR_SERVICE);
-            Sensor sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            manager.unregisterListener(listener, sensor);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            toast(t.getMessage());
-        }
-    }
-
-
-    private static long lastCheckTime;
-    private static float[] lastXyz = new float[3];
-
-    public static boolean checkIfShake(float x, float y, float z) {
-        long currentTime = System.currentTimeMillis();
-        long diffTime = currentTime - lastCheckTime;
-        if (diffTime < 100) {
-            return false;
-        }
-        lastCheckTime = currentTime;
-        float deltaX = x - lastXyz[0];
-        float deltaY = y - lastXyz[1];
-        float deltaZ = z - lastXyz[2];
-        lastXyz[0] = x;
-        lastXyz[1] = y;
-        lastXyz[2] = z;
-        int delta = (int) (Math.sqrt(deltaX * deltaX
-                + deltaY * deltaY + deltaZ * deltaZ) / diffTime * 10000);
-        if (delta > Config.getSHAKE_THRESHOLD()) {// a buddhist-style value
-            return true;
-        }
-        return false;
-    }
-
 
     public static List<String> getActivities() {
         List<String> result = new ArrayList<>();
