@@ -2,6 +2,7 @@ package tech.linjiang.pandora.ui.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
@@ -70,6 +71,21 @@ public class FuncView extends LinearLayout {
                 ViewKnife.dip2px(40), ViewGroup.LayoutParams.MATCH_PARENT
         ));
 
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int maxWidth;
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // drag + close + 5*func + 0.5*func
+            maxWidth = ViewKnife.dip2px(64) + ViewKnife.dip2px(50) * 5 + ViewKnife.dip2px(24);
+        } else {
+            maxWidth = MeasureSpec.getSize(widthMeasureSpec);
+        }
+        super.onMeasure(MeasureSpec.makeMeasureSpec(
+                Math.min(MeasureSpec.getSize(widthMeasureSpec), maxWidth),
+                MeasureSpec.getMode(widthMeasureSpec)
+        ), heightMeasureSpec);
     }
 
     private OnTouchListener touchListener = new OnTouchListener() {
