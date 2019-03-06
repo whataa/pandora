@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.ui.connector.SimpleAnimationListener;
 import tech.linjiang.pandora.ui.connector.UIStateCallback;
 import tech.linjiang.pandora.ui.view.SwipeBackLayout;
 import tech.linjiang.pandora.util.ViewKnife;
@@ -38,6 +37,7 @@ abstract class BaseFragment extends Fragment
     protected static final String PARAM4 = "param4";
     protected static final String PARAM_TITLE = "param_title";
     protected static final int CODE1 = 0x01;
+    protected static final int CODE2 = 0x02;
 
     public BaseFragment() {
         setArguments(new Bundle());
@@ -140,7 +140,11 @@ abstract class BaseFragment extends Fragment
             return super.onCreateAnimation(transit, enter, nextAnim);
         }
         Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
-        anim.setAnimationListener(new SimpleAnimationListener() {
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
             @Override
             public void onAnimationEnd(Animation animation) {
                 // Closes the fragment when the animation has not finished yet,
@@ -148,6 +152,10 @@ abstract class BaseFragment extends Fragment
                 if (getView() != null) {
                     onViewEnterAnimEnd(getView());
                 }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
             }
         });
         return anim;

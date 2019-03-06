@@ -20,7 +20,6 @@ import java.util.List;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.database.DatabaseResult;
-import tech.linjiang.pandora.ui.connector.EventCallback;
 import tech.linjiang.pandora.ui.connector.SimpleOnActionExpandListener;
 import tech.linjiang.pandora.ui.connector.SimpleOnQueryTextListener;
 import tech.linjiang.pandora.ui.item.GridItem;
@@ -198,8 +197,7 @@ public class TableFragment extends BaseFragment {
                     Bundle bundle = new Bundle();
                     bundle.putInt(PARAM1, key);
                     bundle.putString(PARAM2, table);
-                    bundle.putSerializable(PARAM3, eventCallback);
-                    launch(AddRowFragment.class, bundle);
+                    launch(AddRowFragment.class, bundle, CODE2);
                 } else if (item.getItemId() == R.id.pd_menu_id_4) {
                     delete(null);
                 }
@@ -308,14 +306,9 @@ public class TableFragment extends BaseFragment {
                     loadData(realTimeQueryCondition);
                 }
             }).execute();
+        } else if (requestCode == CODE2 && resultCode == Activity.RESULT_OK) {
+            loadData(realTimeQueryCondition);
         }
     }
 
-
-    private EventCallback eventCallback = new EventCallback() {
-        @Override
-        public void onComplete() {
-            loadData(realTimeQueryCondition);
-        }
-    };
 }

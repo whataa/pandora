@@ -37,7 +37,7 @@
             android:ellipsize="middle"
             android:singleLine="true"
             android:textColor="#000"
-            android:textSize="17dp"
+            android:textSize="15dp"
             tools:text="apk/res/android" />
 
         <TextView
