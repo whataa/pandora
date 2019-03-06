@@ -36,8 +36,8 @@ public class ConfigFragment extends BaseListFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getToolbar().setTitle("Setting");
-        getToolbar().getMenu().add(-1, -1, 0, "reset").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        getToolbar().setTitle(R.string.pd_name_config);
+        getToolbar().getMenu().add(-1, -1, 0, R.string.pd_name_reset).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -93,12 +93,12 @@ public class ConfigFragment extends BaseListFragment {
     private void refreshData() {
         List<BaseItem> data = new ArrayList<>();
 
-        data.add(new TitleItem("NETWORK"));
+        data.add(new TitleItem(ViewKnife.getString(R.string.pd_name_network)));
         data.add(new NameArrowItem("delay for each request(ms)", "" + Config.getNETWORK_DELAY_REQ()).setTag(Config.Type.NETWORK_DELAY_REQ));
         data.add(new NameArrowItem("delay for each response(ms)", "" + Config.getNETWORK_DELAY_RES()).setTag(Config.Type.NETWORK_DELAY_RES));
         data.add(new NameArrowItem("the maximum number of first loads", "" + Config.getNETWORK_PAGE_SIZE()).setTag(Config.Type.NETWORK_PAGE_SIZE));
 
-        data.add(new TitleItem("SANDBOX"));
+        data.add(new TitleItem(ViewKnife.getString(R.string.pd_name_sandbox)));
         data.add(new CheckBoxItem("show device-protect-mode file\n(only for api>=24)", Config.getSANDBOX_DPM()).setTag(Config.Type.SANDBOX_DPM));
 
         data.add(new TitleItem("UI"));
@@ -107,8 +107,8 @@ public class ConfigFragment extends BaseListFragment {
         data.add(new CheckBoxItem("ignore system layers in hierarchy", Config.getUI_IGNORE_SYS_LAYER()).setTag(Config.Type.UI_IGNORE_SYS_LAYER));
 
         data.add(new TitleItem("SHAKE"));
-        data.add(new CheckBoxItem("turn on", Config.getSHAKE_SWITCH()).setTag(Config.Type.SHAKE_SWITCH));
-        data.add(new NameArrowItem("threshold", "" + Config.getSHAKE_THRESHOLD()).setTag(Config.Type.SHAKE_THRESHOLD));
+        data.add(new CheckBoxItem(getString(R.string.pd_name_turn_on), Config.getSHAKE_SWITCH()).setTag(Config.Type.SHAKE_SWITCH));
+        data.add(new NameArrowItem(getString(R.string.pd_name_threshold), "" + Config.getSHAKE_THRESHOLD()).setTag(Config.Type.SHAKE_THRESHOLD));
 
         getAdapter().setItems(data);
     }

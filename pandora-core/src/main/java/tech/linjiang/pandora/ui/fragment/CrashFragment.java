@@ -33,8 +33,8 @@ public class CrashFragment extends BaseListFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getToolbar().setTitle("CRASH");
-        getToolbar().getMenu().add(-1, 0, 0, "delete").setIcon(R.drawable.pd_delete)
+        getToolbar().setTitle(R.string.pd_name_crash);
+        getToolbar().getMenu().add(-1, 0, 0, R.string.pd_name_delete_key).setIcon(R.drawable.pd_delete)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

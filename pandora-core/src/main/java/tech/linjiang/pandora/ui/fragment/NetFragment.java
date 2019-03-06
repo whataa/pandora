@@ -47,15 +47,15 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getToolbar().setTitle("Network");
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "switch")
+        getToolbar().setTitle(R.string.pd_name_network);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "")
                 .setActionView(new SwitchCompat(getContext()))
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_2, 1, "search")
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_2, 1, R.string.pd_name_search)
                 .setActionView(new SearchView(getContext()))
                 .setIcon(R.drawable.pd_search)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, "clear");
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, R.string.pd_name_clear);
         setSearchView();
         getToolbar().setOnMenuItemClickListener(this);
         SwitchCompat switchCompat = ((SwitchCompat) getToolbar()

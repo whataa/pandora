@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tech.linjiang.pandora.Pandora;
+import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.sandbox.Sandbox;
 import tech.linjiang.pandora.ui.item.DBItem;
 import tech.linjiang.pandora.ui.item.FileItem;
@@ -37,7 +38,7 @@ public class SandboxFragment extends BaseListFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getToolbar().setTitle("Sandbox");
+        getToolbar().setTitle(R.string.pd_name_sandbox);
 
         getAdapter().setListener(new UniversalAdapter.OnItemClickListener() {
             @Override
@@ -80,17 +81,17 @@ public class SandboxFragment extends BaseListFragment {
             public List<BaseItem> doInBackground(Void[] params) {
                 SparseArray<String> databaseNames = Pandora.get().getDatabases().getDatabaseNames();
                 List<BaseItem> data = new ArrayList<>(databaseNames.size());
-                data.add(new TitleItem("Database"));
+                data.add(new TitleItem(getString(R.string.pd_name_database)));
                 for (int i = 0; i < databaseNames.size(); i++) {
                     data.add(new DBItem(databaseNames.valueAt(i), databaseNames.keyAt(i)));
                 }
-                data.add(new TitleItem("SharedPreference"));
+                data.add(new TitleItem(getString(R.string.pd_name_sp)));
                 List<File> spFiles = Pandora.get().getSharedPref().getSharedPrefDescs();
                 for (int i = 0; i < spFiles.size(); i++) {
                     data.add(new SPItem(spFiles.get(i).getName(), spFiles.get(i)));
                 }
 
-                data.add(new TitleItem("Files"));
+                data.add(new TitleItem(getString(R.string.pd_name_file)));
 
                 List<File> descriptors = Sandbox.getRootFiles();
                 for (int i = 0; i < descriptors.size(); i++) {

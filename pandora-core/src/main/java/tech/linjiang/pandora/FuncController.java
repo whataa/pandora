@@ -16,6 +16,7 @@ import tech.linjiang.pandora.ui.Dispatcher;
 import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.ui.view.FuncView;
 import tech.linjiang.pandora.util.Utils;
+import tech.linjiang.pandora.util.ViewKnife;
 
 /**
  * Created by linjiang on 2019/3/4.
@@ -131,7 +132,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
 
             @Override
             public String getName() {
-                return "network";
+                return ViewKnife.getString(R.string.pd_name_network);
             }
 
             @Override
@@ -148,7 +149,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
 
             @Override
             public String getName() {
-                return "sandbox";
+                return ViewKnife.getString(R.string.pd_name_sandbox);
             }
 
             @Override
@@ -165,7 +166,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
 
             @Override
             public String getName() {
-                return "select";
+                return ViewKnife.getString(R.string.pd_name_select);
             }
 
             @Override
@@ -182,7 +183,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
 
             @Override
             public String getName() {
-                return "crash";
+                return ViewKnife.getString(R.string.pd_name_crash);
             }
 
             @Override
@@ -199,7 +200,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
 
             @Override
             public String getName() {
-                return "hierarchy";
+                return ViewKnife.getString(R.string.pd_name_layer);
             }
 
             @Override
@@ -216,7 +217,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
 
             @Override
             public String getName() {
-                return "baseline";
+                return ViewKnife.getString(R.string.pd_name_baseline);
             }
 
             @Override
@@ -233,7 +234,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
 
             @Override
             public String getName() {
-                return "navigate";
+                return ViewKnife.getString(R.string.pd_name_navigate);
             }
 
             @Override
@@ -250,7 +251,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
 
             @Override
             public String getName() {
-                return "history";
+                return ViewKnife.getString(R.string.pd_name_history);
             }
 
             @Override
@@ -267,7 +268,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
 
             @Override
             public String getName() {
-                return "activity";
+                return ViewKnife.getString(R.string.pd_name_activity);
             }
 
             @Override
@@ -285,7 +286,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
 
             @Override
             public String getName() {
-                return "gridLine";
+                return ViewKnife.getString(R.string.pd_name_gridline);
             }
 
             @Override
@@ -303,7 +304,7 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
 
             @Override
             public String getName() {
-                return "config";
+                return ViewKnife.getString(R.string.pd_name_config);
             }
 
             @Override

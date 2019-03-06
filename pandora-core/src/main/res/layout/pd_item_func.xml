@@ -27,5 +27,5 @@
         android:singleLine="true"
         android:text="network"
         android:textColor="#000"
-        android:textSize="10dp" />
+        android:textSize="9dp" />
 </tech.linjiang.pandora.ui.view.SquareLayout>

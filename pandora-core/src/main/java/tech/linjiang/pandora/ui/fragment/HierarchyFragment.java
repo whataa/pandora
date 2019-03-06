@@ -107,9 +107,9 @@ public class HierarchyFragment extends BaseListFragment
         if (savedInstanceState != null) {
             return;
         }
-        getToolbar().setTitle("Hierarchy");
+        getToolbar().setTitle(R.string.pd_name_layer);
 
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "switch")
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "")
                 .setActionView(new SwitchCompat(getContext()))
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         SwitchCompat switchCompat = ((SwitchCompat) getToolbar()

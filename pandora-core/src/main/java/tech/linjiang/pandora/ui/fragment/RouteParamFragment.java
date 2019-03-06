@@ -109,9 +109,9 @@ public class RouteParamFragment extends BaseListFragment implements RouteParamIt
             MenuRecyclerView.RvContextMenuInfo info = (MenuRecyclerView.RvContextMenuInfo) menuInfo;
             RouteParamItem paramItem = getAdapter().getItem(info.position);
             if (paramItem.data != RouteParamItem.Type.NONE) {
-                menu.add(-1, R.id.pd_menu_id_1, 0, "add");
+                menu.add(-1, R.id.pd_menu_id_1, 0, R.string.pd_name_add);
             }
-            menu.add(-1, R.id.pd_menu_id_2, 0, "delete");
+            menu.add(-1, R.id.pd_menu_id_2, 0, R.string.pd_name_delete_key);
         }
     }
 

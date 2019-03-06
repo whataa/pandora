@@ -47,11 +47,11 @@ public class FileAttrFragment extends BaseListFragment {
         getToolbar().setTitle(file.getName());
 
 
-        getToolbar().getMenu().add(-1, 0, 0, "try open");
-        getToolbar().getMenu().add(-1, 0, 1, "open as text");
-        getToolbar().getMenu().add(-1, 0, 2, "rename");
-        getToolbar().getMenu().add(-1, 0, 3, "delete");
-        getToolbar().getMenu().add(-1, 0, 4, "copy to sdcard");
+        getToolbar().getMenu().add(-1, 0, 0, R.string.pd_name_open);
+        getToolbar().getMenu().add(-1, 0, 1, R.string.pd_name_open_as_text);
+        getToolbar().getMenu().add(-1, 0, 2, R.string.pd_name_rename);
+        getToolbar().getMenu().add(-1, 0, 3, R.string.pd_name_delete_key);
+        getToolbar().getMenu().add(-1, 0, 4, R.string.pd_name_copy_to_sdcard);
 
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

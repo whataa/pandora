@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pd_lib_name">pandora</string>
+    <string name="pd_error_msg">空</string>
+    <string name="pd_ok">OK</string>
+    <string name="pd_cancel">Cancel</string>
+    <string name="pd_not_support">不支持的文件类型</string>
+    <string name="pd_success">操作成功</string>
+    <string name="pd_failed">操作失败</string>
+    <string name="pd_copy_2_clipboard">已复制到剪切板</string>
+    <string name="pd_no_change">没有修改</string>
+    <string name="pd_search_hint">condition, like id=1</string>
+    <string name="pd_net_search_hint">query url</string>
+    <string name="pd_can_not_edit">不支持编辑</string>
+    <string name="pd_please_open_net_log">请打开开关以记录</string>
+    <string name="pd_permission_title">权限提示</string>
+    <string name="pd_please_allow_permission">Pandora需要悬浮窗权限来展示功能面板，请手动允许并重试。</string>
+    <string name="pd_help_title">提示</string>
+    <string name="pd_help_operate">① 单击以选中，再次单击取消选中，最多能选中两个.\n② 长按可以移动已选中的View.\n③ 点击下方面板查看View更多属性.\n④ 向上拖动面板查看更多操作.\n⑤ 点击返回键退出.</string>
+    <string name="pd_help_baseline">① 单击以确定位置.\n② 拖动可开始测量.\n③ 默认单位是5dp，可以在设置中修改.\n⑤ 点击返回键退出.</string>
+    <string name="pd_help_sp">① 长按可执行复制或删除选项.\n② 点击Value可修改.\n③ \"尝试打开\" 会把该文件先复制到sdcard 并尝试使用手机内支持该文件类型的app打开.</string>
+    <string name="pd_help_table">① 长按可执行复制或删除选项.\n② 点击Value可修改.\n③ 搜索功能的输入必须是一个不带\"where\"的条件sql语句, 例如 \"id=1\".</string>
+    <string name="pd_make_sure">请点击OK确定操作.</string>
+    <string name="pd_copy_hint">已将文件拷贝到： %s</string>
+    <string name="pd_name_network">网络日志</string>
+    <string name="pd_name_sandbox">沙盒文件</string>
+    <string name="pd_name_select">选择视图</string>
+    <string name="pd_name_crash">Crash</string>
+    <string name="pd_name_layer">视图层级</string>
+    <string name="pd_name_baseline">基准线</string>
+    <string name="pd_name_navigate">跳转至</string>
+    <string name="pd_name_history">Act历史</string>
+    <string name="pd_name_activity">当前Act</string>
+    <string name="pd_name_gridline">网格线</string>
+    <string name="pd_name_config">配置</string>
+    <string name="pd_name_copy_value">复制</string>
+    <string name="pd_name_delete_row">删除该行</string>
+    <string name="pd_name_help">帮助</string>
+    <string name="pd_name_search">搜索</string>
+    <string name="pd_name_info">信息</string>
+    <string name="pd_name_add">添加</string>
+    <string name="pd_name_delete_all">删除所有</string>
+    <string name="pd_name_delete_key">删除</string>
+    <string name="pd_name_database">数据库</string>
+    <string name="pd_name_sp">SharedPreference</string>
+    <string name="pd_name_file">内部存储</string>
+    <string name="pd_name_clear">清除</string>
+    <string name="pd_name_share">分享到</string>
+    <string name="pd_name_open">尝试打开</string>
+    <string name="pd_name_open_as_text">以文本形式打开</string>
+    <string name="pd_name_rename">重命名</string>
+    <string name="pd_name_copy_to_sdcard">复制到sdcard</string>
+    <string name="pd_name_save">保存</string>
+    <string name="pd_name_edit">编辑</string>
+    <string name="pd_name_reset">重置</string>
+    <string name="pd_name_turn_on">打开</string>
+    <string name="pd_name_threshold">摇晃系数</string>
+</resources>

@@ -36,7 +36,7 @@ public class FileFragment extends BaseListFragment {
         super.onViewCreated(view, savedInstanceState);
         file = (File) getArguments().getSerializable(PARAM1);
         getToolbar().setTitle(file.getName());
-        getToolbar().getMenu().add(0,0,0,"delete")
+        getToolbar().getMenu().add(0,0,0,R.string.pd_name_delete_key)
                 .setIcon(R.drawable.pd_delete)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {

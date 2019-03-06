@@ -41,7 +41,7 @@ public class SPFragment extends BaseListFragment {
         super.onViewCreated(view, savedInstanceState);
         descriptor = (File) getArguments().getSerializable(PARAM1);
         getToolbar().setTitle(descriptor.getName());
-        getToolbar().getMenu().add(0,0,0,"help").setIcon(R.drawable.pd_help)
+        getToolbar().getMenu().add(0,0,0,R.string.pd_name_help).setIcon(R.drawable.pd_help)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -83,8 +83,8 @@ public class SPFragment extends BaseListFragment {
             MenuRecyclerView.RvContextMenuInfo info = (MenuRecyclerView.RvContextMenuInfo) menuInfo;
             if (getAdapter().getItems().get(info.position) instanceof KeyValueItem) {
                 if (!((KeyValueItem) getAdapter().getItems().get(info.position)).isTitle) {
-                    menu.add(-1, 0, 0, "copy");
-                    menu.add(-1, 0, 0, "delete key");
+                    menu.add(-1, 0, 0, R.string.pd_name_copy_value);
+                    menu.add(-1, 0, 0, R.string.pd_name_delete_key);
                 }
             }
         }

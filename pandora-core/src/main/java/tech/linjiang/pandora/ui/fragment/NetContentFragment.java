@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import tech.linjiang.pandora.cache.Content;
+import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
 
@@ -71,8 +71,8 @@ public class NetContentFragment extends BaseFragment {
     }
 
     private void setSearchView() {
-        getToolbar().getMenu().add(-1, 0, 0, "copy");
-        getToolbar().getMenu().add(-1, 0, 1, "share");
+        getToolbar().getMenu().add(-1, 0, 0, R.string.pd_name_copy_value);
+        getToolbar().getMenu().add(-1, 0, 1, R.string.pd_name_share);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -104,10 +104,9 @@ public class NetContentFragment extends BaseFragment {
 
             @Override
             public void onPostExecute(String result) {
-                Log.d(TAG, "onPostExecute: " + result);
                 hideLoading();
                 if (TextUtils.isEmpty(result)) {
-                    Utils.toast("empty");
+                    Utils.toast(R.string.pd_error_msg);
                     return;
                 }
                 setSearchView();

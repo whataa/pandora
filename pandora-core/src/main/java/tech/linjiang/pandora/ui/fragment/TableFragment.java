@@ -132,8 +132,8 @@ public class TableFragment extends BaseFragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(-1, R.id.pd_menu_id_1, 0, "copy value");
-        menu.add(-1, R.id.pd_menu_id_2, 1, "delete row");
+        menu.add(-1, R.id.pd_menu_id_1, 0, R.string.pd_name_copy_value);
+        menu.add(-1, R.id.pd_menu_id_2, 1, R.string.pd_name_delete_row);
     }
 
     @Override
@@ -154,16 +154,16 @@ public class TableFragment extends BaseFragment {
     }
 
     private void initMenu() {
-        getToolbar().getMenu().add(0,0,0,"help").setIcon(R.drawable.pd_help)
+        getToolbar().getMenu().add(0,0,0, R.string.pd_name_help).setIcon(R.drawable.pd_help)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        MenuItem searchItem = getToolbar().getMenu().add(0,0, 1, "search");
+        MenuItem searchItem = getToolbar().getMenu().add(0,0, 1, R.string.pd_name_search);
         searchItem.setActionView(new SearchView(getContext()))
                 .setIcon(R.drawable.pd_search)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
-        getToolbar().getMenu().add(0,0, 2, "info");
-        getToolbar().getMenu().add(0,0, 3, "add");
-        getToolbar().getMenu().add(0,0, 4, "delete all");
+        getToolbar().getMenu().add(0,0, 2, R.string.pd_name_info);
+        getToolbar().getMenu().add(0,0, 3, R.string.pd_name_add);
+        getToolbar().getMenu().add(0,0, 4, R.string.pd_name_delete_all);
 
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(ViewKnife.getString(R.string.pd_search_hint));

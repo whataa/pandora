@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.ui.item.ExceptionItem;
 import tech.linjiang.pandora.util.Utils;
 
@@ -22,8 +23,8 @@ public class CrashStackFragment extends BaseListFragment {
         final String stack = getArguments().getString(PARAM2);
 
         getToolbar().setTitle(Utils.millis2String(time, Utils.NO_MILLIS));
-        getToolbar().getMenu().add(-1, 0, 0, "copy");
-        getToolbar().getMenu().add(-1, 0, 1, "share to");
+        getToolbar().getMenu().add(-1, 0, 0, R.string.pd_name_copy_value);
+        getToolbar().getMenu().add(-1, 0, 1, R.string.pd_name_share);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

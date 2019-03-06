@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.ui.GeneralDialog;
@@ -25,7 +24,6 @@ public class PermissionReqFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("PermissionReqFragment", "onCreate: ");
         if (savedInstanceState != null) {
             return;
         }
