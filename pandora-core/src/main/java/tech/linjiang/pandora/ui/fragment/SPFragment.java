@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
+import tech.linjiang.pandora.ui.GeneralDialog;
 import tech.linjiang.pandora.ui.item.KeyValueItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
@@ -39,6 +41,21 @@ public class SPFragment extends BaseListFragment {
         super.onViewCreated(view, savedInstanceState);
         descriptor = (File) getArguments().getSerializable(PARAM1);
         getToolbar().setTitle(descriptor.getName());
+        getToolbar().getMenu().add(0,0,0,"help").setIcon(R.drawable.pd_help)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getOrder() == 0) {
+                    GeneralDialog.build(-1)
+                            .title(R.string.pd_help_title)
+                            .message(R.string.pd_help_sp)
+                            .positiveButton(R.string.pd_ok)
+                            .show(SPFragment.this);
+                }
+                return false;
+            }
+        });
 
         registerForContextMenu(getRecyclerView());
         getAdapter().setListener(new UniversalAdapter.OnItemClickListener() {

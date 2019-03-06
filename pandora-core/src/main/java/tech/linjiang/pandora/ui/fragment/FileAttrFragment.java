@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tech.linjiang.pandora.core.R;
+import tech.linjiang.pandora.ui.GeneralDialog;
 import tech.linjiang.pandora.ui.item.ContentItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
@@ -46,10 +47,11 @@ public class FileAttrFragment extends BaseListFragment {
         getToolbar().setTitle(file.getName());
 
 
-        getToolbar().getMenu().add(-1, 0, 0, "open");
+        getToolbar().getMenu().add(-1, 0, 0, "try open");
         getToolbar().getMenu().add(-1, 0, 1, "open as text");
         getToolbar().getMenu().add(-1, 0, 2, "rename");
         getToolbar().getMenu().add(-1, 0, 3, "delete");
+        getToolbar().getMenu().add(-1, 0, 4, "copy to sdcard");
 
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -64,6 +66,8 @@ public class FileAttrFragment extends BaseListFragment {
                     launch(EditFragment.class, bundle, CODE1);
                 } else if (item.getOrder() == 3) {
                     tryDel();
+                } else if (item.getOrder() == 4) {
+                    copyTo();
                 }
                 return true;
             }
@@ -116,6 +120,27 @@ public class FileAttrFragment extends BaseListFragment {
                 }
             }
         }).execute(file);
+    }
+
+    private void copyTo() {
+        new SimpleTask<>(new SimpleTask.Callback<File, String>() {
+            @Override
+            public String doInBackground(File[] params) {
+                String result = FileUtil.fileCopy2Tmp(params[0]);
+                return result;
+            }
+
+            @Override
+            public void onPostExecute(String result) {
+                hideLoading();
+                GeneralDialog.build(-1)
+                        .title(R.string.pd_success)
+                        .message(R.string.pd_copy_hint, result)
+                        .positiveButton(R.string.pd_ok)
+                        .show(FileAttrFragment.this);
+            }
+        }).execute(file);
+        showLoading();
     }
 
     private void tryOpen() {

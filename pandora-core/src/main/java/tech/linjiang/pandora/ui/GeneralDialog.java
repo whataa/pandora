@@ -61,6 +61,11 @@ public class GeneralDialog extends DialogFragment implements DialogInterface.OnC
             return this;
         }
 
+        public Creator message(int res, Object... param) {
+            bundle.putString(ATTR3, (String.format(ViewKnife.getString(res), param)));
+            return this;
+        }
+
         public Creator message(int res, boolean center) {
             bundle.putString(ATTR3, ViewKnife.getString(res));
             bundle.putBoolean(ATTR7, center);

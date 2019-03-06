@@ -130,7 +130,7 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
         childRv.setAdapter(childAdapter);
         childAdapter.setListener(clickListener);
 
-        GeneralDialog.build(1)
+        GeneralDialog.build(-1)
                 .title(R.string.pd_help_title)
                 .message(R.string.pd_help_operate)
                 .positiveButton(R.string.pd_ok)

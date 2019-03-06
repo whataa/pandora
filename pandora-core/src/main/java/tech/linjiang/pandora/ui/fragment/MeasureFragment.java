@@ -41,7 +41,7 @@ public class MeasureFragment extends BaseFragment {
         if (savedInstanceState != null) {
             return;
         }
-        GeneralDialog.build(1)
+        GeneralDialog.build(-1)
                 .title(R.string.pd_help_title)
                 .message(R.string.pd_help_baseline)
                 .positiveButton(R.string.pd_ok)
