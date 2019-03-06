@@ -26,6 +26,7 @@ public class Config {
     private static final String KEY_UI_ACTIVITY_GRAVITY     = "key_ui_activity_gravity";
     private static final String KEY_UI_GRID_INTERVAL        = "key_ui_grid_interval";
     private static final String KEY_UI_IGNORE_SYS_LAYER     = "key_ui_ignore_sys_layer";
+    private static final String KEY_INTERNAL_DRAG_Y         = "key_internal_drag_y";
 
     private static final boolean DEF_KEY_SHAKE_SWITCH = true;
     private static final int DEF_KEY_SHAKE_THRESHOLD = 1000;
@@ -36,6 +37,7 @@ public class Config {
     private static final int DEF_UI_ACTIVITY_GRAVITY = Gravity.START | Gravity.BOTTOM;
     private static final int DEF_UI_GRID_INTERVAL = 5;
     private static final boolean DEF_UI_IGNORE_SYS_LAYER = false;
+    private static final int DEF_INTERNAL_DRAG_Y = 0;
 
 
     public static void setNetLogEnable(boolean enable) {
@@ -48,9 +50,20 @@ public class Config {
         return getSp().getBoolean(KEY_NET, true);
     }
 
+    public static void setDragY(float y) {
+        getSp().edit()
+                .putFloat(KEY_INTERNAL_DRAG_Y, y)
+                .apply();
+    }
+
+    public static float getDragY() {
+        return getSp().getFloat(KEY_INTERNAL_DRAG_Y, DEF_INTERNAL_DRAG_Y);
+    }
+
     private static SharedPreferences getSp() {
         return Utils.getContext().getSharedPreferences(NAME, Context.MODE_PRIVATE);
     }
+
 
 
     // =============================================================================================

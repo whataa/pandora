@@ -21,6 +21,7 @@ import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.ui.item.FuncItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
+import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.Utils;
 import tech.linjiang.pandora.util.ViewKnife;
 
@@ -99,11 +100,20 @@ public class FuncView extends LinearLayout {
                     params.y = Math.max(0, params.y);
                     Utils.updateViewLayoutInWindow(FuncView.this, params);
                     lastY = event.getRawY();
+                    Utils.cancelTask(task);
+                    Utils.postDelayed(task, 200);
                     break;
                 default:
                     break;
             }
             return true;
+        }
+    };
+
+    private Runnable task = new Runnable() {
+        @Override
+        public void run() {
+            Config.setDragY(lastY);
         }
     };
 
@@ -138,7 +148,7 @@ public class FuncView extends LinearLayout {
         params.format = PixelFormat.TRANSLUCENT;
         params.gravity = Gravity.TOP | Gravity.START;
         params.x = 0;
-        params.y = 0;
+        params.y = (int) Config.getDragY();
         return Utils.addViewToWindow(this, params);
     }
 
