@@ -46,23 +46,23 @@ public class FileAttrFragment extends BaseListFragment {
         getToolbar().setTitle(file.getName());
 
 
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "open");
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_2, 1, "open as text");
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, "rename");
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_4, 3, "delete");
+        getToolbar().getMenu().add(-1, 0, 0, "open");
+        getToolbar().getMenu().add(-1, 0, 1, "open as text");
+        getToolbar().getMenu().add(-1, 0, 2, "rename");
+        getToolbar().getMenu().add(-1, 0, 3, "delete");
 
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.pd_menu_id_1) {
+                if (item.getOrder() == 0) {
                     tryOpen();
-                } else if (item.getItemId() == R.id.pd_menu_id_2) {
+                } else if (item.getOrder() == 1) {
                     tryOpenAsText();
-                } else if (item.getItemId() == R.id.pd_menu_id_3) {
+                } else if (item.getOrder() == 2) {
                     Bundle bundle = new Bundle();
                     bundle.putString(PARAM1, file.getName());
                     launch(EditFragment.class, bundle, CODE1);
-                } else if (item.getItemId() == R.id.pd_menu_id_4) {
+                } else if (item.getOrder() == 3) {
                     tryDel();
                 }
                 return true;
@@ -182,6 +182,7 @@ public class FileAttrFragment extends BaseListFragment {
             public void onPostExecute(Boolean result) {
                 hideLoading();
                 Utils.toast(result ? R.string.pd_success : R.string.pd_failed);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
                 onBackPressed();
             }
         }).execute(file);
@@ -204,6 +205,7 @@ public class FileAttrFragment extends BaseListFragment {
                     hideLoading();
                     Utils.toast(result ? R.string.pd_success : R.string.pd_failed);
                     loadData();
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
                 }
             }).execute();
             showLoading();

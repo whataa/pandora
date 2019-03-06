@@ -1,5 +1,7 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -50,7 +52,7 @@ public class SandboxFragment extends BaseListFragment {
                 } else if (item instanceof FileItem) {
                     bundle.putSerializable(PARAM1, (File) item.data);
                     if (((File) item.data).isDirectory()) {
-                        launch(FileFragment.class, bundle);
+                        launch(FileFragment.class, bundle, CODE1);
                     } else {
                         launch(FileAttrFragment.class, bundle);
                     }
@@ -61,6 +63,16 @@ public class SandboxFragment extends BaseListFragment {
         loadData();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CODE1) {
+                loadData();
+            }
+        }
+    }
+
     private void loadData() {
         showLoading();
         new SimpleTask<>(new SimpleTask.Callback<Void, List<BaseItem>>() {
@@ -68,7 +80,7 @@ public class SandboxFragment extends BaseListFragment {
             public List<BaseItem> doInBackground(Void[] params) {
                 SparseArray<String> databaseNames = Pandora.get().getDatabases().getDatabaseNames();
                 List<BaseItem> data = new ArrayList<>(databaseNames.size());
-                data.add(new TitleItem("SQLite"));
+                data.add(new TitleItem("Database"));
                 for (int i = 0; i < databaseNames.size(); i++) {
                     data.add(new DBItem(databaseNames.valueAt(i), databaseNames.keyAt(i)));
                 }

@@ -13,7 +13,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import tech.linjiang.pandora.cache.Content;
-import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
 
@@ -72,14 +71,14 @@ public class NetContentFragment extends BaseFragment {
     }
 
     private void setSearchView() {
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "copy");
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, "share");
+        getToolbar().getMenu().add(-1, 0, 0, "copy");
+        getToolbar().getMenu().add(-1, 0, 1, "share");
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.pd_menu_id_1) {
+                if (item.getOrder() == 0) {
                     Utils.copy2ClipBoard(originContent);
-                } else if (item.getItemId() == R.id.pd_menu_id_3) {
+                } else if (item.getOrder() == 1) {
                     Utils.shareText(originContent);
                 }
                 return true;

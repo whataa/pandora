@@ -33,7 +33,8 @@ public class HistoryFragment extends BaseListFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getToolbar().setTitle("Activity History");
-        getToolbar().getMenu().add(-1, 0, 0, "clear");
+        getToolbar().getMenu().add(-1, 0, 0, "delete").setIcon(R.drawable.pd_delete)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

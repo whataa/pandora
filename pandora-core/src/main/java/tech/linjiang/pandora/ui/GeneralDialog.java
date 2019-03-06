@@ -41,6 +41,7 @@ public class GeneralDialog extends DialogFragment implements DialogInterface.OnC
     public static final String ATTR4 = "ATTR4";
     public static final String ATTR5 = "ATTR5";
     public static final String ATTR6 = "ATTR6";
+    public static final String ATTR7 = "ATTR7";
 
 
     public static class Creator {
@@ -56,7 +57,13 @@ public class GeneralDialog extends DialogFragment implements DialogInterface.OnC
         }
 
         public Creator message(int res) {
+            message(res, false);
+            return this;
+        }
+
+        public Creator message(int res, boolean center) {
             bundle.putString(ATTR3, ViewKnife.getString(res));
+            bundle.putBoolean(ATTR7, center);
             return this;
         }
 
@@ -216,11 +223,13 @@ public class GeneralDialog extends DialogFragment implements DialogInterface.OnC
 
             if (message != null) {
                 message.setTextColor(0xff202020);
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-//                    message.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-//                } else {
-//                    message.setGravity(Gravity.CENTER_HORIZONTAL);
-//                }
+                if (getArguments().getBoolean(ATTR7, false)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        message.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    } else {
+                        message.setGravity(Gravity.CENTER_HORIZONTAL);
+                    }
+                }
             }
 
             title.setTextColor(0xff353535);

@@ -212,4 +212,14 @@ public class FileUtil {
         }
         return newFile.getPath();
     }
+
+    public static void deleteDirectory(File file) {
+        if (file != null && file.exists() && file.isDirectory()) {
+            for (File item : file.listFiles()) {
+                item.delete();
+            }
+            file.delete();
+        }
+    }
+
 }
