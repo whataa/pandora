@@ -84,7 +84,7 @@ public class SPFragment extends BaseListFragment {
             if (getAdapter().getItems().get(info.position) instanceof KeyValueItem) {
                 if (!((KeyValueItem) getAdapter().getItems().get(info.position)).isTitle) {
                     menu.add(-1, 0, 0, R.string.pd_name_copy_value);
-                    menu.add(-1, 0, 0, R.string.pd_name_delete_key);
+                    menu.add(-1, 0, 1, R.string.pd_name_delete_key);
                 }
             }
         }
