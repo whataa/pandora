@@ -69,8 +69,8 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
     }
 
     @Override
-    public void onItemClick(int index) {
-        functions.get(index).onClick();
+    public boolean onItemClick(int index) {
+        return functions.get(index).onClick();
     }
 
     @Override
@@ -135,8 +135,9 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
             }
 
             @Override
-            public void onClick() {
+            public boolean onClick() {
                 Dispatcher.start(Utils.getContext(), Type.NET);
+                return false;
             }
         });
         addFunc(new IFunc() {
@@ -151,8 +152,9 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
             }
 
             @Override
-            public void onClick() {
+            public boolean onClick() {
                 Dispatcher.start(Utils.getContext(), Type.FILE);
+                return false;
             }
         });
         addFunc(new IFunc() {
@@ -167,8 +169,9 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
             }
 
             @Override
-            public void onClick() {
+            public boolean onClick() {
                 Dispatcher.start(Utils.getContext(), Type.SELECT);
+                return false;
             }
         });
         addFunc(new IFunc() {
@@ -183,8 +186,9 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
             }
 
             @Override
-            public void onClick() {
+            public boolean onClick() {
                 Dispatcher.start(Utils.getContext(), Type.BUG);
+                return false;
             }
         });
         addFunc(new IFunc() {
@@ -199,8 +203,9 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
             }
 
             @Override
-            public void onClick() {
+            public boolean onClick() {
                 Dispatcher.start(Utils.getContext(), Type.HIERARCHY);
+                return false;
             }
         });
         addFunc(new IFunc() {
@@ -215,8 +220,9 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
             }
 
             @Override
-            public void onClick() {
+            public boolean onClick() {
                 Dispatcher.start(Utils.getContext(), Type.BASELINE);
+                return false;
             }
         });
         addFunc(new IFunc() {
@@ -231,8 +237,9 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
             }
 
             @Override
-            public void onClick() {
+            public boolean onClick() {
                 Dispatcher.start(Utils.getContext(), Type.ROUTE);
+                return false;
             }
         });
         addFunc(new IFunc() {
@@ -247,8 +254,9 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
             }
 
             @Override
-            public void onClick() {
+            public boolean onClick() {
                 Dispatcher.start(Utils.getContext(), Type.HISTORY);
+                return false;
             }
         });
         addFunc(new IFunc() {
@@ -263,8 +271,10 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
             }
 
             @Override
-            public void onClick() {
+            public boolean onClick() {
+                boolean isOpen = curInfoView.isOpen();
                 curInfoView.toggle();
+                return !isOpen;
             }
         });
         addFunc(new IFunc() {
@@ -279,8 +289,10 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
             }
 
             @Override
-            public void onClick() {
+            public boolean onClick() {
+                boolean isOpen = gridLineView.isOpen();
                 gridLineView.toggle();
+                return !isOpen;
             }
         });
         addFunc(new IFunc() {
@@ -295,8 +307,9 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
             }
 
             @Override
-            public void onClick() {
+            public boolean onClick() {
                 Dispatcher.start(Utils.getContext(), Type.CONFIG);
+                return false;
             }
         });
     }

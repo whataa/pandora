@@ -50,11 +50,15 @@ public class CurInfoView extends AppCompatTextView {
     }
 
     public void toggle() {
-        if (ViewCompat.isAttachedToWindow(this)) {
+        if (isOpen()) {
             close();
         } else {
             open();
         }
+    }
+
+    public boolean isOpen() {
+        return ViewCompat.isAttachedToWindow(this);
     }
 
     private static CharSequence lastInfo;

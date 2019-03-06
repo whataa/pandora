@@ -17,8 +17,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import java.util.List;
-
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.ui.item.FuncItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
@@ -117,7 +115,9 @@ public class FuncView extends LinearLayout {
         adapter.setListener(new UniversalAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, BaseItem item) {
-                listener.onItemClick(position);
+                boolean selected = listener.onItemClick(position);
+                ((FuncItem) item).setSelected(selected);
+                adapter.notifyItemChanged(position);
             }
         });
     }
@@ -153,6 +153,6 @@ public class FuncView extends LinearLayout {
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int index);
+        boolean onItemClick(int index);
     }
 }

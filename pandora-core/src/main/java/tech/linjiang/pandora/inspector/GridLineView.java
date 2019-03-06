@@ -43,11 +43,15 @@ public class GridLineView extends View {
     }
 
     public void toggle() {
-        if (ViewCompat.isAttachedToWindow(this)) {
+        if (isOpen()) {
             close();
         } else {
             open();
         }
+    }
+
+    public boolean isOpen() {
+        return ViewCompat.isAttachedToWindow(this);
     }
 
     private int LINE_INTERVAL;

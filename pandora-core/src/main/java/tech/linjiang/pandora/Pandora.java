@@ -75,23 +75,40 @@ public final class Pandora extends FileProvider implements SensorDetector.Callba
         return attrFactory;
     }
 
-    // hide
+    /**
+     * @hide
+     */
     public Activity getTopActivity() {
         return historyRecorder.getTopActivity();
     }
 
+    /**
+     * Add a custom entry to the panel.
+     * also see @{@link tech.linjiang.pandora.function.IFunc}
+     *
+     * @param func
+     */
     public void addFunction(IFunc func) {
         funcController.addFunc(func);
     }
 
+    /**
+     * Open the panel.
+     */
     public void open() {
         funcController.open();
     }
 
+    /**
+     * Close the panel.
+     */
     public void close() {
         funcController.close();
     }
 
+    /**
+     * Disable the Shake feature.
+     */
     public void disableShakeSwitch() {
         sensorDetector.unRegister();
     }
