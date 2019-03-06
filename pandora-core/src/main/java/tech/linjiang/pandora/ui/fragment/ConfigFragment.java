@@ -57,15 +57,6 @@ public class ConfigFragment extends BaseListFragment {
                     @Config.Type int type = (int) item.getTag();
                     Log.d(TAG, "onItemClick: " + type);
                     switch (type) {
-                        case Config.Type.COMMON_NETWORK_SWITCH:
-                            Config.setCOMMON_NETWORK_SWITCH(!Config.getCOMMON_NETWORK_SWITCH());
-                            break;
-                        case Config.Type.COMMON_SANDBOX_SWITCH:
-                            Config.setCOMMON_SANDBOX_SWITCH(!Config.getCOMMON_SANDBOX_SWITCH());
-                            break;
-                        case Config.Type.COMMON_UI_SWITCH:
-                            Config.setCOMMON_UI_SWITCH(!Config.getCOMMON_UI_SWITCH());
-                            break;
                         case Config.Type.NETWORK_DELAY_REQ:
                         case Config.Type.NETWORK_DELAY_RES:
                         case Config.Type.NETWORK_PAGE_SIZE:
@@ -119,10 +110,6 @@ public class ConfigFragment extends BaseListFragment {
         data.add(new CheckBoxItem("turn on", Config.getSHAKE_SWITCH()).setTag(Config.Type.SHAKE_SWITCH));
         data.add(new NameArrowItem("threshold", "" + Config.getSHAKE_THRESHOLD()).setTag(Config.Type.SHAKE_THRESHOLD));
 
-        data.add(new TitleItem("COMMON"));
-        data.add(new CheckBoxItem("enable network module", Config.getCOMMON_NETWORK_SWITCH()).setTag(Config.Type.COMMON_NETWORK_SWITCH));
-        data.add(new CheckBoxItem("enable sandbox module", Config.getCOMMON_SANDBOX_SWITCH()).setTag(Config.Type.COMMON_SANDBOX_SWITCH));
-//        data.add(new CheckBoxItem("enable UI module", Config.getCOMMON_UI_SWITCH()).setTag(Config.Type.COMMON_UI_SWITCH));
         getAdapter().setItems(data);
     }
 

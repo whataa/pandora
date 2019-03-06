@@ -46,7 +46,7 @@ public class OkHttpInterceptor implements Interceptor {
         long id = -1;
 
         Request request = chain.request();
-        if (Config.getCOMMON_NETWORK_SWITCH() && Config.isNetLogEnable()) {
+        if (Config.isNetLogEnable()) {
             id = insert(request);
             notifyStart(id);
         }
@@ -62,7 +62,7 @@ public class OkHttpInterceptor implements Interceptor {
         try {
             response = chain.proceed(request);
         } catch (IOException e) {
-            if (Config.getCOMMON_NETWORK_SWITCH() && Config.isNetLogEnable() && id >= 0) {
+            if (Config.isNetLogEnable() && id >= 0) {
                 markFailed(id, Utils.collectThrow(e));
                 notifyEnd(id);
             }
@@ -76,7 +76,7 @@ public class OkHttpInterceptor implements Interceptor {
             } catch (Throwable ignore){}
         }
 
-        if (Config.getCOMMON_NETWORK_SWITCH() && Config.isNetLogEnable() && id >= 0) {
+        if (Config.isNetLogEnable() && id >= 0) {
             updateSummary(id, response);
             updateContent(id, response);
             notifyEnd(id);

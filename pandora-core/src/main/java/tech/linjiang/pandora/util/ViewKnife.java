@@ -248,7 +248,7 @@ public class ViewKnife {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             //Accessing hidden field Landroid/view/WindowManagerImpl;->mGlobal:Landroid/view/WindowManagerGlobal; (light greylist, reflection)
             //Accessing hidden field Landroid/view/WindowManagerGlobal;->mRoots:Ljava/util/ArrayList; (light greylist, reflection)
