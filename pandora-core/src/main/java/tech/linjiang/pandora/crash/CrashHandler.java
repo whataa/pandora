@@ -1,6 +1,7 @@
 package tech.linjiang.pandora.crash;
 
-import java.lang.Thread.UncaughtExceptionHandler;
+import android.os.Handler;
+import android.os.Looper;
 
 import tech.linjiang.pandora.cache.Crash;
 
@@ -8,22 +9,24 @@ import tech.linjiang.pandora.cache.Crash;
  * Created by linjiang on 2019/3/1.
  */
 
-public class CrashHandler implements UncaughtExceptionHandler {
+public class CrashHandler {
 
     private final long launchTime;
 
-    private Thread.UncaughtExceptionHandler mDefaultHandler;
     public CrashHandler() {
         launchTime = System.currentTimeMillis();
-        mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
-        Thread.setDefaultUncaughtExceptionHandler(this);
-    }
 
-
-    @Override
-    public void uncaughtException(Thread thread, Throwable t) {
-        Crash.insert(t, launchTime);
-        mDefaultHandler.uncaughtException(thread, t);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Looper.loop();
+                } catch (Throwable t) {
+                    Crash.insert(t, launchTime);
+                    throw t;
+                }
+            }
+        });
     }
 
 }

@@ -47,7 +47,7 @@ public class OperableView extends ElementHoldView {
     // max selectable count
     private final int elementsNum = 2;
     private Element[] relativeElements = new Element[elementsNum];
-    // the target Element when DOWN
+    // the latest selected Element when tap.
     private Element targetElement;
     private SelectCanvas selectCanvas;
     private RelativeCanvas relativeCanvas;
@@ -174,17 +174,7 @@ public class OperableView extends ElementHoldView {
 
     private void tryStartCheckTask() {
         cancelCheckTask();
-        targetElement = null;
-        Element element = getTargetElement(downX, downY);
-        boolean exist = false;
-        for (Element e : relativeElements) {
-            if (e != null && element == e) {
-                exist = true;
-                targetElement = e;
-                break;
-            }
-        }
-        if (exist) {
+        if (targetElement != null) {
             postDelayed(longPressCheck, longPressTimeout);
             postDelayed(tapTimeoutCheck, tapTimeout);
         }
@@ -229,6 +219,7 @@ public class OperableView extends ElementHoldView {
     }
 
     private void handleElementSelected(Element element, boolean cancelIfSelected) {
+        targetElement = element;
         if (element != null) {
             boolean bothNull = true;
             for (int i = 0; i < relativeElements.length; i++) {
