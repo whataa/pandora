@@ -1,17 +1,23 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import tech.linjiang.pandora.cache.Crash;
 import tech.linjiang.pandora.core.R;
+import tech.linjiang.pandora.ui.GeneralDialog;
 import tech.linjiang.pandora.ui.item.CrashItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
@@ -24,6 +30,7 @@ import tech.linjiang.pandora.util.Utils;
  */
 
 public class CrashFragment extends BaseListFragment {
+    private final DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @Override
     protected boolean enableSwipeBack() {
@@ -39,9 +46,12 @@ public class CrashFragment extends BaseListFragment {
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Crash.clear();
-                getAdapter().clearItems();
-                Utils.toast(R.string.pd_success);
+                GeneralDialog.build(CODE1)
+                        .title(R.string.pd_help_title)
+                        .message(R.string.pd_make_sure, true)
+                        .positiveButton(R.string.pd_ok)
+                        .negativeButton(R.string.pd_cancel)
+                        .show(CrashFragment.this);
                 return true;
             }
         });
@@ -50,13 +60,22 @@ public class CrashFragment extends BaseListFragment {
             public void onItemClick(int position, BaseItem item) {
                 if (item instanceof CrashItem) {
                     Bundle bundle = new Bundle();
-                    bundle.putLong(PARAM1, ((CrashItem)item).data.createTime);
-                    bundle.putString(PARAM2, ((CrashItem)item).data.stack);
+                    bundle.putSerializable(PARAM1, ((CrashItem)item).data);
                     launch(CrashStackFragment.class, bundle);
                 }
             }
         });
         loadData();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE1 && resultCode == Activity.RESULT_OK) {
+            Crash.clear();
+            getAdapter().clearItems();
+            Utils.toast(R.string.pd_success);
+        }
     }
 
     private void loadData() {
@@ -73,8 +92,13 @@ public class CrashFragment extends BaseListFragment {
                 hideLoading();
                 List<BaseItem> data = new ArrayList<>(result.size());
                 if (Utils.isNotEmpty(result)) {
-                    data.add(new TitleItem(String.format(Locale.getDefault(), "%d LOGS", result.size())));
+                    String title = null;
                     for (Crash crash : result) {
+                        String tmp = Utils.millis2String(crash.createTime, FORMAT);
+                        if (!TextUtils.equals(title, tmp)) {
+                            data.add(new TitleItem(tmp));
+                            title = tmp;
+                        }
                         data.add(new CrashItem(crash));
                     }
                     getAdapter().setItems(data);

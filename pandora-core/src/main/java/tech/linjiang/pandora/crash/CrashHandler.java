@@ -10,10 +10,11 @@ import tech.linjiang.pandora.cache.Crash;
 
 public class CrashHandler implements UncaughtExceptionHandler {
 
-    private static final String TAG = "CrashHandler";
+    private final long launchTime;
 
     private Thread.UncaughtExceptionHandler mDefaultHandler;
     public CrashHandler() {
+        launchTime = System.currentTimeMillis();
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
@@ -21,7 +22,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, Throwable t) {
-        Crash.insert(t);
+        Crash.insert(t, launchTime);
         mDefaultHandler.uncaughtException(thread, t);
     }
 

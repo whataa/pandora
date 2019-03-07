@@ -149,7 +149,7 @@ public class OkHttpInterceptor implements Interceptor {
             if (type != null && type.toString().contains("image")) {
                 byte[] bytes = responseBodyAsBytes(response);
                 if (bytes != null) {
-                    String path = FileUtil.saveFile(bytes, response.request().url().toString());
+                    String path = FileUtil.saveFile(bytes, response.request().url().toString(), null);
                     Content content = Content.query(reqId);
                     content.responseBody = path;
                     Content.update(content);

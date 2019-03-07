@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -32,9 +31,9 @@ import tech.linjiang.pandora.core.R;
 
 public class Utils {
 
-    public static final DateFormat DEFAULT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS", Locale.ENGLISH);
-    public static final DateFormat NO_MILLIS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-    public static final DateFormat HHMMSS = new SimpleDateFormat("HH:mm:ss SSS", Locale.ENGLISH);
+    public static final DateFormat DEFAULT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS", Locale.getDefault());
+    public static final DateFormat NO_MILLIS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+    public static final DateFormat HHMMSS = new SimpleDateFormat("HH:mm:ss SSS", Locale.getDefault());
 
     private static Context CONTEXT;
     private static Handler mainHandler;
@@ -75,7 +74,7 @@ public class Utils {
     }
 
     public static void toast(@StringRes int resId) {
-        Toast.makeText(CONTEXT, resId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(CONTEXT, resId, Toast.LENGTH_LONG).show();
     }
 
     public static void toast(String msg) {
@@ -122,17 +121,25 @@ public class Utils {
         return value;
     }
 
-    public static void shareText(String content) {
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, content);
-        shareIntent.setType("text/plain");
-        try {
-            CONTEXT.startActivity(Intent.createChooser(shareIntent, "share to").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        } catch (Throwable t) {
-            t.printStackTrace();
-            toast(t.getMessage());
+    public static String formatDuration(long ms){
+        String time = "";
+        ms /= 1000;
+        long hour = ms / 3600;
+        long mint = (ms % 3600) / 60;
+        long sed = ms % 60;
+        if (hour > 0) {
+            String hourStr = String.valueOf(hour);
+            time += hourStr + "h ";
         }
+        if (mint > 0) {
+            String mintStr = String.valueOf(mint);
+            time += mintStr + "m ";
+        }
+        if (sed > 0) {
+            String sedStr = String.valueOf(sed);
+            time += sedStr + "s";
+        }
+        return time;
     }
 
     public static void removeViewFromWindow(View v) {

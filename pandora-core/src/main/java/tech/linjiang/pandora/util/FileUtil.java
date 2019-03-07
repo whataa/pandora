@@ -192,12 +192,18 @@ public class FileUtil {
         return text;
     }
 
-    public static String saveFile(byte[] bytes, String name) {
+    public static String saveFile(byte[] bytes, String name, String suffix) {
         File cacheDir = Utils.getContext().getCacheDir();
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
         }
-        File newFile = new File(cacheDir, md5String(name));
+        String md5Name;
+        if (!TextUtils.isEmpty(suffix)) {
+            md5Name = name.concat(".").concat(suffix);
+        } else {
+            md5Name = md5String(name);
+        }
+        File newFile = new File(cacheDir, md5Name);
         if (newFile.exists()) {
             newFile.delete();
         }

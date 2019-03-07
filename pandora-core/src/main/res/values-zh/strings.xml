@@ -45,7 +45,7 @@
     <string name="pd_name_sp">SharedPreference</string>
     <string name="pd_name_file">内部存储</string>
     <string name="pd_name_clear">清除</string>
-    <string name="pd_name_share">分享到</string>
+    <string name="pd_name_share">以文件形式分享到</string>
     <string name="pd_name_open">尝试打开</string>
     <string name="pd_name_open_as_text">以文本形式打开</string>
     <string name="pd_name_rename">重命名</string>

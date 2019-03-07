@@ -1,6 +1,7 @@
 package tech.linjiang.pandora.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,8 +12,11 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.io.File;
+
 import tech.linjiang.pandora.cache.Content;
 import tech.linjiang.pandora.core.R;
+import tech.linjiang.pandora.util.FileUtil;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
 
@@ -79,11 +83,42 @@ public class NetContentFragment extends BaseFragment {
                 if (item.getOrder() == 0) {
                     Utils.copy2ClipBoard(originContent);
                 } else if (item.getOrder() == 1) {
-                    Utils.shareText(originContent);
+                    saveAsFileAndShare(originContent);
                 }
                 return true;
             }
         });
+    }
+
+    private void saveAsFileAndShare(String msg) {
+        showLoading();
+        new SimpleTask<>(new SimpleTask.Callback<String, Intent>() {
+            @Override
+            public Intent doInBackground(String[] params) {
+                String path = FileUtil.saveFile(params[0].getBytes(), "json", "txt");
+                String newPath = FileUtil.fileCopy2Tmp(new File(path));
+                if (!TextUtils.isEmpty(newPath)) {
+                    return FileUtil.getFileIntent(newPath);
+                }
+                return null;
+            }
+
+            @Override
+            public void onPostExecute(Intent result) {
+                hideLoading();
+                if (result != null) {
+                    try {
+                        startActivity(result);
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                        Utils.toast(t.getMessage());
+                    }
+                } else {
+                    Utils.toast(R.string.pd_failed);
+                }
+
+            }
+        }).execute(msg);
     }
 
     private void loadData() {

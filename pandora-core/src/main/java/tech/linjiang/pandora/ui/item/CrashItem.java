@@ -24,7 +24,7 @@ public class CrashItem extends BaseItem<Crash> {
         pool
                 .setVisibility(R.id.common_item_arrow, View.VISIBLE)
                 .setText(R.id.common_item_info, TextUtils.isEmpty(data.cause) ? data.type : data.cause)
-                .setText(R.id.common_item_title, Utils.millis2String(data.createTime, Utils.NO_MILLIS));
+                .setText(R.id.common_item_title, Utils.millis2String(data.createTime, Utils.HHMMSS));
     }
 
     @Override

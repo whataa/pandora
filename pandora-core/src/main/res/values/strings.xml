@@ -44,7 +44,7 @@
     <string name="pd_name_sp">SharedPreference</string>
     <string name="pd_name_file">Files</string>
     <string name="pd_name_clear">clear</string>
-    <string name="pd_name_share">share</string>
+    <string name="pd_name_share">share to</string>
     <string name="pd_name_open">try open</string>
     <string name="pd_name_open_as_text">open as text</string>
     <string name="pd_name_rename">rename</string>
