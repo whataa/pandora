@@ -17,8 +17,9 @@
     <string name="pd_help_title">Hint</string>
     <string name="pd_help_operate">① Single tap to select views, cancel select when tap again.\n② Long press to start moving the selected view.\n③ Click the panel to see attributes.\n④ Drag the panel to see more.\n⑤ Press back to exit.</string>
     <string name="pd_help_baseline">① Click to reset the position.\n② Drag to measure.\n③ Unit is 5 dp and can modify in the Config.\n⑤ Press back to exit.</string>
-    <string name="pd_help_sp">① Long press to copy and delete.\n② Click value to modify.\n③ \"try open\" will copy this file to sdcard and try to use the app in your device to open it if can.</string>
+    <string name="pd_help_sp">① Long press to copy and delete.\n② Click value to modify.</string>
     <string name="pd_help_table">① Long press to copy and delete.\n② Click value to modify.\n③ When searching, the content of input need be a condition without \"where\", such as \"id=1\".</string>
+    <string name="pd_help_file">① \"try open\" will copy this file to sdcard and try to use the app in your device to open it if can.</string>
     <string name="pd_make_sure">Please click OK to confirm.</string>
     <string name="pd_copy_hint">The new file is location at %s</string>
     <string name="pd_name_network">network</string>

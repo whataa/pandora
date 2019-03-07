@@ -52,6 +52,8 @@ public class FileAttrFragment extends BaseListFragment {
         getToolbar().getMenu().add(-1, 0, 2, R.string.pd_name_rename);
         getToolbar().getMenu().add(-1, 0, 3, R.string.pd_name_delete_key);
         getToolbar().getMenu().add(-1, 0, 4, R.string.pd_name_copy_to_sdcard);
+        getToolbar().getMenu().add(0,0,5,R.string.pd_name_help).setIcon(R.drawable.pd_help)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -68,6 +70,12 @@ public class FileAttrFragment extends BaseListFragment {
                     tryDel();
                 } else if (item.getOrder() == 4) {
                     copyTo();
+                } else if (item.getOrder() == 5) {
+                    GeneralDialog.build(-1)
+                            .title(R.string.pd_help_title)
+                            .message(R.string.pd_help_file)
+                            .positiveButton(R.string.pd_ok)
+                            .show(FileAttrFragment.this);
                 }
                 return true;
             }
