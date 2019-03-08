@@ -14,7 +14,8 @@
     <string name="pd_can_not_edit">不支持编辑</string>
     <string name="pd_please_open_net_log">请打开开关以记录</string>
     <string name="pd_permission_title">权限提示</string>
-    <string name="pd_please_allow_permission">Pandora需要悬浮窗权限来展示功能面板，请手动允许并重试。</string>
+    <string name="pd_please_allow_permission">Pandora需要悬浮窗权限来展示功能面板，请检查并前往允许。</string>
+    <string name="pd_permission_not_sure">Pandora需要悬浮窗权限来展示功能面板，但不确定该权限是否已授权，请检查并前往允许。</string>
     <string name="pd_help_title">提示</string>
     <string name="pd_help_operate">① 单击以选中，再次单击取消选中，最多能选中两个.\n② 长按可以移动已选中的View.\n③ 点击下方面板查看View更多属性.\n④ 向上拖动面板查看更多操作.\n⑤ 点击返回键退出.</string>
     <string name="pd_help_baseline">① 单击以确定位置.\n② 拖动可开始测量.\n③ 默认单位是5dp，可以在设置中修改.\n⑤ 点击返回键退出.</string>

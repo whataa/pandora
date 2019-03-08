@@ -29,7 +29,8 @@ public class PermissionReqFragment extends Fragment {
         }
         GeneralDialog.build(code)
                 .title(R.string.pd_permission_title)
-                .message(R.string.pd_please_allow_permission)
+                .message(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        ? R.string.pd_please_allow_permission : R.string.pd_permission_not_sure)
                 .positiveButton(R.string.pd_ok)
                 .negativeButton(R.string.pd_cancel)
                 .cancelable(false)

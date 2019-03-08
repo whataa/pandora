@@ -1,14 +1,17 @@
 package tech.linjiang.pandora.util;
 
 import android.annotation.SuppressLint;
+import android.app.AppOpsManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.view.View;
@@ -153,6 +156,9 @@ public class Utils {
 
     public static boolean addViewToWindow(View v, WindowManager.LayoutParams params) {
         try {
+            if (isPermissionDenied()) {
+                return false;
+            }
             WindowManager windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
             windowManager.addView(v, params);
             return true;
@@ -168,6 +174,30 @@ public class Utils {
             WindowManager windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
             windowManager.updateViewLayout(v, params);
         } catch (Throwable ignore){}
+    }
+
+    private static boolean isPermissionDenied() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return !Settings.canDrawOverlays(getContext());
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                AppOpsManager appOpsMgr = (AppOpsManager) CONTEXT.getSystemService(Context.APP_OPS_SERVICE);
+                try {
+                    int mode = appOpsMgr.checkOpNoThrow("android:system_alert_window",
+                            android.os.Process.myUid(), CONTEXT.getPackageName());
+                    if (mode == AppOpsManager.MODE_ERRORED) {
+                        return true;
+                    }
+                } catch (Throwable t) {
+                    // Unknown operation string: android:system_alert_window
+                }
+            }
+            if (!Config.ifPermissionChecked()) {
+                Config.setPermissionChecked();
+                return true;
+            }
+        }
+        return false;
     }
 
     public static List<String> getActivities() {
