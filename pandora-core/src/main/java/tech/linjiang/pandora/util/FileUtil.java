@@ -210,7 +210,6 @@ public class FileUtil {
         try {
             FileOutputStream fos = new FileOutputStream(newFile);
             fos.write(bytes, 0, bytes.length);
-            fos.flush();
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();

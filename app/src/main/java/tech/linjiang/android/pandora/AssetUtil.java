@@ -73,7 +73,6 @@ public class AssetUtil {
                 out.write(buffer, 0, read);
             }
             in.close();
-            out.flush();
             out.close();
         } catch (Exception e) {
             Log.e("tag", "Exception in copyFile() of " + newFileName, e);
