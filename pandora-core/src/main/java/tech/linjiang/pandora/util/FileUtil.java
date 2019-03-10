@@ -97,8 +97,9 @@ public class FileUtil {
             FileInputStream inputStream = new FileInputStream(originPath);
             byte[] data = new byte[1024];
             FileOutputStream outputStream = new FileOutputStream(targetFile);
-            while (inputStream.read(data) != -1) {
-                outputStream.write(data);
+            int length;
+            while ((length = inputStream.read(data)) != -1) {
+                outputStream.write(data, 0, length);
             }
             inputStream.close();
             outputStream.close();
@@ -209,7 +210,7 @@ public class FileUtil {
         }
         try {
             FileOutputStream fos = new FileOutputStream(newFile);
-            fos.write(bytes, 0, bytes.length);
+            fos.write(bytes);
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
