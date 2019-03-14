@@ -31,7 +31,7 @@ public class SensorDetector implements SensorEventListener {
                         event.values[1],
                         event.values[2])) {
                     Utils.cancelTask(task);
-                    Utils.postDelayed(task, 250);
+                    Utils.postDelayed(task, 150);
                 }
             }
         }

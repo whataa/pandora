@@ -43,7 +43,7 @@ public class FuncView extends LinearLayout {
         setOrientation(HORIZONTAL);
         setBackgroundResource(R.drawable.pd_shadow_131124);
         ImageView moveView = new ImageView(context);
-        RecyclerView recyclerView = new MenuRecyclerView(context);
+        RecyclerView recyclerView = new RecyclerView(context);
         ImageView closeView = new ImageView(context);
 
         moveView.setImageResource(R.drawable.pd_drag);
