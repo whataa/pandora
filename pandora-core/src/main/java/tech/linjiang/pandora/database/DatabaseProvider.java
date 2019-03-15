@@ -18,7 +18,7 @@ import tech.linjiang.pandora.database.protocol.IProvider;
 public class DatabaseProvider implements IProvider {
     private Context context;
 
-    public DatabaseProvider(Context context) {
+    DatabaseProvider(Context context) {
         this.context = context;
     }
 
