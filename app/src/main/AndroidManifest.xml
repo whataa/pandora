@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="tech.linjiang.android.pandora">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-sdk tools:overrideLibrary="android.support.customtabs" />
 
     <application
         android:name=".MyApp"
@@ -11,8 +13,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,8 +24,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TransActivity"
+            android:name=".ui.TransActivity"
             android:theme="@style/AppTheme.Translucent" />
+        <activity android:name=".ui.PicturesActivity" />
+        <activity android:name=".ui.StackViewActivity" />
     </application>
 
 </manifest>

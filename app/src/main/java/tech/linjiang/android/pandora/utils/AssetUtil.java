@@ -1,4 +1,4 @@
-package tech.linjiang.android.pandora;
+package tech.linjiang.android.pandora.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -19,9 +19,10 @@ public class AssetUtil {
 
     private static String TARGET_BASE_PATH = "";
 
-    public static void copyAssertToFiles(Context context) {
+    public static String copyAssertToFiles(Context context) {
         TARGET_BASE_PATH = context.getFilesDir().getPath().concat(File.separator);
         copyFileOrDir(context, "");
+        return TARGET_BASE_PATH;
     }
 
     private static void copyFileOrDir(Context context, String path) {

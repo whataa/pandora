@@ -40,8 +40,10 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
     }
 
     void addFunc(IFunc func) {
-        functions.add(func);
-        funcView.addItem(func.getIcon(), func.getName());
+        if (!functions.contains(func)) {
+            functions.add(func);
+            funcView.addItem(func.getIcon(), func.getName());
+        }
     }
 
     void open() {

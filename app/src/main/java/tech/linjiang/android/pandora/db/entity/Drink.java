@@ -21,7 +21,7 @@ public class Drink {
 
     public int flavor;
 
-    public int color;
+    public String color;
 
     public int type;
 
