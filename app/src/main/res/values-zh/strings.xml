@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Pandora</string>
-    <string name="pandora_permission">Pandora使用悬浮窗来展示功能面板， 使用前请确保权限已开启。</string>
+    <string name="pandora_permission">Pandora使用悬浮窗来展示功能面板， \n使用前请确保权限已开启。</string>
     <string name="pandora_shake">摇一摇</string>
     <string name="pandora_open">手动打开</string>
     <string name="pandora_download">文件下载</string>

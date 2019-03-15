@@ -20,9 +20,8 @@ public class MyApp extends Application {
         mThis = this;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             ThreadPool.post(() -> {
-                // the store.db and testAllType.xml if exist will be moved to the Device encrypted storage area.
+                // the store.db if exist will be moved to the Device encrypted storage area.
                 createDeviceProtectedStorageContext().moveDatabaseFrom(mThis, StoreDatabase.NAME);
-                createDeviceProtectedStorageContext().moveSharedPreferencesFrom(mThis, "testAllType");
             });
         }
 
