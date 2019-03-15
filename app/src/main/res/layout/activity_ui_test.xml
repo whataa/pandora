@@ -19,5 +19,5 @@
         android:elevation="12dp"
         android:padding="8dp"
         android:textSize="14dp"
-        android:text="我可以被选中" />
+        android:text="@string/pandora_can_be_selected" />
 </FrameLayout>

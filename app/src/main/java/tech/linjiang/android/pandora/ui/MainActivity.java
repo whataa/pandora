@@ -37,19 +37,23 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         findViewById(R.id.btn_shake).setOnClickListener(v -> {
-            toast("请摇晃手机");
+            toast(getString(R.string.pandora_shake_please));
         });
         findViewById(R.id.btn_open).setOnClickListener(v -> {
             Pandora.get().open();
         });
         findViewById(R.id.btn_net_okhttp).setOnClickListener(v -> {
             viewModel.doOKHttp();
+            toast(getString(R.string.pandora_open_net));
+
         });
         findViewById(R.id.btn_net_urlconnection).setOnClickListener(v -> {
             viewModel.doUrlConnection();
+            toast(getString(R.string.pandora_open_net));
         });
         findViewById(R.id.btn_net_file).setOnClickListener(v -> {
             viewModel.doFileDownload();
+            toast(getString(R.string.pandora_open_net));
         });
         findViewById(R.id.btn_net_pic).setOnClickListener(v -> {
             startActivity(new Intent(this, PicturesActivity.class));
@@ -57,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.btn_ui_activity).setOnClickListener(v -> {
             startActivity(new Intent(this, TransActivity.class));
+            toast(getString(R.string.pandora_open_select));
         });
         findViewById(R.id.btn_ui_window).setOnClickListener(v -> {
             View content = LayoutInflater.from(this).inflate(R.layout.activity_ui_test, null);
@@ -67,11 +72,13 @@ public class MainActivity extends AppCompatActivity {
             window.setOutsideTouchable(true);
             window.setFocusable(true);
             window.showAsDropDown(v);
+            toast(getString(R.string.pandora_open_select));
         });
         findViewById(R.id.btn_ui_dialog).setOnClickListener(v -> {
             new AlertDialog.Builder(this)
                     .setView(R.layout.activity_ui_test)
                     .show();
+            toast(getString(R.string.pandora_open_select));
         });
         findViewById(R.id.btn_ui_view).setOnClickListener(v -> {
             startActivity(new Intent(this, StackViewActivity.class));
@@ -82,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         });
         findViewById(R.id.btn_feature_func).setOnClickListener(v -> {
             Pandora.get().addFunction(customFunc);
-            toast("添加成功，请滑动到面板最右侧查看");
+            toast(getString(R.string.pandora_add_success));
         });
 
         findViewById(R.id.btn_file_assets).setOnClickListener(v -> {
@@ -103,16 +110,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViewModel() {
         viewModel.dbResult.observe(this, name -> {
-            toast("已重置：" + name);
+            toast(getString(R.string.pandora_reseted) + name);
         });
         viewModel.assetResult.observe(this, path -> {
-            toast("已复制到：" + path);
+            toast(getString(R.string.pandora_copyed) + path);
         });
         viewModel.fileResult.observe(this, path -> {
-            toast("已创建新文件：" + path);
+            toast(getString(R.string.pandora_created_file) + path);
         });
         viewModel.xmlResult.observe(this, path -> {
-            toast("已创建：" + path);
+            toast(getString(R.string.pandora_created_xml) + path);
         });
     }
 
@@ -154,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public String getName() {
-            return "ClickMe";
+            return getString(R.string.pandora_click_me);
         }
 
         @Override

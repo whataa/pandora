@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">Pandora</string>
+
+    <string name="pandora_permission">Pandora needs OVERLAY permission to show the function panel,\nbe sure it is allowed before using.</string>
+    <string name="pandora_shake">Shake to open</string>
+    <string name="pandora_open">Open</string>
+    <string name="pandora_download">Download File</string>
+    <string name="pandora_load_pic">Load Pictures</string>
+    <string name="pandora_trans_act">Trans Activity</string>
+    <string name="pandora_stack_view">Views</string>
+    <string name="pandora_crash">Mock Crash</string>
+    <string name="pandora_add_func">Add Func</string>
+    <string name="pandora_copy_asset">Copy assets to /files/</string>
+    <string name="pandora_new_xml">Create new Xml</string>
+    <string name="pandora_reset_db">Create/Reset Db</string>
+    <string name="pandora_new_file">Create new File</string>
+    <string name="pandora_shake_please">Please shake your device.</string>
+    <string name="pandora_open_net">The requests has emitted，you can open「Network」to check.</string>
+    <string name="pandora_open_select">You can Click「Select」to inspect views.</string>
+    <string name="pandora_add_success">Add successfully, please swipe to the far right of the panel to check.</string>
+    <string name="pandora_copyed">Copy：</string>
+    <string name="pandora_reseted">Reset：</string>
+    <string name="pandora_created_file">New file：</string>
+    <string name="pandora_created_xml">New xml：</string>
+    <string name="pandora_click_me">ClickMe</string>
+    <string name="pandora_can_be_selected">I can be selected</string>
 </resources>
