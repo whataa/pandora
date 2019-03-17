@@ -1,10 +1,27 @@
 <p align=center>
 <img src="https://i.loli.net/2019/03/15/5c8b6158be01e.png" width=40%>
- [![Release](https://jitpack.io/v/whataa/pandora.svg)](https://jitpack.io/#whataa/pandora) [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14) [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)  [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/whataa/pandora-no-op/blob/master/LICENSE) [![Build Status](https://travis-ci.org/whataa/pandora.svg?branch=master)](https://travis-ci.org/whataa/pandora) [![Demo](https://img.shields.io/badge/demo-youtube-red.svg)](https://youtu.be/pP9jVcxKPsE)
 </p>
 
-
-------------
+<p align=center>
+<a href="https://youtu.be/pP9jVcxKPsE">
+    <img src="https://img.shields.io/badge/demo-youtube-red.svg">
+</a>
+<a href="https://jitpack.io/#whataa/pandora">
+    <img src="https://jitpack.io/v/whataa/pandora.svg">
+</a>
+<a href="https://android-arsenal.com/api?level=14">
+    <img src="https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat">
+</a>
+<a href="https://developer.android.com/index.html">
+    <img src="https://img.shields.io/badge/platform-android-brightgreen.svg">
+</a>
+<a href="https://github.com/whataa/pandora-no-op/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg">
+</a>
+<a href="https://travis-ci.org/whataa/pandora">
+    <img src="https://travis-ci.org/whataa/pandora.svg?branch=master">
+</a>
+</p>
 
 Pandora 是一款无需ROOT、可以直接在应用内查看和修改包括网络、数据库、UI等的工具箱，适合开发和测试阶段的各种问题的快速定位。
 

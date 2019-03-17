@@ -2,11 +2,28 @@ EN | [中文](https://github.com/whataa/pandora/blob/master/README_CN.md)
 
 <p align=center>
 <img src="https://i.loli.net/2019/03/15/5c8b6158be01e.png" width=40%>
- [![Release](https://jitpack.io/v/whataa/pandora.svg)](https://jitpack.io/#whataa/pandora) [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14) [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)  [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/whataa/pandora-no-op/blob/master/LICENSE) [![Build Status](https://travis-ci.org/whataa/pandora.svg?branch=master)](https://travis-ci.org/whataa/pandora) [![Demo](https://img.shields.io/badge/demo-youtube-red.svg)](https://youtu.be/pP9jVcxKPsE)
 </p>
 
-
-------------
+<p align=center>
+<a href="https://youtu.be/pP9jVcxKPsE">
+    <img src="https://img.shields.io/badge/demo-youtube-red.svg">
+</a>
+<a href="https://jitpack.io/#whataa/pandora">
+    <img src="https://jitpack.io/v/whataa/pandora.svg">
+</a>
+<a href="https://android-arsenal.com/api?level=14">
+    <img src="https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat">
+</a>
+<a href="https://developer.android.com/index.html">
+    <img src="https://img.shields.io/badge/platform-android-brightgreen.svg">
+</a>
+<a href="https://github.com/whataa/pandora-no-op/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg">
+</a>
+<a href="https://travis-ci.org/whataa/pandora">
+    <img src="https://travis-ci.org/whataa/pandora.svg?branch=master">
+</a>
+</p>
 
 Pandora is a tool box that allows you to inspect and modify what includes networks, databases, UIs, etc. directly in your application. It is suitable for rapid position of various problems in the development and testing stages.
 
