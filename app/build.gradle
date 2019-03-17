@@ -25,7 +25,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     debugImplementation project(':pandora-core')
-    releaseImplementation project(':pandora-no-op')
+    releaseImplementation 'com.github.whataa:pandora-no-op:master-SNAPSHOT'
+
 
     implementation "com.android.support:appcompat-v7:${versions.SUPPORT_LIB}"
     implementation "android.arch.lifecycle:extensions:1.1.1"
