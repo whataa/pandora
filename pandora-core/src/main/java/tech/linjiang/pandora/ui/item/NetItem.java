@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import java.util.Locale;
 
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.network.model.Summary;
+import tech.linjiang.pandora.cache.Summary;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
 import tech.linjiang.pandora.util.Utils;

@@ -1,5 +1,7 @@
 package tech.linjiang.pandora.inspector.attribute.parser;
 
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -59,7 +61,7 @@ public class ViewParser implements IParser<View> {
         Attribute translationYAttribute = new Attribute("translationY", ViewKnife.px2dipStr(view.getTranslationY()));
         attributes.add(translationYAttribute);
 
-        Attribute backgroundAttribute = new Attribute("background", String.valueOf(view.getBackground()));
+        Attribute backgroundAttribute = new Attribute("background", formatDrawable(view.getBackground()));
         attributes.add(backgroundAttribute);
         Attribute alphaAttribute = new Attribute("alpha", String.valueOf(view.getAlpha()), Attribute.Edit.ALPHA);
         attributes.add(alphaAttribute);
@@ -103,5 +105,15 @@ public class ViewParser implements IParser<View> {
             return "GONE";
         }
         return "OTHER";
+    }
+
+    private static String formatDrawable(Drawable drawable) {
+        if (drawable == null) {
+            return "null";
+        }
+        if (drawable instanceof ColorDrawable) {
+            return String.format("#%06X", (((ColorDrawable) drawable).getColor()));
+        }
+        return drawable.toString();
     }
 }

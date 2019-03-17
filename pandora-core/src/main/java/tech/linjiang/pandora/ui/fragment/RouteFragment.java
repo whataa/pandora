@@ -9,6 +9,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.ui.item.RouteItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.util.Utils;
@@ -27,7 +28,7 @@ public class RouteFragment extends BaseListFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getToolbar().setTitle("Navigate to...");
+        getToolbar().setTitle(R.string.pd_name_navigate);
         List<String> activities = Utils.getActivities();
         List<BaseItem> data = new ArrayList<>();
         for (int i = 0; i < activities.size(); i++) {

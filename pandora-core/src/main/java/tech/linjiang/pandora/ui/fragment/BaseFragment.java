@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -20,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.ui.connector.SimpleAnimationListener;
 import tech.linjiang.pandora.ui.connector.UIStateCallback;
 import tech.linjiang.pandora.ui.view.SwipeBackLayout;
 import tech.linjiang.pandora.util.ViewKnife;
@@ -37,6 +37,7 @@ abstract class BaseFragment extends Fragment
     protected static final String PARAM4 = "param4";
     protected static final String PARAM_TITLE = "param_title";
     protected static final int CODE1 = 0x01;
+    protected static final int CODE2 = 0x02;
 
     public BaseFragment() {
         setArguments(new Bundle());
@@ -70,7 +71,7 @@ abstract class BaseFragment extends Fragment
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right_, 0, 0, R.anim.slide_out_right_)
-                    .add(R.id.pd_fragment_container_id, fragment)
+                    .add(Window.ID_ANDROID_CONTENT, fragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } catch (Throwable t) {
@@ -139,7 +140,11 @@ abstract class BaseFragment extends Fragment
             return super.onCreateAnimation(transit, enter, nextAnim);
         }
         Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
-        anim.setAnimationListener(new SimpleAnimationListener() {
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
             @Override
             public void onAnimationEnd(Animation animation) {
                 // Closes the fragment when the animation has not finished yet,
@@ -147,6 +152,10 @@ abstract class BaseFragment extends Fragment
                 if (getView() != null) {
                     onViewEnterAnimEnd(getView());
                 }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
             }
         });
         return anim;

@@ -27,7 +27,7 @@
             android:ellipsize="middle"
             android:singleLine="true"
             android:textColor="#000"
-            android:textSize="17dp"
+            android:textSize="16dp"
             tools:text="123123123123123123123123123123123123" />
 
         <TextView

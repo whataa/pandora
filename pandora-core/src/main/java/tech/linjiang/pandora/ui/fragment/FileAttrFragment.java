@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tech.linjiang.pandora.core.R;
+import tech.linjiang.pandora.ui.GeneralDialog;
 import tech.linjiang.pandora.ui.item.ContentItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
@@ -46,24 +47,35 @@ public class FileAttrFragment extends BaseListFragment {
         getToolbar().setTitle(file.getName());
 
 
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "open");
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_2, 1, "open as text");
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, "rename");
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_4, 3, "delete");
+        getToolbar().getMenu().add(-1, 0, 0, R.string.pd_name_open);
+        getToolbar().getMenu().add(-1, 0, 1, R.string.pd_name_open_as_text);
+        getToolbar().getMenu().add(-1, 0, 2, R.string.pd_name_rename);
+        getToolbar().getMenu().add(-1, 0, 3, R.string.pd_name_delete_key);
+        getToolbar().getMenu().add(-1, 0, 4, R.string.pd_name_copy_to_sdcard);
+        getToolbar().getMenu().add(0,0,5,R.string.pd_name_help).setIcon(R.drawable.pd_help)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.pd_menu_id_1) {
+                if (item.getOrder() == 0) {
                     tryOpen();
-                } else if (item.getItemId() == R.id.pd_menu_id_2) {
+                } else if (item.getOrder() == 1) {
                     tryOpenAsText();
-                } else if (item.getItemId() == R.id.pd_menu_id_3) {
+                } else if (item.getOrder() == 2) {
                     Bundle bundle = new Bundle();
                     bundle.putString(PARAM1, file.getName());
                     launch(EditFragment.class, bundle, CODE1);
-                } else if (item.getItemId() == R.id.pd_menu_id_4) {
+                } else if (item.getOrder() == 3) {
                     tryDel();
+                } else if (item.getOrder() == 4) {
+                    copyTo();
+                } else if (item.getOrder() == 5) {
+                    GeneralDialog.build(-1)
+                            .title(R.string.pd_help_title)
+                            .message(R.string.pd_help_file)
+                            .positiveButton(R.string.pd_ok)
+                            .show(FileAttrFragment.this);
                 }
                 return true;
             }
@@ -116,6 +128,27 @@ public class FileAttrFragment extends BaseListFragment {
                 }
             }
         }).execute(file);
+    }
+
+    private void copyTo() {
+        new SimpleTask<>(new SimpleTask.Callback<File, String>() {
+            @Override
+            public String doInBackground(File[] params) {
+                String result = FileUtil.fileCopy2Tmp(params[0]);
+                return result;
+            }
+
+            @Override
+            public void onPostExecute(String result) {
+                hideLoading();
+                GeneralDialog.build(-1)
+                        .title(R.string.pd_success)
+                        .message(R.string.pd_copy_hint, result)
+                        .positiveButton(R.string.pd_ok)
+                        .show(FileAttrFragment.this);
+            }
+        }).execute(file);
+        showLoading();
     }
 
     private void tryOpen() {
@@ -182,6 +215,7 @@ public class FileAttrFragment extends BaseListFragment {
             public void onPostExecute(Boolean result) {
                 hideLoading();
                 Utils.toast(result ? R.string.pd_success : R.string.pd_failed);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
                 onBackPressed();
             }
         }).execute(file);
@@ -204,6 +238,7 @@ public class FileAttrFragment extends BaseListFragment {
                     hideLoading();
                     Utils.toast(result ? R.string.pd_success : R.string.pd_failed);
                     loadData();
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
                 }
             }).execute();
             showLoading();

@@ -54,7 +54,7 @@ public class HierarchyFragment extends BaseListFragment
         if (savedInstanceState != null) {
             return;
         }
-        rootView = ViewKnife.tryGetTheFrontView(Pandora.get().getBottomActivity());
+        rootView = ViewKnife.tryGetTheFrontView(Pandora.get().getTopActivity());
         if (!Config.getUI_IGNORE_SYS_LAYER()) {
             sysLayerCount = countSysLayers();
         } else {
@@ -107,9 +107,9 @@ public class HierarchyFragment extends BaseListFragment
         if (savedInstanceState != null) {
             return;
         }
-        getToolbar().setTitle("Hierarchy");
+        getToolbar().setTitle(R.string.pd_name_layer);
 
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "switch")
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "")
                 .setActionView(new SwitchCompat(getContext()))
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         SwitchCompat switchCompat = ((SwitchCompat) getToolbar()

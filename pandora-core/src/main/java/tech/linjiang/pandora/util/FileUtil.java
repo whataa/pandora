@@ -97,8 +97,9 @@ public class FileUtil {
             FileInputStream inputStream = new FileInputStream(originPath);
             byte[] data = new byte[1024];
             FileOutputStream outputStream = new FileOutputStream(targetFile);
-            while (inputStream.read(data) != -1) {
-                outputStream.write(data);
+            int length;
+            while ((length = inputStream.read(data)) != -1) {
+                outputStream.write(data, 0, length);
             }
             inputStream.close();
             outputStream.close();
@@ -192,19 +193,24 @@ public class FileUtil {
         return text;
     }
 
-    public static String saveFile(byte[] bytes, String name) {
+    public static String saveFile(byte[] bytes, String name, String suffix) {
         File cacheDir = Utils.getContext().getCacheDir();
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
         }
-        File newFile = new File(cacheDir, md5String(name));
+        String md5Name;
+        if (!TextUtils.isEmpty(suffix)) {
+            md5Name = name.concat(".").concat(suffix);
+        } else {
+            md5Name = md5String(name);
+        }
+        File newFile = new File(cacheDir, md5Name);
         if (newFile.exists()) {
             newFile.delete();
         }
         try {
             FileOutputStream fos = new FileOutputStream(newFile);
-            fos.write(bytes, 0, bytes.length);
-            fos.flush();
+            fos.write(bytes);
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,4 +218,14 @@ public class FileUtil {
         }
         return newFile.getPath();
     }
+
+    public static void deleteDirectory(File file) {
+        if (file != null && file.exists() && file.isDirectory()) {
+            for (File item : file.listFiles()) {
+                item.delete();
+            }
+            file.delete();
+        }
+    }
+
 }

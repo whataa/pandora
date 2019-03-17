@@ -12,9 +12,10 @@ import java.lang.annotation.RetentionPolicy;
         Type.BASELINE,
         Type.SELECT,
         Type.CONFIG,
-        Type.GRID,
-        Type.WINDOW,
+        Type.BUG,
+        Type.HISTORY,
         Type.ROUTE,
+        Type.PERMISSION
 })
 @Retention(RetentionPolicy.SOURCE)
 public @interface Type {
@@ -24,7 +25,8 @@ public @interface Type {
     int BASELINE = 0x05;
     int SELECT = 0x06;
     int CONFIG = 0x07;
-    int GRID = 0x08;
-    int WINDOW = 0x09;
+    int BUG = 0x08;
+    int HISTORY = 0x09;
     int ROUTE = 0x10;
+    int PERMISSION = 0x11;
 }

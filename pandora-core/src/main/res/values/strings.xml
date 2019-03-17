@@ -1,7 +1,8 @@
 <resources>
     <string name="pd_lib_name">pandora</string>
     <string name="pd_error_msg">EMPTY</string>
-    <!--toast-->
+    <string name="pd_ok">OK</string>
+    <string name="pd_cancel">Cancel</string>
     <string name="pd_not_support">not support file type</string>
     <string name="pd_success">success</string>
     <string name="pd_failed">failed</string>
@@ -11,5 +12,48 @@
     <string name="pd_net_search_hint">query url</string>
     <string name="pd_can_not_edit">can not edit</string>
     <string name="pd_please_open_net_log">TURN ON THE SWITCH TO LOG</string>
-    <string name="pd_please_allow_permission">Pandora needs OVERLAY_PERMISSION to show the function panel, please click "allow" and try again</string>
+    <string name="pd_permission_title">Permission Denied</string>
+    <string name="pd_please_allow_permission">Pandora needs OVERLAY permission to show the function panel, %s please check and click allow.</string>
+    <string name="pd_permission_not_sure">Pandora needs OVERLAY permission to show the function panel, but not certain whether it is authorized, please check and click allow.</string>
+    <string name="pd_help_title">Hint</string>
+    <string name="pd_help_operate">① Single tap to select views, cancel select when tap again.\n② Long press to start moving the selected view.\n③ Click the panel to see attributes.\n④ Drag the panel to see more.\n⑤ Press back to exit.</string>
+    <string name="pd_help_baseline">① Click to reset the position.\n② Drag to measure.\n③ Unit is 5 dp and can modify in the Config.\n⑤ Press back to exit.</string>
+    <string name="pd_help_sp">① Long press to copy and delete.\n② Click value to modify.</string>
+    <string name="pd_help_table">① Long press to copy and delete.\n② Click value to modify.\n③ When searching, the content of input need be a condition without \"where\", such as \"id=1\".</string>
+    <string name="pd_help_file">① \"try open\" will copy this file to sdcard and try to use the app in your device to open it if can.</string>
+    <string name="pd_make_sure">Please click OK to confirm.</string>
+    <string name="pd_copy_hint">The new file is location at %s</string>
+    <string name="pd_name_network">network</string>
+    <string name="pd_name_sandbox">sandbox</string>
+    <string name="pd_name_select">select</string>
+    <string name="pd_name_crash">crash</string>
+    <string name="pd_name_layer">hierarchy</string>
+    <string name="pd_name_baseline">baseline</string>
+    <string name="pd_name_navigate">navigate</string>
+    <string name="pd_name_history">history</string>
+    <string name="pd_name_activity">activity</string>
+    <string name="pd_name_gridline">gridLine</string>
+    <string name="pd_name_config">config</string>
+    <string name="pd_name_copy_value">copy</string>
+    <string name="pd_name_delete_row">delete row</string>
+    <string name="pd_name_help">help</string>
+    <string name="pd_name_search">search</string>
+    <string name="pd_name_info">info</string>
+    <string name="pd_name_add">add</string>
+    <string name="pd_name_delete_all">delete all</string>
+    <string name="pd_name_delete_key">delete</string>
+    <string name="pd_name_database">Database</string>
+    <string name="pd_name_sp">SharedPreference</string>
+    <string name="pd_name_file">Files</string>
+    <string name="pd_name_clear">clear</string>
+    <string name="pd_name_share">share to</string>
+    <string name="pd_name_open">try open</string>
+    <string name="pd_name_open_as_text">open as text</string>
+    <string name="pd_name_rename">rename</string>
+    <string name="pd_name_copy_to_sdcard">copy to sdcard</string>
+    <string name="pd_name_save">save</string>
+    <string name="pd_name_edit">Edit</string>
+    <string name="pd_name_reset">reset</string>
+    <string name="pd_name_turn_on">turn on</string>
+    <string name="pd_name_threshold">threshold</string>
 </resources>

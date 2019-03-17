@@ -2,6 +2,7 @@ package tech.linjiang.pandora.inspector;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.support.annotation.IntDef;
@@ -19,18 +20,13 @@ import tech.linjiang.pandora.util.ViewKnife;
  * Created by linjiang on 08/06/2018.
  */
 
-public class BaseLineView extends HintView {
+public class BaseLineView extends View {
 
     public BaseLineView(Context context) {
         super(context);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         ViewConfiguration vc = ViewConfiguration.get(context);
         touchSlop = vc.getScaledTouchSlop();
-    }
-
-    @Override
-    protected String getViewHint() {
-        return "① Click to reset.\n② Drag to measure.\n③ Each unit is 5 dp.";
     }
 
     private int touchSlop;
@@ -88,6 +84,12 @@ public class BaseLineView extends HintView {
             setFlags(FAKE_BOLD_TEXT_FLAG);
         }
     };
+
+    private final Paint defPaint = new Paint(Paint.ANTI_ALIAS_FLAG) {{
+        setColor(Color.YELLOW);
+        setStrokeWidth(ViewKnife.dip2px(2));
+        setStyle(Style.STROKE);
+    }};
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -154,6 +156,8 @@ public class BaseLineView extends HintView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), defPaint);
+
         // init
         if (initY > 0) {
             canvas.drawLine(0, initY, getMeasuredWidth(), initY, paint);

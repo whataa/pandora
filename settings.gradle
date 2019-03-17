@@ -1,1 +1,1 @@
-include ':app', ':pandora-core', ':pandora-no-op'
+include ':app', ':pandora-core'

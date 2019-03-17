@@ -5,20 +5,24 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
-import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.inspector.BaseLineView;
 import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.ui.connector.UIStateCallback;
 import tech.linjiang.pandora.ui.fragment.ConfigFragment;
+import tech.linjiang.pandora.ui.fragment.CrashFragment;
 import tech.linjiang.pandora.ui.fragment.HierarchyFragment;
+import tech.linjiang.pandora.ui.fragment.HistoryFragment;
+import tech.linjiang.pandora.ui.fragment.MeasureFragment;
 import tech.linjiang.pandora.ui.fragment.NetFragment;
+import tech.linjiang.pandora.ui.fragment.PermissionReqFragment;
 import tech.linjiang.pandora.ui.fragment.RouteFragment;
 import tech.linjiang.pandora.ui.fragment.SandboxFragment;
 import tech.linjiang.pandora.ui.fragment.ViewFragment;
@@ -33,7 +37,7 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
     public static final String PARAM1 = "param1";
 
     public static void start(Context context, @Type int type) {
-        boolean needTrans = type == Type.BASELINE || type == Type.SELECT;
+        boolean needTrans = type == Type.BASELINE || type == Type.SELECT || type == Type.PERMISSION;
         Intent intent = new Intent(context, needTrans ? TransActivity.class : Dispatcher.class)
                 .putExtra(PARAM1, type);
         // This flag is very ridiculous in different android versions, like a bug
@@ -54,78 +58,75 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
     }
 
     private void dispatch(Bundle savedInstanceState) {
-        View view;
         switch (type) {
+            case Type.PERMISSION:
+                if (savedInstanceState == null) {
+                    addFragment(PermissionReqFragment.class);
+                }
+                break;
             case Type.BASELINE:
-                view = new BaseLineView(this);
-                setContentView(view);
+                if (savedInstanceState == null) {
+                    addFragment(MeasureFragment.class);
+                }
                 break;
             case Type.SELECT:
-                view = new FrameLayout(this);
-                view.setId(R.id.pd_fragment_container_id);
-                setContentView(view);
                 if (savedInstanceState == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.pd_fragment_container_id, new ViewFragment())
-                            .commit();
+                    addFragment(ViewFragment.class);
                 } else {
                     finish();
                 }
                 break;
             case Type.NET:
-                view = new FrameLayout(this);
-                view.setId(R.id.pd_fragment_container_id);
-                setContentView(view);
                 if (savedInstanceState == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.pd_fragment_container_id, new NetFragment())
-                            .commit();
+                    addFragment(NetFragment.class);
                 }
                 break;
             case Type.FILE:
-                view = new FrameLayout(this);
-                view.setId(R.id.pd_fragment_container_id);
-                setContentView(view);
                 if (savedInstanceState == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.pd_fragment_container_id, new SandboxFragment())
-                            .commit();
+                    addFragment(SandboxFragment.class);
+                }
+                break;
+            case Type.BUG:
+                if (savedInstanceState == null) {
+                    addFragment(CrashFragment.class);
+                }
+                break;
+            case Type.HISTORY:
+                if (savedInstanceState == null) {
+                    addFragment(HistoryFragment.class);
                 }
                 break;
             case Type.CONFIG:
-                view = new FrameLayout(this);
-                view.setId(R.id.pd_fragment_container_id);
-                setContentView(view);
                 if (savedInstanceState == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.pd_fragment_container_id, new ConfigFragment())
-                            .commit();
+                    addFragment(ConfigFragment.class);
                 }
                 break;
             case Type.HIERARCHY:
-                view = new FrameLayout(this);
-                view.setId(R.id.pd_fragment_container_id);
-                setContentView(view);
                 if (savedInstanceState == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.pd_fragment_container_id, new HierarchyFragment())
-                            .commit();
+                    addFragment(HierarchyFragment.class);
                 } else {
                     finish();
                 }
                 break;
             case Type.ROUTE:
-                view = new FrameLayout(this);
-                view.setId(R.id.pd_fragment_container_id);
-                setContentView(view);
                 if (savedInstanceState == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.pd_fragment_container_id, new RouteFragment())
-                            .commit();
+                    addFragment(RouteFragment.class);
                 }
                 break;
         }
 
+    }
+
+    private void addFragment(Class<? extends Fragment> clazz) {
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .add(Window.ID_ANDROID_CONTENT, clazz.newInstance())
+                    .commit();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

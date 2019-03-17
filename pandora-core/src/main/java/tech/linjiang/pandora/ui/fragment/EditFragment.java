@@ -98,7 +98,7 @@ public class EditFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getToolbar().setTitle("Edit");
+        getToolbar().setTitle(R.string.pd_name_edit);
         final String data = getArguments().getString(PARAM1);
         boolean onlyNumber = getArguments().getBoolean(PARAM2, false);
         if (onlyNumber) {
@@ -116,7 +116,7 @@ public class EditFragment extends BaseFragment {
             editText.requestFocus();
         }
 
-        getToolbar().getMenu().add(-1, -1, 0, "save").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        getToolbar().getMenu().add(-1, -1, 0, R.string.pd_name_save).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

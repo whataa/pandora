@@ -1,18 +1,13 @@
 package tech.linjiang.pandora.util;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
+import android.app.AppOpsManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,6 +18,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,9 +34,9 @@ import tech.linjiang.pandora.core.R;
 
 public class Utils {
 
-    public static final DateFormat DEFAULT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS", Locale.ENGLISH);
-    public static final DateFormat NO_MILLIS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-    public static final DateFormat HHMMSS = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+    public static final DateFormat DEFAULT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS", Locale.getDefault());
+    public static final DateFormat NO_MILLIS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+    public static final DateFormat HHMMSS = new SimpleDateFormat("HH:mm:ss SSS", Locale.getDefault());
 
     private static Context CONTEXT;
     private static Handler mainHandler;
@@ -79,7 +77,7 @@ public class Utils {
     }
 
     public static void toast(@StringRes int resId) {
-        Toast.makeText(CONTEXT, resId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(CONTEXT, resId, Toast.LENGTH_LONG).show();
     }
 
     public static void toast(String msg) {
@@ -126,92 +124,81 @@ public class Utils {
         return value;
     }
 
-    public static void shareText(String content) {
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, content);
-        shareIntent.setType("text/plain");
-        try {
-            CONTEXT.startActivity(Intent.createChooser(shareIntent, "share to").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        } catch (Throwable t) {
-            t.printStackTrace();
-            toast(t.getMessage());
+    public static String formatDuration(long ms){
+        String time = "";
+        ms /= 1000;
+        long hour = ms / 3600;
+        long mint = (ms % 3600) / 60;
+        long sed = ms % 60;
+        if (hour > 0) {
+            String hourStr = String.valueOf(hour);
+            time += hourStr + "h ";
         }
+        if (mint > 0) {
+            String mintStr = String.valueOf(mint);
+            time += mintStr + "m ";
+        }
+        if (sed > 0) {
+            String sedStr = String.valueOf(sed);
+            time += sedStr + "s";
+        }
+        return time;
     }
 
     public static void removeViewFromWindow(View v) {
         try {
             WindowManager windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
             windowManager.removeView(v);
+        } catch (Throwable t){
+            t.printStackTrace();
+        }
+    }
+
+    public static boolean addViewToWindow(View v, WindowManager.LayoutParams params) {
+        try {
+            if (isPermissionDenied()) {
+                return false;
+            }
+            WindowManager windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
+            windowManager.addView(v, params);
+            return true;
+        } catch (Throwable t){
+            t.printStackTrace();
+            removeViewFromWindow(v);
+            return false;
+        }
+    }
+
+    public static void updateViewLayoutInWindow(View v, WindowManager.LayoutParams params) {
+        try {
+            WindowManager windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
+            windowManager.updateViewLayout(v, params);
         } catch (Throwable ignore){}
     }
 
-    public static boolean checkPermission() {
+    private static boolean isPermissionDenied() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(CONTEXT)) {
-                Toast.makeText(CONTEXT, R.string.pd_please_allow_permission, Toast.LENGTH_LONG).show();
+            return !Settings.canDrawOverlays(getContext());
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                AppOpsManager appOpsMgr = (AppOpsManager) CONTEXT.getSystemService(Context.APP_OPS_SERVICE);
                 try {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                    intent.setData(Uri.parse("package:" + CONTEXT.getPackageName()));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    CONTEXT.startActivity(intent);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
+                    int mode = appOpsMgr.checkOpNoThrow("android:system_alert_window",
+                            android.os.Process.myUid(), CONTEXT.getPackageName());
+                    if (mode == AppOpsManager.MODE_ERRORED) {
+                        return true;
+                    }
+                } catch (Throwable t) {
+                    // Unknown operation string: android:system_alert_window
                 }
-                return false;
             }
-        }
-        // if failed, let user to allow manually
-        return true;
-    }
-
-    public static void registerSensor(SensorEventListener listener) {
-        try {
-            SensorManager manager = (SensorManager) CONTEXT.getSystemService(Context.SENSOR_SERVICE);
-            Sensor sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            manager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            toast(t.getMessage());
-        }
-    }
-
-    public static void unRegisterSensor(SensorEventListener listener) {
-        try {
-            SensorManager manager = (SensorManager) CONTEXT.getSystemService(Context.SENSOR_SERVICE);
-            Sensor sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            manager.unregisterListener(listener, sensor);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            toast(t.getMessage());
-        }
-    }
-
-
-    private static long lastCheckTime;
-    private static float[] lastXyz = new float[3];
-
-    public static boolean checkIfShake(float x, float y, float z) {
-        long currentTime = System.currentTimeMillis();
-        long diffTime = currentTime - lastCheckTime;
-        if (diffTime < 100) {
-            return false;
-        }
-        lastCheckTime = currentTime;
-        float deltaX = x - lastXyz[0];
-        float deltaY = y - lastXyz[1];
-        float deltaZ = z - lastXyz[2];
-        lastXyz[0] = x;
-        lastXyz[1] = y;
-        lastXyz[2] = z;
-        int delta = (int) (Math.sqrt(deltaX * deltaX
-                + deltaY * deltaY + deltaZ * deltaZ) / diffTime * 10000);
-        if (delta > Config.getSHAKE_THRESHOLD()) {// a buddhist-style value
-            return true;
+            if (!Config.ifPermissionChecked()) {
+                Config.setPermissionChecked();
+                return true;
+            }
         }
         return false;
     }
-
 
     public static List<String> getActivities() {
         List<String> result = new ArrayList<>();
@@ -228,5 +215,18 @@ public class Utils {
         }
         Collections.sort(result);
         return result;
+    }
+
+    public static String collectThrow(Throwable ex) {
+        Writer writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        ex.printStackTrace(printWriter);
+        Throwable cause = ex.getCause();
+        while (cause != null) {
+            cause.printStackTrace(printWriter);
+            cause = cause.getCause();
+        }
+        printWriter.close();
+        return writer.toString();
     }
 }

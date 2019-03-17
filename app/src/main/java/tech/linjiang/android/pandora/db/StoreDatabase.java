@@ -20,7 +20,7 @@ import tech.linjiang.android.pandora.db.entity.Drink;
         entities = {
                 Drink.class
         },
-        version = 3,
+        version = 4,
         exportSchema = false)
 public abstract class StoreDatabase extends RoomDatabase {
 
@@ -34,6 +34,7 @@ public abstract class StoreDatabase extends RoomDatabase {
     private static StoreDatabase db =
             Room.databaseBuilder(MyApp.getContext(), StoreDatabase.class, NAME)
                     .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
                     .addMigrations(
                             new MIGRATE_1_2()
                     )

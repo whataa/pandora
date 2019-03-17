@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="#F9FBE7"
+    android:elevation="8dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_gravity="center"
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="40dp"
+        android:background="@drawable/btn_background"
+        android:elevation="12dp"
+        android:padding="8dp"
+        android:textSize="14dp"
+        android:text="@string/pandora_can_be_selected" />
+</FrameLayout>

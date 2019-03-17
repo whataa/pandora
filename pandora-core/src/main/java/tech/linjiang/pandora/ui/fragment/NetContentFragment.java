@@ -1,20 +1,22 @@
 package tech.linjiang.pandora.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.io.File;
+
+import tech.linjiang.pandora.cache.Content;
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.network.CacheDbHelper;
-import tech.linjiang.pandora.network.model.Content;
+import tech.linjiang.pandora.util.FileUtil;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
 
@@ -73,19 +75,50 @@ public class NetContentFragment extends BaseFragment {
     }
 
     private void setSearchView() {
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "copy");
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, "share");
+        getToolbar().getMenu().add(-1, 0, 0, R.string.pd_name_copy_value);
+        getToolbar().getMenu().add(-1, 0, 1, R.string.pd_name_share);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.pd_menu_id_1) {
+                if (item.getOrder() == 0) {
                     Utils.copy2ClipBoard(originContent);
-                } else if (item.getItemId() == R.id.pd_menu_id_3) {
-                    Utils.shareText(originContent);
+                } else if (item.getOrder() == 1) {
+                    saveAsFileAndShare(originContent);
                 }
                 return true;
             }
         });
+    }
+
+    private void saveAsFileAndShare(String msg) {
+        showLoading();
+        new SimpleTask<>(new SimpleTask.Callback<String, Intent>() {
+            @Override
+            public Intent doInBackground(String[] params) {
+                String path = FileUtil.saveFile(params[0].getBytes(), "json", "txt");
+                String newPath = FileUtil.fileCopy2Tmp(new File(path));
+                if (!TextUtils.isEmpty(newPath)) {
+                    return FileUtil.getFileIntent(newPath);
+                }
+                return null;
+            }
+
+            @Override
+            public void onPostExecute(Intent result) {
+                hideLoading();
+                if (result != null) {
+                    try {
+                        startActivity(result);
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                        Utils.toast(t.getMessage());
+                    }
+                } else {
+                    Utils.toast(R.string.pd_failed);
+                }
+
+            }
+        }).execute(msg);
     }
 
     private void loadData() {
@@ -93,7 +126,7 @@ public class NetContentFragment extends BaseFragment {
         new SimpleTask<>(new SimpleTask.Callback<Void, String>() {
             @Override
             public String doInBackground(Void[] params) {
-                Content content = CacheDbHelper.getContent(id);
+                Content content = Content.query(id);
                 String result;
                 if (showResponse) {
                     result = content.responseBody;
@@ -106,10 +139,9 @@ public class NetContentFragment extends BaseFragment {
 
             @Override
             public void onPostExecute(String result) {
-                Log.d(TAG, "onPostExecute: " + result);
                 hideLoading();
                 if (TextUtils.isEmpty(result)) {
-                    Utils.toast("empty");
+                    Utils.toast(R.string.pd_error_msg);
                     return;
                 }
                 setSearchView();

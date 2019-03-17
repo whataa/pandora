@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -27,58 +28,47 @@ public class CurInfoView extends AppCompatTextView {
         setGravity(Gravity.CENTER);
         setPadding(ViewKnife.dip2px(4), 0, ViewKnife.dip2px(4), 0);
     }
-    private boolean isOpen;
 
-    private static final CurInfoView curInfoView = new CurInfoView(Utils.getContext());
 
-    private static void open() {
-        try {
-            WindowManager windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
-            WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-            params.width = FrameLayout.LayoutParams.WRAP_CONTENT;
-            params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-            } else {
-                params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-            }
-            params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-            params.format = PixelFormat.TRANSLUCENT;
-            params.gravity = Config.getUI_ACTIVITY_GRAVITY();
-            windowManager.addView(curInfoView, params);
-            curInfoView.isOpen = true;
-        } catch (Throwable ignore) {
+    private void open() {
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.width = FrameLayout.LayoutParams.WRAP_CONTENT;
+        params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        } else {
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         }
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        params.format = PixelFormat.TRANSLUCENT;
+        params.gravity = Config.getUI_ACTIVITY_GRAVITY();
+        Utils.addViewToWindow(this, params);
     }
 
-    private static void close() {
-        Utils.removeViewFromWindow(curInfoView);
-        curInfoView.isOpen = false;
+    private void close() {
+        Utils.removeViewFromWindow(this);
     }
 
-    public static void toggle() {
-        if (curInfoView.isOpen) {
+    public void toggle() {
+        if (isOpen()) {
             close();
         } else {
             open();
         }
     }
 
-    public static void show() {
-        curInfoView.setVisibility(VISIBLE);
-    }
-
-    public static void hide() {
-        curInfoView.setVisibility(GONE);
+    public boolean isOpen() {
+        return ViewCompat.isAttachedToWindow(this);
     }
 
     private static CharSequence lastInfo;
-    public static void updateText(CharSequence value) {
+
+    public void updateText(CharSequence value) {
         if (!TextUtils.isEmpty(value)) {
-            lastInfo = curInfoView.getText();
+            lastInfo = getText();
         } else {
             value = lastInfo;
         }
-        curInfoView.setText(value);
+        setText(value);
     }
 }

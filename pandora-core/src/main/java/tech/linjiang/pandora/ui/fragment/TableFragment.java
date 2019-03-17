@@ -20,7 +20,7 @@ import java.util.List;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.database.DatabaseResult;
-import tech.linjiang.pandora.ui.connector.EventCallback;
+import tech.linjiang.pandora.ui.GeneralDialog;
 import tech.linjiang.pandora.ui.connector.SimpleOnActionExpandListener;
 import tech.linjiang.pandora.ui.connector.SimpleOnQueryTextListener;
 import tech.linjiang.pandora.ui.item.GridItem;
@@ -132,8 +132,8 @@ public class TableFragment extends BaseFragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(-1, R.id.pd_menu_id_1, 0, "copy value");
-        menu.add(-1, R.id.pd_menu_id_2, 1, "delete row");
+        menu.add(-1, R.id.pd_menu_id_1, 0, R.string.pd_name_copy_value);
+        menu.add(-1, R.id.pd_menu_id_2, 1, R.string.pd_name_delete_row);
     }
 
     @Override
@@ -154,17 +154,18 @@ public class TableFragment extends BaseFragment {
     }
 
     private void initMenu() {
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "search")
-                .setActionView(new SearchView(getContext()))
+        getToolbar().getMenu().add(0,0,0, R.string.pd_name_help).setIcon(R.drawable.pd_help)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItem searchItem = getToolbar().getMenu().add(0,0, 1, R.string.pd_name_search);
+        searchItem.setActionView(new SearchView(getContext()))
                 .setIcon(R.drawable.pd_search)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_2, 1, "info");
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, "add");
-        getToolbar().getMenu().add(-1, R.id.pd_menu_id_4, 3, "delete all");
+        getToolbar().getMenu().add(0,0, 2, R.string.pd_name_info);
+        getToolbar().getMenu().add(0,0, 3, R.string.pd_name_add);
+        getToolbar().getMenu().add(0,0, 4, R.string.pd_name_delete_all);
 
-        MenuItem menuItem = getToolbar().getMenu().findItem(R.id.pd_menu_id_1);
-        SearchView searchView = (SearchView) menuItem.getActionView();
+        SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(ViewKnife.getString(R.string.pd_search_hint));
         searchView.setOnQueryTextListener(new SimpleOnQueryTextListener() {
             @Override
@@ -175,7 +176,7 @@ public class TableFragment extends BaseFragment {
                 return true;
             }
         });
-        SimpleOnActionExpandListener.bind(menuItem, new SimpleOnActionExpandListener() {
+        SimpleOnActionExpandListener.bind(searchItem, new SimpleOnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 if (!TextUtils.isEmpty(realTimeQueryCondition)) {
@@ -188,19 +189,25 @@ public class TableFragment extends BaseFragment {
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.pd_menu_id_2) {
+                if (item.getOrder() == 0) {
+                    GeneralDialog.build(-1)
+                            .title(R.string.pd_help_title)
+                            .message(R.string.pd_help_table)
+                            .positiveButton(R.string.pd_ok)
+                            .show(TableFragment.this);
+                }
+                if (item.getOrder() == 2) {
                     Bundle bundle = new Bundle();
                     bundle.putInt(PARAM1, key);
                     bundle.putString(PARAM2, table);
                     bundle.putBoolean(PARAM3, true);
                     launch(TableFragment.class, bundle);
-                } else if (item.getItemId() == R.id.pd_menu_id_3) {
+                } else if (item.getOrder() == 3) {
                     Bundle bundle = new Bundle();
                     bundle.putInt(PARAM1, key);
                     bundle.putString(PARAM2, table);
-                    bundle.putSerializable(PARAM3, eventCallback);
-                    launch(AddRowFragment.class, bundle);
-                } else if (item.getItemId() == R.id.pd_menu_id_4) {
+                    launch(AddRowFragment.class, bundle, CODE2);
+                } else if (item.getOrder() == 4) {
                     delete(null);
                 }
                 closeSoftInput();
@@ -308,14 +315,9 @@ public class TableFragment extends BaseFragment {
                     loadData(realTimeQueryCondition);
                 }
             }).execute();
+        } else if (requestCode == CODE2 && resultCode == Activity.RESULT_OK) {
+            loadData(realTimeQueryCondition);
         }
     }
 
-
-    private EventCallback eventCallback = new EventCallback() {
-        @Override
-        public void onComplete() {
-            loadData(realTimeQueryCondition);
-        }
-    };
 }

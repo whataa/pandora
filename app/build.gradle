@@ -15,18 +15,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     debugImplementation project(':pandora-core')
-    releaseImplementation project(':pandora-no-op')
+    releaseImplementation 'com.github.whataa:pandora-no-op:master-SNAPSHOT'
+
 
     implementation "com.android.support:appcompat-v7:${versions.SUPPORT_LIB}"
-    implementation "android.arch.persistence.room:runtime:1.1.1-rc1"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1-rc1"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
 
-    api "com.squareup.retrofit2:retrofit:2.2.0"
-    api "com.squareup.retrofit2:converter-gson:2.2.0"
-    api 'com.alibaba:fastjson:1.2.45'
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    implementation "com.android.support.constraint:constraint-layout:1.1.3"
+    implementation "com.android.support:customtabs:${versions.SUPPORT_LIB}"
+
+
+    implementation "com.squareup.retrofit2:retrofit:2.2.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.2.0"
+    implementation 'com.alibaba:fastjson:1.2.45'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
 }

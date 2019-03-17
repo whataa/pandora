@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Pandora</string>
+    <string name="pandora_permission">Pandora使用悬浮窗来展示功能面板， \n使用前请确保权限已开启。</string>
+    <string name="pandora_shake">摇一摇</string>
+    <string name="pandora_open">手动打开</string>
+    <string name="pandora_download">文件下载</string>
+    <string name="pandora_load_pic">图片加载</string>
+    <string name="pandora_trans_act">透明Activity</string>
+    <string name="pandora_stack_view">层叠View</string>
+    <string name="pandora_crash">模拟Crash</string>
+    <string name="pandora_add_func">添加自定义Func</string>
+    <string name="pandora_copy_asset">复制Assets到/files/</string>
+    <string name="pandora_new_xml">创建新的xml</string>
+    <string name="pandora_reset_db">创建/重置Db</string>
+    <string name="pandora_new_file">创建新文件</string>
+    <string name="pandora_shake_please">请摇晃手机</string>
+    <string name="pandora_open_net">请求已开始，你可以点击「网络日志」查看</string>
+    <string name="pandora_open_select">你可以使用「选择视图」功能进行查看</string>
+    <string name="pandora_add_success">添加成功，请滑动到面板最右侧查看</string>
+    <string name="pandora_copyed">已重置：</string>
+    <string name="pandora_reseted">已重置：</string>
+    <string name="pandora_created_file">已创建新文件：</string>
+    <string name="pandora_created_xml">已创建：</string>
+    <string name="pandora_click_me">点我试试</string>
+    <string name="pandora_can_be_selected">我可以被选中</string>
+</resources>

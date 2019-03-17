@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
+import tech.linjiang.pandora.ui.GeneralDialog;
 import tech.linjiang.pandora.ui.item.KeyValueItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
@@ -39,6 +41,21 @@ public class SPFragment extends BaseListFragment {
         super.onViewCreated(view, savedInstanceState);
         descriptor = (File) getArguments().getSerializable(PARAM1);
         getToolbar().setTitle(descriptor.getName());
+        getToolbar().getMenu().add(0,0,0,R.string.pd_name_help).setIcon(R.drawable.pd_help)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getOrder() == 0) {
+                    GeneralDialog.build(-1)
+                            .title(R.string.pd_help_title)
+                            .message(R.string.pd_help_sp)
+                            .positiveButton(R.string.pd_ok)
+                            .show(SPFragment.this);
+                }
+                return false;
+            }
+        });
 
         registerForContextMenu(getRecyclerView());
         getAdapter().setListener(new UniversalAdapter.OnItemClickListener() {
@@ -66,8 +83,8 @@ public class SPFragment extends BaseListFragment {
             MenuRecyclerView.RvContextMenuInfo info = (MenuRecyclerView.RvContextMenuInfo) menuInfo;
             if (getAdapter().getItems().get(info.position) instanceof KeyValueItem) {
                 if (!((KeyValueItem) getAdapter().getItems().get(info.position)).isTitle) {
-                    menu.add(-1, R.id.pd_menu_id_1, 0, "copy");
-                    menu.add(-1, R.id.pd_menu_id_2, 0, "delete key");
+                    menu.add(-1, 0, 0, R.string.pd_name_copy_value);
+                    menu.add(-1, 0, 1, R.string.pd_name_delete_key);
                 }
             }
         }
@@ -86,12 +103,12 @@ public class SPFragment extends BaseListFragment {
                     return true;
                 }
 
-                if (item.getItemId() == R.id.pd_menu_id_1) {
+                if (item.getOrder() == 0) {
                     Utils.copy2ClipBoard(
                             "KEY :: " + keyValueItem.data[0] + "\nVALUE  :: " + keyValueItem.data[1]
                     );
                     return true;
-                } else if (item.getItemId() == R.id.pd_menu_id_2) {
+                } else if (item.getOrder() == 1) {
                     String clickedKey = keyValueItem.data[0];
                     Pandora.get().getSharedPref().removeSharedPrefKey(descriptor, clickedKey);
                     getAdapter().removeItem(info.position);

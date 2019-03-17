@@ -15,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -213,7 +212,7 @@ public class ViewKnife {
                     }
                 }
             }
-            Field mGlobalField = Class.forName("android.view.WindowManagerImpl").getDeclaredField("mGlobal");
+            Field mGlobalField = Reflect28Util.getDeclaredField( Reflect28Util.forName("android.view.WindowManagerImpl"),"mGlobal");
             mGlobalField.setAccessible(true);
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
                 Field mViewsField = Class.forName("android.view.WindowManagerGlobal").getDeclaredField("mViews");
@@ -226,7 +225,7 @@ public class ViewKnife {
                     }
                 }
             } else {
-                Field mRootsField = Class.forName("android.view.WindowManagerGlobal").getDeclaredField("mRoots");
+                Field mRootsField = Reflect28Util.getDeclaredField(Reflect28Util.forName("android.view.WindowManagerGlobal"),"mRoots");
                 mRootsField.setAccessible(true);
                 List viewRootImpls;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -235,11 +234,11 @@ public class ViewKnife {
                     viewRootImpls = Arrays.asList((Object[]) mRootsField.get(mGlobalField.get(windowManager)));
                 }
                 for (int i = viewRootImpls.size() - 1; i >= 0; i--) {
-                    Class clazz = Class.forName("android.view.ViewRootImpl");
+                    Class clazz = Reflect28Util.forName("android.view.ViewRootImpl");
                     Object object = viewRootImpls.get(i);
-                    Field mWindowAttributesField = clazz.getDeclaredField("mWindowAttributes");
+                    Field mWindowAttributesField = Reflect28Util.getDeclaredField(clazz, "mWindowAttributes");
                     mWindowAttributesField.setAccessible(true);
-                    Field mViewField = clazz.getDeclaredField("mView");
+                    Field mViewField = Reflect28Util.getDeclaredField(clazz, "mView");
                     mViewField.setAccessible(true);
                     View decorView = (View) mViewField.get(object);
                     WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) mWindowAttributesField.get(object);
@@ -249,7 +248,7 @@ public class ViewKnife {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             //Accessing hidden field Landroid/view/WindowManagerImpl;->mGlobal:Landroid/view/WindowManagerGlobal; (light greylist, reflection)
             //Accessing hidden field Landroid/view/WindowManagerGlobal;->mRoots:Ljava/util/ArrayList; (light greylist, reflection)

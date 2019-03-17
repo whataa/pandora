@@ -1,420 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8aa6c2"
     android:fillViewport="true"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#8aa6c2"
-        android:orientation="vertical">
+        android:fillViewport="true">
 
-        <Button
-            android:id="@+id/open2"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="open pandora" />
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:padding="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/pd_done"
-            android:drawablePadding="8dp"
-            android:padding="8dp"
-            android:text="test netWork" />
 
-        <Button
-            android:id="@+id/http"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="do Http" />
+            <TextView
+                android:id="@+id/permission_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_quotes"
+                android:gravity="left|center_vertical"
+                android:paddingBottom="12dp"
+                android:text="@string/pandora_permission"
+                android:textColor="#6B6A6A"
+                android:textSize="14dp"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/download"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="download binary file (91MB)" />
+            <TextView
+                android:id="@+id/btn_shake"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_shake"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_open"
+                app:layout_constraintTop_toBottomOf="@id/permission_hint" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/pd_done"
-            android:drawablePadding="8dp"
-            android:padding="8dp"
-            android:text="test select" />
+            <TextView
+                android:id="@+id/btn_open"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_open"
+                app:layout_constraintBaseline_toBaselineOf="@id/btn_shake"
+                app:layout_constraintLeft_toRightOf="@id/btn_shake"
+                app:layout_constraintRight_toRightOf="parent" />
 
-        <Button
-            android:id="@+id/another_activity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:alpha="0.6"
-            android:gravity="center"
-            android:padding="8dp"
-            android:text="open transluent activity" />
-
-        <Button
-            android:id="@+id/dialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="open dialog" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="300dp">
-
-            <Button
-                android:id="@+id/open"
+            <TextView
+                android:id="@+id/title_net"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_margin="24dp"
-                android:background="#590bc461"
-                android:text="open" />
+                android:gravity="center_vertical"
+                android:paddingLeft="4dp"
+                android:paddingTop="16dp"
+                android:text="①"
+                android:textColor="#000"
+                android:textSize="15dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_shake" />
 
+            <!---->
+            <TextView
+                android:id="@+id/btn_net_okhttp"
+                style="@style/AppTheme_TextView"
+                android:text="OKHttp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_net_urlconnection"
+                app:layout_constraintTop_toBottomOf="@id/title_net" />
 
-            <Button
-                android:id="@+id/toast"
+            <TextView
+                android:id="@+id/btn_net_urlconnection"
+                style="@style/AppTheme_TextView"
+                android:text="UrlConnection"
+                app:layout_constraintBaseline_toBaselineOf="@id/btn_net_okhttp"
+                app:layout_constraintLeft_toRightOf="@id/btn_net_okhttp"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/btn_net_file"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_download"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_net_pic"
+                app:layout_constraintTop_toBottomOf="@id/btn_net_okhttp" />
+
+            <TextView
+                android:id="@+id/btn_net_pic"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_load_pic"
+                app:layout_constraintBaseline_toBaselineOf="@id/btn_net_file"
+                app:layout_constraintLeft_toRightOf="@id/btn_net_file"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <!---->
+
+            <TextView
+                android:id="@+id/title_ui"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/open"
-                android:layout_marginTop="12dp"
-                android:layout_toLeftOf="@id/open"
-                android:text="toast" />
+                android:gravity="center_vertical"
+                android:paddingLeft="4dp"
+                android:paddingTop="16dp"
+                android:text="②"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_net_file" />
 
-            <Button
+            <TextView
+                android:id="@+id/btn_ui_activity"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_trans_act"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_ui_window"
+                app:layout_constraintTop_toBottomOf="@id/title_ui" />
+
+            <TextView
+                android:id="@+id/btn_ui_window"
+                style="@style/AppTheme_TextView"
+                android:text="PopupWindow"
+                app:layout_constraintBaseline_toBaselineOf="@id/btn_ui_activity"
+                app:layout_constraintLeft_toRightOf="@id/btn_ui_activity"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/btn_ui_dialog"
+                style="@style/AppTheme_TextView"
+                android:text="Dialog"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_ui_view"
+                app:layout_constraintTop_toBottomOf="@id/btn_ui_activity" />
+
+            <TextView
+                android:id="@+id/btn_ui_view"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_stack_view"
+                app:layout_constraintBaseline_toBaselineOf="@id/btn_ui_dialog"
+                app:layout_constraintLeft_toRightOf="@id/btn_ui_dialog"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <!---->
+
+            <TextView
+                android:id="@+id/title_feature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/open"
-                android:layout_toLeftOf="@id/open"
-                android:rotation="45"
-                android:text="test" />
+                android:gravity="center_vertical"
+                android:paddingLeft="4dp"
+                android:paddingTop="16dp"
+                android:text="③"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_ui_dialog" />
 
-            <Button
+            <TextView
+                android:id="@+id/btn_feature_crash"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_crash"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_feature_func"
+                app:layout_constraintTop_toBottomOf="@id/title_feature" />
+
+            <TextView
+                android:id="@+id/btn_feature_func"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_add_func"
+                app:layout_constraintBaseline_toBaselineOf="@id/btn_feature_crash"
+                app:layout_constraintLeft_toRightOf="@id/btn_feature_crash"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <!---->
+
+            <TextView
+                android:id="@+id/title_file"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/open"
-                android:layout_alignLeft="@id/open"
-                android:layout_marginLeft="12dp"
-                android:text="test" />
-
-
-            <Button
-                android:layout_width="60dp"
-                android:layout_height="120dp"
-                android:layout_marginTop="12dp"
-                android:layout_toRightOf="@id/open"
-                android:text="test" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/open"
-                android:layout_below="@id/open"
-                android:layout_marginRight="12dp"
-                android:scaleY="0.8"
-                android:text="test" />
-
-
-        </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/pd_done"
-            android:drawablePadding="8dp"
-            android:padding="8dp"
-            android:text="test hierarchy" />
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher"
-                    android:visibility="gone" />
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-
-                        <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/ic_launcher" />
-
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-
-                            <ImageView
-                                android:id="@+id/i_am_the_longest_id_in_the_hierarchy_of_main_activity"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:scaleType="centerCrop"
-                                android:src="@mipmap/ic_launcher" />
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-
-
-                                <ImageView
-                                    android:layout_width="80dp"
-                                    android:layout_height="80dp"
-                                    android:scaleType="centerCrop"
-                                    android:src="@mipmap/ic_launcher" />
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content">
-
-
-                                    <ImageView
-                                        android:layout_width="80dp"
-                                        android:layout_height="80dp"
-                                        android:scaleType="centerCrop"
-                                        android:src="@mipmap/ic_launcher"
-                                        android:visibility="gone" />
-
-                                    <FrameLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content">
-
-
-                                        <ImageView
-                                            android:layout_width="80dp"
-                                            android:layout_height="80dp"
-                                            android:scaleType="centerCrop"
-                                            android:src="@mipmap/ic_launcher" />
-
-                                        <FrameLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content">
-
-
-                                            <ImageView
-                                                android:layout_width="80dp"
-                                                android:layout_height="80dp"
-                                                android:scaleType="centerCrop"
-                                                android:src="@mipmap/ic_launcher" />
-
-                                            <FrameLayout
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content">
-
-
-                                                <ImageView
-                                                    android:layout_width="80dp"
-                                                    android:layout_height="80dp"
-                                                    android:scaleType="centerCrop"
-                                                    android:src="@mipmap/ic_launcher" />
-                                            </FrameLayout>
-                                        </FrameLayout>
-                                    </FrameLayout>
-                                </FrameLayout>
-                            </FrameLayout>
-                        </FrameLayout>
-                    </FrameLayout>
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-
-                        <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/ic_launcher" />
-
-                        <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/ic_launcher" />
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-
-                        <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/ic_launcher"
-                            android:visibility="gone" />
-
-                        <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/ic_launcher" />
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-
-                        <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/ic_launcher" />
-
-                        <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/ic_launcher" />
-                    </FrameLayout>
-                </FrameLayout>
-            </FrameLayout>
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher"
-                android:visibility="gone" />
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher" />
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher" />
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher"
-                    android:visibility="gone" />
-            </FrameLayout>
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher" />
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher" />
-
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher"
-                        android:visibility="gone" />
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-
-                        <tech.linjiang.android.pandora.ItIsAFactThatIAmTheLongestNameInAllViewsIsThatRight_JUST_FOR_TEST_HIERARCHY
-                            android:layout_width="80dp"
-                            android:layout_height="80dp" />
-                    </FrameLayout>
-                </FrameLayout>
-            </FrameLayout>
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher" />
-        </FrameLayout>
-        <!--test layout tree-->
-    </LinearLayout>
-</ScrollView>
+                android:gravity="center_vertical"
+                android:paddingLeft="4dp"
+                android:paddingTop="16dp"
+                android:text="④"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_feature_crash" />
+
+            <TextView
+                android:id="@+id/btn_file_assets"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_copy_asset"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_file_xml"
+                app:layout_constraintTop_toBottomOf="@id/title_file" />
+
+            <TextView
+                android:id="@+id/btn_file_xml"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_new_xml"
+                app:layout_constraintBaseline_toBaselineOf="@id/btn_file_assets"
+                app:layout_constraintLeft_toRightOf="@id/btn_file_assets"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/btn_file_db"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_reset_db"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_file_file"
+                app:layout_constraintTop_toBottomOf="@id/btn_file_assets" />
+
+            <TextView
+                android:id="@+id/btn_file_file"
+                style="@style/AppTheme_TextView"
+                android:text="@string/pandora_new_file"
+                app:layout_constraintBaseline_toBaselineOf="@id/btn_file_db"
+                app:layout_constraintLeft_toRightOf="@id/btn_file_db"
+                app:layout_constraintRight_toRightOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>
