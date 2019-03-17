@@ -1,0 +1,3 @@
+[submodule "no-op"]
+	path = no-op
+	url = https://github.com/whataa/pandora-no-op
