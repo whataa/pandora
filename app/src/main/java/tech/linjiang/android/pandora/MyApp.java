@@ -2,6 +2,7 @@ package tech.linjiang.android.pandora;
 
 import android.app.Application;
 import android.os.Build;
+import android.util.Log;
 
 import tech.linjiang.android.pandora.db.StoreDatabase;
 import tech.linjiang.android.pandora.utils.ThreadPool;
@@ -25,6 +26,10 @@ public class MyApp extends Application {
             });
         }
 
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            Log.w("MyApp", "uncaughtException: " + e);
+            // Testing whether Pandora's CrashHandler works as expected.
+        });
     }
 
     public static Application getContext() {

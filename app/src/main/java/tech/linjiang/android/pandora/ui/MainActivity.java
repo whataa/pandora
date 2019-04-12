@@ -85,7 +85,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btn_feature_crash).setOnClickListener(v -> {
-            throw new RuntimeException("Test crash");
+            new Thread() {
+                @Override
+                public void run() {
+                    throw new RuntimeException("Test rash");
+                }
+            }.start();
         });
         findViewById(R.id.btn_feature_func).setOnClickListener(v -> {
             Pandora.get().addFunction(customFunc);
