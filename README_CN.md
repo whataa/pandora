@@ -184,6 +184,13 @@ Pandora.get().getSharedPref().addProvider(new XXProvider());
 > 由于Android机型众多，请手动前往权限中心检查是否授予了「悬浮窗」权限，
 > 对于很难打开的情况，可以在「配置」功能里对触发系数进行调整，修改为最适合你手机的值。
 
+#### 4. 混淆规则
+
+> 即使建议将Pandora仅用在debug环境，但是无法约束大家在哪种BuildType下开启混淆，因此若有需求请添加以下规则：
+
+```
+-keep class tech.linjiang.pandora.cache.**{*;}
+```
 
 ## 致谢
 

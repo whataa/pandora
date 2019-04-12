@@ -188,6 +188,13 @@ and call `Pandora.get().open();` to open directly.
 
 > In cases where it's hard to open, you can change the trigger factor in the "config" modify the value that works best for your phone.
 
+#### 4. proguard-rules
+
+> Even though it is recommended to use Pandora only in the dev and test stage, enable minify can be anywhere, so add the following rules if you need it:
+
+```
+-keep class tech.linjiang.pandora.cache.**{*;}
+```
 
 ## Thanks
 
