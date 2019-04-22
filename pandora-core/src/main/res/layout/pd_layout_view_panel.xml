@@ -115,7 +115,7 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/view_panel_parent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -128,7 +128,7 @@
             android:layout_height="match_parent"
             android:background="#c1c0c0" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/view_panel_current"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
             android:layout_height="match_parent"
             android:background="#c1c0c0" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/view_panel_child"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

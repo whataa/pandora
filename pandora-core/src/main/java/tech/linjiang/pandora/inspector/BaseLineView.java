@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;

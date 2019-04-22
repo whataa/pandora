@@ -2,7 +2,7 @@ package tech.linjiang.pandora.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import android.view.Gravity;
 
 import java.lang.annotation.Retention;

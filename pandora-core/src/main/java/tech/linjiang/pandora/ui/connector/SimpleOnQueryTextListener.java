@@ -1,6 +1,6 @@
 package tech.linjiang.pandora.ui.connector;
 
-import android.support.v7.widget.SearchView;
+import androidx.appcompat.widget.SearchView;
 
 /**
  * Created by linjiang on 07/06/2018.

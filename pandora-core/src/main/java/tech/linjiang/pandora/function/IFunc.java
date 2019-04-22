@@ -1,6 +1,6 @@
 package tech.linjiang.pandora.function;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 /**
  * Created by linjiang on 2019/3/4.

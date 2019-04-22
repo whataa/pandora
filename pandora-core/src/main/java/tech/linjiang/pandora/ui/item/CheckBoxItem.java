@@ -1,6 +1,6 @@
 package tech.linjiang.pandora.ui.item;
 
-import android.support.v7.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatCheckBox;
 
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;

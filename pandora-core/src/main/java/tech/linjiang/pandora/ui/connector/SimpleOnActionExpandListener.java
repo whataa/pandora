@@ -1,6 +1,6 @@
 package tech.linjiang.pandora.ui.connector;
 
-import android.support.v4.view.MenuItemCompat;
+import androidx.core.view.MenuItemCompat;
 import android.view.MenuItem;
 
 /**

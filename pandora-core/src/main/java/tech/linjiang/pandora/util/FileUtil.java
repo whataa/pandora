@@ -2,7 +2,7 @@ package tech.linjiang.pandora.util;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 

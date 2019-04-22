@@ -1,7 +1,7 @@
 package tech.linjiang.pandora.cache;
 
 import android.provider.BaseColumns;
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import android.util.Pair;
 
 import java.lang.annotation.Retention;

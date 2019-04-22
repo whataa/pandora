@@ -1,6 +1,6 @@
 package tech.linjiang.pandora.ui.recyclerview;
 
-import android.support.annotation.LayoutRes;
+import androidx.annotation.LayoutRes;
 
 /**
  * Created by linjiang on 03/06/2018.

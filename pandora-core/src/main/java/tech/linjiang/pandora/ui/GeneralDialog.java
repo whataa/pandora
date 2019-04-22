@@ -10,13 +10,13 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DialogTitle;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.core.view.ViewCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.DialogTitle;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -190,7 +190,7 @@ public class GeneralDialog extends DialogFragment implements DialogInterface.OnC
             backgroundDrawable.setColor(Color.WHITE);
             ViewCompat.setBackground(sysContent, backgroundDrawable);
 
-            DialogTitle title = window.findViewById(android.support.v7.appcompat.R.id.alertTitle);
+            DialogTitle title = window.findViewById(androidx.appcompat.R.id.alertTitle);
             TextView message = window.findViewById(android.R.id.message);
             Button button1 = window.findViewById(android.R.id.button1);
             Button button2 = window.findViewById(android.R.id.button2);
@@ -210,9 +210,9 @@ public class GeneralDialog extends DialogFragment implements DialogInterface.OnC
                     ViewKnife.dip2px(-1), 0, ViewKnife.dip2px(-1), ViewKnife.dip2px(-1));
             ViewCompat.setBackground(buttonParent, insetDrawable);
 
-            window.findViewById(android.support.v7.appcompat.R.id.spacer).setVisibility(View.GONE);
+            window.findViewById(androidx.appcompat.R.id.spacer).setVisibility(View.GONE);
 
-            View textSpacerNoButtons = window.findViewById(android.support.v7.appcompat.R.id.textSpacerNoButtons);
+            View textSpacerNoButtons = window.findViewById(androidx.appcompat.R.id.textSpacerNoButtons);
             if (textSpacerNoButtons != null) {
                 textSpacerNoButtons.setVisibility(View.VISIBLE);
             }

@@ -1,6 +1,6 @@
 package tech.linjiang.pandora.ui.item;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;

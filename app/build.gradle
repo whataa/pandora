@@ -23,18 +23,18 @@ android {
 }
 
 dependencies {
+    // migrate to AndroidX : https://blog.csdn.net/qq_17766199/article/details/81433706
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':pandora-core')
 //    implementation "com.github.whataa:pandora:v2.0.1"
-
-    implementation "com.android.support:appcompat-v7:${versions.SUPPORT_LIB}"
-    implementation "android.arch.lifecycle:extensions:1.1.1"
-
-    implementation "android.arch.persistence.room:runtime:1.1.1"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
-    implementation "com.android.support.constraint:constraint-layout:1.1.3"
-    implementation "com.android.support:customtabs:${versions.SUPPORT_LIB}"
-
+//
+    implementation "androidx.appcompat:appcompat:1.0.0"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0-rc01"
+//
+    implementation "androidx.room:room-runtime:2.0.0-rc01"
+    annotationProcessor "androidx.room:room-compiler:2.0.0-rc01"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    implementation "androidx.browser:browser:1.0.0"
 
     implementation "com.squareup.retrofit2:retrofit:2.2.0"
     implementation "com.squareup.retrofit2:converter-gson:2.2.0"

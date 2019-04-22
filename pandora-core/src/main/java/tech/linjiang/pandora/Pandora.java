@@ -2,7 +2,7 @@ package tech.linjiang.pandora;
 
 import android.app.Activity;
 import android.app.Application;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 import tech.linjiang.pandora.crash.CrashHandler;
 import tech.linjiang.pandora.database.Databases;
