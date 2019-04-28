@@ -2,9 +2,10 @@ package tech.linjiang.android.pandora;
 
 import android.app.Application;
 import android.os.Build;
+import android.util.Log;
 
 import tech.linjiang.android.pandora.db.StoreDatabase;
-import tech.linjiang.pandora.Pandora;
+import tech.linjiang.android.pandora.utils.ThreadPool;
 
 /**
  * Created by linjiang on 30/05/2018.
@@ -18,15 +19,21 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
         mThis = this;
-        Pandora.init(this).enableShakeOpen(650);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            // the store.db and testAllType.xml if exist will be moved to the Device encrypted storage area.
-            createDeviceProtectedStorageContext().moveDatabaseFrom(this, StoreDatabase.NAME);
-            createDeviceProtectedStorageContext().moveSharedPreferencesFrom(this, "testAllType");
+            ThreadPool.post(() -> {
+                // the store.db if exist will be moved to the Device encrypted storage area.
+                createDeviceProtectedStorageContext().moveDatabaseFrom(mThis, StoreDatabase.NAME);
+            });
         }
+
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            Log.w("MyApp", "uncaughtException: " + e);
+            // Testing whether Pandora's CrashHandler works as expected.
+        });
     }
 
     public static Application getContext() {
         return mThis;
     }
+
 }

@@ -1,10 +1,10 @@
 package tech.linjiang.pandora.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tech.linjiang.pandora.Pandora;
+import tech.linjiang.pandora.cache.Content;
+import tech.linjiang.pandora.cache.Summary;
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.network.CacheDbHelper;
 import tech.linjiang.pandora.network.NetStateListener;
-import tech.linjiang.pandora.network.model.Summary;
 import tech.linjiang.pandora.ui.connector.SimpleOnActionExpandListener;
 import tech.linjiang.pandora.ui.connector.SimpleOnQueryTextListener;
 import tech.linjiang.pandora.ui.item.NetItem;
@@ -40,14 +40,26 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
     private List<BaseItem> tmpFilter = new ArrayList<>();
 
     @Override
+    protected boolean enableSwipeBack() {
+        return false;
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getToolbar().setTitle("Network");
-        getToolbar().inflateMenu(R.menu.pd_menu_net);
+        getToolbar().setTitle(R.string.pd_name_network);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "")
+                .setActionView(new SwitchCompat(getContext()))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_2, 1, R.string.pd_name_search)
+                .setActionView(new SearchView(getContext()))
+                .setIcon(R.drawable.pd_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_3, 2, R.string.pd_name_clear);
         setSearchView();
         getToolbar().setOnMenuItemClickListener(this);
         SwitchCompat switchCompat = ((SwitchCompat) getToolbar()
-                .getMenu().findItem(R.id.menu_switch).getActionView());
+                .getMenu().findItem(R.id.pd_menu_id_1).getActionView());
         switchCompat.setOnCheckedChangeListener(this);
         if (Config.isNetLogEnable()) {
             switchCompat.setChecked(true);
@@ -79,7 +91,7 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
         new SimpleTask<>(new SimpleTask.Callback<Void, List<Summary>>() {
             @Override
             public List<Summary> doInBackground(Void[] params) {
-                return CacheDbHelper.getSummaries();
+                return Summary.queryList();
             }
 
             @Override
@@ -106,7 +118,8 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
         new SimpleTask<>(new SimpleTask.Callback<Void, Void>() {
             @Override
             public Void doInBackground(Void[] params) {
-                CacheDbHelper.deleteAll();
+                Summary.clear();
+                Content.clear();
                 return null;
             }
 
@@ -120,7 +133,7 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
     }
 
     private void setSearchView() {
-        MenuItem menuItem = getToolbar().getMenu().findItem(R.id.menu_search);
+        MenuItem menuItem = getToolbar().getMenu().findItem(R.id.pd_menu_id_2);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         searchView.setQueryHint(ViewKnife.getString(R.string.pd_net_search_hint));
@@ -138,7 +151,7 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
                 return true;
             }
         });
-        menuItem.setOnActionExpandListener(new SimpleOnActionExpandListener() {
+        SimpleOnActionExpandListener.bind(menuItem, new SimpleOnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 loadData();
@@ -149,7 +162,7 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.menu_clear) {
+        if (item.getItemId() == R.id.pd_menu_id_3) {
             if (!Config.isNetLogEnable()) {
                 return false;
             }
@@ -207,7 +220,7 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
         new SimpleTask<>(new SimpleTask.Callback<Void, Summary>() {
             @Override
             public Summary doInBackground(Void[] params) {
-                return CacheDbHelper.getSummary(id);
+                return Summary.query(id);
             }
 
             @Override

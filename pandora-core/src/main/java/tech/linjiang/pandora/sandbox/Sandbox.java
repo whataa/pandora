@@ -1,5 +1,8 @@
 package tech.linjiang.pandora.sandbox;
 
+import android.annotation.TargetApi;
+import android.os.Build;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +20,11 @@ public class Sandbox {
 
     public static List<File> getRootFiles() {
         return getFiles(new File(ROOT_PATH));
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    public static List<File> getDPMFiles() {
+        return getFiles(new File(Utils.getContext().getApplicationInfo().deviceProtectedDataDir));
     }
 
     public static List<File> getFiles(File curFile) {

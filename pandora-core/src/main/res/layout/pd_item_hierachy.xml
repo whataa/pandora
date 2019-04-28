@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tech.linjiang.pandora.ui.view.TreeNodeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_name_wrapper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minWidth="100dp"
+    android:orientation="horizontal"
+    android:paddingBottom="2dp"
+    android:paddingTop="2dp">
+
+
+    <LinearLayout
+        android:id="@+id/item_hierarchy_content_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <TextView
+            tools:drawableLeft="@drawable/pd_expand"
+            android:drawablePadding="4dp"
+            android:id="@+id/view_name_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:gravity="center_vertical"
+            android:paddingBottom="1dp"
+            android:textColor="#000"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            tools:text="TextView" />
+
+        <TextView
+            android:id="@+id/view_name_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:gravity="center_vertical"
+            android:paddingTop="1dp"
+            android:singleLine="true"
+            android:ellipsize="start"
+            android:textColor="#000"
+            android:textSize="10dp"
+            tools:text="qwerty" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/view_name_more"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:src="@drawable/pd_info"
+        android:tint="@color/pd_blue" />
+</tech.linjiang.pandora.ui.view.TreeNodeLayout>

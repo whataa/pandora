@@ -1,12 +1,11 @@
 package tech.linjiang.pandora.network;
 
-import android.content.ContentValues;
 import android.text.TextUtils;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import okhttp3.Connection;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -19,8 +18,12 @@ import okio.BufferedSource;
 import okio.GzipSource;
 import okio.Okio;
 import okio.Source;
+import tech.linjiang.pandora.cache.Content;
+import tech.linjiang.pandora.cache.Summary;
+import tech.linjiang.pandora.network.okhttp3.OkUrlFactory;
 import tech.linjiang.pandora.util.Config;
-import tech.linjiang.pandora.util.JsonUtil;
+import tech.linjiang.pandora.util.FileUtil;
+import tech.linjiang.pandora.util.FormatUtil;
 import tech.linjiang.pandora.util.Utils;
 
 /**
@@ -31,15 +34,14 @@ public class OkHttpInterceptor implements Interceptor {
 
     private static final String TAG = "OkHttpInterceptor";
 
+    public OkHttpInterceptor() {
+        OkUrlFactory.init();
+    }
+
     private NetStateListener listener;
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Connection connection = chain.connection();
-        if (connection != null) {
-            throw new IllegalStateException(
-                    "should use addInterceptor instead of addNetworkInterceptor");
-        }
 
         long id = -1;
 
@@ -49,15 +51,29 @@ public class OkHttpInterceptor implements Interceptor {
             notifyStart(id);
         }
 
+        long delayReq = Config.getNETWORK_DELAY_REQ();
+        if (delayReq > 0) {
+            try {
+                Thread.sleep(delayReq);
+            } catch (Throwable ignore){}
+        }
+
         Response response;
         try {
             response = chain.proceed(request);
         } catch (IOException e) {
             if (Config.isNetLogEnable() && id >= 0) {
-                markFailed(id);
+                markFailed(id, Utils.collectThrow(e));
                 notifyEnd(id);
             }
             throw e;
+        }
+
+        long delayRes = Config.getNETWORK_DELAY_RES();
+        if (delayRes > 0) {
+            try {
+                Thread.sleep(delayRes);
+            } catch (Throwable ignore){}
         }
 
         if (Config.isNetLogEnable() && id >= 0) {
@@ -69,74 +85,98 @@ public class OkHttpInterceptor implements Interceptor {
     }
 
     private long insert(Request request) {
-        ContentValues values = new ContentValues();
-        ContentValues contentValues = new ContentValues();
+        Summary summary = new Summary();
+        Content content = new Content();
 
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_STATUS, CacheDbHelper.SummaryEntry.Status.REQUESTING);
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_URL, request.url().encodedPath());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_HOST, request.url().host() + ":" + request.url().port());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_METHOD, request.method());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_SSL, request.isHttps());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_TIME_START, System.currentTimeMillis());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_HEADER_REQUEST, JsonUtil.formatHeaders(request.headers()));
+        summary.status = Summary.Status.REQUESTING;
+        summary.url = request.url().encodedPath();
+        summary.host = request.url().host() + ":" + request.url().port();
+        summary.method = request.method();
+        summary.ssl = request.isHttps();
+        summary.start_time = System.currentTimeMillis();
+        summary.requestHeader = FormatUtil.formatHeaders(request.headers());
 
         String query = request.url().encodedQuery();
         if (!TextUtils.isEmpty(query)) {
-            values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_QUERY, query);
+            summary.query = query;
         }
 
         RequestBody requestBody = request.body();
         if (requestBody != null) {
             try {
-                values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_SIZE_REQUEST, requestBody.contentLength());
+                summary.request_size = requestBody.contentLength();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            if (requestBody.contentType() != null) {
+                summary.request_content_type = requestBody.contentType().toString();
             }
         }
 
         boolean canRecognize = checkContentEncoding(request.header("Content-Encoding"));
         if (canRecognize) {
-            contentValues.put(CacheDbHelper.ContentEntry.COLUMN_NAME_REQUEST, requestBodyAsStr(request));
+            content.requestBody = requestBodyAsStr(request);
         }
-        long id = CacheDbHelper.SummaryEntry.insert(values);
-        contentValues.put(CacheDbHelper.ContentEntry.COLUMN_NAME_SUMMARY_ID, id);
-        CacheDbHelper.ContentEntry.insert(contentValues);
+        long id = Summary.insert(summary);
+        content.id = id;
+        Content.insert(content);
         return id;
     }
 
     private void updateSummary(long reqId, Response response) {
-        ContentValues values = new ContentValues();
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_STATUS, CacheDbHelper.SummaryEntry.Status.COMPLETE);
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_TIME_END, System.currentTimeMillis());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_CODE, response.code());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_PROTOCOL, response.protocol().toString());
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_HEADER_RESPONSE, JsonUtil.formatHeaders(response.headers()));
+        Summary summary =Summary.query(reqId);
+        summary.status = Summary.Status.COMPLETE;
+        summary.end_time = System.currentTimeMillis();
+        summary.code = response.code();
+        summary.protocol = response.protocol().toString();
+        summary.responseHeader = FormatUtil.formatHeaders(response.headers());
 
         ResponseBody body = response.body();
         if (body != null) {
             MediaType type = body.contentType();
             if (type != null) {
-                values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_CONTENT_TYPE_RESPONSE, type.toString());
+                summary.response_content_type = type.toString();
             }
-            values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_SIZE_RESPONSE, body.contentLength());
+            summary.response_size = body.contentLength();
         }
-        CacheDbHelper.SummaryEntry.update(reqId, values);
+        Summary.update(summary);
     }
 
     private void updateContent(long reqId, Response response) {
+        ResponseBody body = response.body();
+        if (body != null) {
+            MediaType type = body.contentType();
+            if (type != null && type.toString().contains("image")) {
+                byte[] bytes = responseBodyAsBytes(response);
+                if (bytes != null) {
+                    String path = FileUtil.saveFile(bytes, response.request().url().toString(), null);
+                    Content content = Content.query(reqId);
+                    content.responseBody = path;
+                    Content.update(content);
+                }
+                return;
+            }
+        }
         boolean canRecognize = checkContentEncoding(response.header("Content-Encoding"));
         if (canRecognize) {
-            ContentValues values = new ContentValues();
-            values.put(CacheDbHelper.ContentEntry.COLUMN_NAME_RESPONSE, responseBodyAsStr(response));
-            CacheDbHelper.ContentEntry.update(reqId, values);
+            String bodyStr = responseBodyAsStr(response);
+            if (!TextUtils.isEmpty(bodyStr)) {
+                Content content = Content.query(reqId);
+                content.responseBody = bodyStr;
+                Content.update(content);
+            }
         }
     }
 
-    private void markFailed(long id) {
-        ContentValues values = new ContentValues();
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_STATUS, CacheDbHelper.SummaryEntry.Status.ERROR);
-        values.put(CacheDbHelper.SummaryEntry.COLUMN_NAME_TIME_END, System.currentTimeMillis());
-        CacheDbHelper.SummaryEntry.update(id, values);
+    private void markFailed(long id, String err) {
+        Summary summary = Summary.query(id);
+        summary.status = Summary.Status.ERROR;
+        summary.end_time = System.currentTimeMillis();
+        Summary.update(summary);
+
+        Content content = Content.query(id);
+        content.responseBody = err;
+        Content.update(content);
     }
 
     private void notifyStart(final long id) {
@@ -144,7 +184,9 @@ public class OkHttpInterceptor implements Interceptor {
             Utils.post(new Runnable() {
                 @Override
                 public void run() {
-                    listener.onRequestStart(id);
+                    if (listener != null) {
+                        listener.onRequestStart(id);
+                    }
                 }
             });
         }
@@ -155,12 +197,37 @@ public class OkHttpInterceptor implements Interceptor {
             Utils.post(new Runnable() {
                 @Override
                 public void run() {
-                    listener.onRequestEnd(id);
+                    if (listener != null) {
+                        listener.onRequestEnd(id);
+                    }
                 }
             });
         }
     }
 
+    /**
+     * Returns true if the body in question probably contains human readable text. Uses a small sample
+     * of code points to detect unicode control characters commonly used in binary file signatures.
+     */
+    private static boolean isPlaintext(Buffer buffer) {
+        try {
+            Buffer prefix = new Buffer();
+            long byteCount = buffer.size() < 64 ? buffer.size() : 64;
+            buffer.copyTo(prefix, 0, byteCount);
+            for (int i = 0; i < 16; i++) {
+                if (prefix.exhausted()) {
+                    break;
+                }
+                int codePoint = prefix.readUtf8CodePoint();
+                if (Character.isISOControl(codePoint) && !Character.isWhitespace(codePoint)) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (EOFException e) {
+            return false; // Truncated UTF-8 sequence.
+        }
+    }
 
     private boolean checkContentEncoding(String contentEncoding) {
         return contentEncoding == null ||
@@ -184,6 +251,14 @@ public class OkHttpInterceptor implements Interceptor {
             e.printStackTrace();
             return null;
         }
+        if (!isPlaintext(buffer)) {
+            try {
+                return " (binary " + requestBody.contentLength() + "-byte body omitted)";
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
         return sourceToStrInternal(buffer, gzip, requestBody.contentType());
     }
 
@@ -198,6 +273,18 @@ public class OkHttpInterceptor implements Interceptor {
         if (responseBody == null || !HttpHeaders.hasBody(response)) {
             return null;
         }
+        try {
+            BufferedSource source = responseBody.source();
+            source.request(64); // Buffer the entire body.
+            Buffer buffer = source.buffer();
+            if (!isPlaintext(buffer)) {
+                return "(binary " + responseBody.contentLength() + "-byte body omitted)";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
         String contentEncoding = response.header("Content-Encoding");
         boolean gzip = "gzip".equalsIgnoreCase(contentEncoding);
         try {
@@ -236,6 +323,51 @@ public class OkHttpInterceptor implements Interceptor {
         return tempStr;
     }
 
+    private static byte[] requestBodyAsBytes(Request request) {
+        RequestBody requestBody = request.body();
+        if (requestBody == null) {
+            return null;
+        }
+        Buffer buffer = new Buffer();
+        try {
+            requestBody.writeTo(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return sourceToBytesInternal(buffer);
+    }
+
+    private static byte[] responseBodyAsBytes(Response response) {
+        ResponseBody responseBody = response.body();
+        if (responseBody == null || !HttpHeaders.hasBody(response)) {
+            return null;
+        }
+        try {
+            return sourceToBytesInternal(response.peekBody(Long.MAX_VALUE).source());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static byte[] sourceToBytesInternal(Source source) {
+        BufferedSource bufferedSource = Okio.buffer(source);
+        byte[] result = null;
+        try {
+            result = bufferedSource.readByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bufferedSource.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
     public void setListener(NetStateListener listener) {
         this.listener = listener;
     }
@@ -243,4 +375,6 @@ public class OkHttpInterceptor implements Interceptor {
     public void removeListener() {
         listener = null;
     }
+
+
 }

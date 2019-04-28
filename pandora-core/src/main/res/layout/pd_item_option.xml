@@ -9,4 +9,5 @@
     android:singleLine="true"
     android:textColor="#000"
     android:textSize="12dp"
+    android:background="@drawable/pd_shape_btn_bg"
     tools:text="#000" />

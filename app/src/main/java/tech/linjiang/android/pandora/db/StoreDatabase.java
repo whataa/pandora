@@ -1,11 +1,11 @@
 package tech.linjiang.android.pandora.db;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.migration.Migration;
-import android.support.annotation.NonNull;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.annotation.NonNull;
 
 import tech.linjiang.android.pandora.MyApp;
 import tech.linjiang.android.pandora.db.dao.DrinkDao;
@@ -20,7 +20,7 @@ import tech.linjiang.android.pandora.db.entity.Drink;
         entities = {
                 Drink.class
         },
-        version = 3,
+        version = 4,
         exportSchema = false)
 public abstract class StoreDatabase extends RoomDatabase {
 
@@ -34,6 +34,7 @@ public abstract class StoreDatabase extends RoomDatabase {
     private static StoreDatabase db =
             Room.databaseBuilder(MyApp.getContext(), StoreDatabase.class, NAME)
                     .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
                     .addMigrations(
                             new MIGRATE_1_2()
                     )

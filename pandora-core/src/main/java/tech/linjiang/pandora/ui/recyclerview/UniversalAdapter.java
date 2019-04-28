@@ -1,9 +1,9 @@
 package tech.linjiang.pandora.ui.recyclerview;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +32,6 @@ public class UniversalAdapter
         data.addAll(items);
         notifyDataSetChanged();
     }
-    public void addItems(List<? extends BaseItem> items) {
-        data.addAll(items);
-        notifyDataSetChanged();
-    }
 
     public void insertItems(List<? extends BaseItem> items, int index) {
         data.addAll(index, items);
@@ -43,6 +39,11 @@ public class UniversalAdapter
     }
     public void insertItem(BaseItem items, int index) {
         data.add(index, items);
+        notifyDataSetChanged();
+    }
+
+    public void insertItem(BaseItem items) {
+        data.add(items);
         notifyDataSetChanged();
     }
 
@@ -56,9 +57,19 @@ public class UniversalAdapter
         return data;
     }
 
+    public <T extends BaseItem> T getItem(int position) {
+        return (T) data.get(position);
+    }
+
     public void clearItems() {
         data.clear();
         notifyDataSetChanged();
+    }
+
+    public void performClick(int position) {
+        if (listener != null) {
+            listener.onItemClick(position, data.get(position));
+        }
     }
 
     public void setListener(OnItemClickListener listener) {
@@ -134,6 +145,18 @@ public class UniversalAdapter
         public ViewPool setText(@IdRes int id, String text) {
             TextView tv = getView(id);
             tv.setText(text);
+            return this;
+        }
+
+        public ViewPool setCompoundDrawableLeft(@IdRes int id, @DrawableRes int left) {
+            TextView tv = getView(id);
+            tv.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
+            return this;
+        }
+
+        public ViewPool setTextColor(@IdRes int id, @ColorInt int color) {
+            TextView tv = getView(id);
+            tv.setTextColor(color);
             return this;
         }
 

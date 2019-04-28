@@ -3,26 +3,29 @@ package tech.linjiang.pandora.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
-import tech.linjiang.pandora.Pandora;
-import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.inspector.BaseLineView;
-import tech.linjiang.pandora.inspector.OperableView;
 import tech.linjiang.pandora.ui.connector.Type;
 import tech.linjiang.pandora.ui.connector.UIStateCallback;
+import tech.linjiang.pandora.ui.fragment.ConfigFragment;
+import tech.linjiang.pandora.ui.fragment.CrashFragment;
+import tech.linjiang.pandora.ui.fragment.HierarchyFragment;
+import tech.linjiang.pandora.ui.fragment.HistoryFragment;
+import tech.linjiang.pandora.ui.fragment.MeasureFragment;
 import tech.linjiang.pandora.ui.fragment.NetFragment;
+import tech.linjiang.pandora.ui.fragment.PermissionReqFragment;
+import tech.linjiang.pandora.ui.fragment.RouteFragment;
 import tech.linjiang.pandora.ui.fragment.SandboxFragment;
 import tech.linjiang.pandora.ui.fragment.ViewFragment;
-import tech.linjiang.pandora.util.Utils;
 import tech.linjiang.pandora.util.ViewKnife;
 
 /**
@@ -34,11 +37,11 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
     public static final String PARAM1 = "param1";
 
     public static void start(Context context, @Type int type) {
-        Intent intent = new Intent(context, Dispatcher.class)
+        boolean needTrans = type == Type.BASELINE || type == Type.SELECT || type == Type.PERMISSION;
+        Intent intent = new Intent(context, needTrans ? TransActivity.class : Dispatcher.class)
                 .putExtra(PARAM1, type);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
+        // This flag is very ridiculous in different android versions, like a bug
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -55,50 +58,75 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
     }
 
     private void dispatch(Bundle savedInstanceState) {
-        View view = null;
         switch (type) {
+            case Type.PERMISSION:
+                if (savedInstanceState == null) {
+                    addFragment(PermissionReqFragment.class);
+                }
+                break;
             case Type.BASELINE:
-                view = new BaseLineView(this);
-                setContentView(view);
-                break;
-            case Type.ATTR:
-            case Type.HIERARCHY:
-                view = new FrameLayout(this);
-                view.setId(R.id.pd_fragment_container_id);
-                setContentView(view);
                 if (savedInstanceState == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.pd_fragment_container_id, ViewFragment.newInstance(type))
-                            .commit();
-                }
-                break;
-            case Type.NET:
-                view = new FrameLayout(this);
-                view.setId(R.id.pd_fragment_container_id);
-                setContentView(view);
-                if (savedInstanceState == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.pd_fragment_container_id, new NetFragment())
-                            .commit();
-                }
-                break;
-            case Type.FILE:
-                view = new FrameLayout(this);
-                view.setId(R.id.pd_fragment_container_id);
-                setContentView(view);
-                if (savedInstanceState == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.pd_fragment_container_id, new SandboxFragment())
-                            .commit();
+                    addFragment(MeasureFragment.class);
                 }
                 break;
             case Type.SELECT:
-                OperableView operableView = new OperableView(this);
-                operableView.tryGetFrontView(Pandora.get().getBottomActivity());
-                setContentView(operableView);
+                if (savedInstanceState == null) {
+                    addFragment(ViewFragment.class);
+                } else {
+                    finish();
+                }
+                break;
+            case Type.NET:
+                if (savedInstanceState == null) {
+                    addFragment(NetFragment.class);
+                }
+                break;
+            case Type.FILE:
+                if (savedInstanceState == null) {
+                    addFragment(SandboxFragment.class);
+                }
+                break;
+            case Type.BUG:
+                if (savedInstanceState == null) {
+                    addFragment(CrashFragment.class);
+                }
+                break;
+            case Type.HISTORY:
+                if (savedInstanceState == null) {
+                    addFragment(HistoryFragment.class);
+                }
+                break;
+            case Type.CONFIG:
+                if (savedInstanceState == null) {
+                    addFragment(ConfigFragment.class);
+                }
+                break;
+            case Type.HIERARCHY:
+                if (savedInstanceState == null) {
+                    addFragment(HierarchyFragment.class);
+                } else {
+                    finish();
+                }
+                break;
+            case Type.ROUTE:
+                if (savedInstanceState == null) {
+                    addFragment(RouteFragment.class);
+                }
                 break;
         }
 
+    }
+
+    private void addFragment(Class<? extends Fragment> clazz) {
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .add(Window.ID_ANDROID_CONTENT, clazz.newInstance())
+                    .commit();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -106,16 +134,6 @@ public class Dispatcher extends AppCompatActivity implements UIStateCallback {
         super.finish();
         overridePendingTransition(0, 0);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (type != Type.NET && type != Type.FILE) {
-            finish();
-            return;
-        }
-    }
-
 
     private View hintView;
 

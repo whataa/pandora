@@ -1,8 +1,8 @@
 package tech.linjiang.pandora.ui.view;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.ContextMenu;
 import android.view.View;
@@ -33,6 +33,10 @@ public class MenuRecyclerView extends RecyclerView {
 
     @Override
     public boolean showContextMenuForChild(View originalView) {
+        // only valid for the direct child
+        if (indexOfChild(originalView) == -1) {
+            return false;
+        }
         final int position = getChildAdapterPosition(originalView);
         if (position >= 0) {
             final long itemId = getAdapter().getItemId(position);

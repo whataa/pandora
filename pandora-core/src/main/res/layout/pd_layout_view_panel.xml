@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/pd_shadow_23354"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/view_panel_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F5F6F8"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="24dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="6dp"
+            android:background="#c1c0c0" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp">
+
+            <TextView
+                android:id="@+id/view_panel_type"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/pd_blue"
+                android:gravity="center"
+                android:text="group"
+                android:textColor="#fff"
+                android:textSize="8dp" />
+
+            <TextView
+                android:id="@+id/view_panel_clazz"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:ellipsize="middle"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="LinearLayout"
+                android:textColor="#2A2B2C"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <TextView
+            android:singleLine="true"
+            android:ellipsize="start"
+            android:id="@+id/view_panel_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/pd_right"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="2dp"
+            android:text="tech.linjiang.pandora.ui.fragment.TextView"
+            android:textColor="#a9a8a8"
+            android:textSize="14dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="4dp">
+
+
+            <TextView
+                android:id="@+id/view_panel_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="text_view"
+                android:textColor="#555657"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/view_panel_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
+                android:text="800 X 400 dp"
+                android:textColor="#5F80E3"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#c1c0c0" />
+
+    <tech.linjiang.pandora.ui.view.MultiRvLayout
+        android:id="@+id/view_panel_rv_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/view_panel_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            tools:background="#6db0f2" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="#c1c0c0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/view_panel_current"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            tools:background="#cf6db0f2" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="#c1c0c0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/view_panel_child"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            tools:background="#7f6db0f2" />
+    </tech.linjiang.pandora.ui.view.MultiRvLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#c1c0c0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="4dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="PARENT"
+            android:textSize="10dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="SIBLING"
+            android:textSize="10dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="CHILDREN"
+            android:textSize="10dp" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:foreground="?android:attr/selectableItemBackground"
+        android:id="@+id/view_panel_hierarchy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/pd_shape_btn_bg">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/pd_layer"
+            android:drawablePadding="8dp"
+            android:padding="12dp"
+            android:text="View hierarchical tree"
+            android:textColor="#000"
+            android:textSize="15dp" />
+    </FrameLayout>
+</LinearLayout>

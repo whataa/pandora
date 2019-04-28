@@ -4,16 +4,16 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.ui.connector.SimpleAnimationListener;
 import tech.linjiang.pandora.ui.connector.UIStateCallback;
 import tech.linjiang.pandora.ui.view.SwipeBackLayout;
 import tech.linjiang.pandora.util.ViewKnife;
@@ -35,13 +34,26 @@ abstract class BaseFragment extends Fragment
     protected static final String PARAM1 = "param1";
     protected static final String PARAM2 = "param2";
     protected static final String PARAM3 = "param3";
+    protected static final String PARAM4 = "param4";
     protected static final String PARAM_TITLE = "param_title";
+    protected static final int CODE1 = 0x01;
+    protected static final int CODE2 = 0x02;
 
-    protected final void launch(Class<? extends BaseFragment> target, Bundle extra) {
-        launch(target, null, extra);
+    public BaseFragment() {
+        setArguments(new Bundle());
     }
 
+    protected final void launch(Class<? extends BaseFragment> target, Bundle extra) {
+        launch(target, null, extra, -1);
+    }
+
+    protected final void launch(Class<? extends BaseFragment> target, Bundle extra, int reqCode) {
+        launch(target, null, extra, reqCode);
+    }
     protected final void launch(Class<? extends BaseFragment> target, String title, Bundle extra) {
+        launch(target, title, extra, -1);
+    }
+    protected final void launch(Class<? extends BaseFragment> target, String title, Bundle extra, int reqCode) {
         if (getActivity() == null) {
             return;
         }
@@ -53,10 +65,13 @@ abstract class BaseFragment extends Fragment
         try {
             Fragment fragment = target.newInstance();
             fragment.setArguments(extra);
+            if (reqCode >= 0) {
+                fragment.setTargetFragment(this, reqCode);
+            }
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right_, 0, 0, R.anim.slide_out_right_)
-                    .add(R.id.pd_fragment_container_id, fragment)
+                    .add(Window.ID_ANDROID_CONTENT, fragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } catch (Throwable t) {
@@ -75,9 +90,9 @@ abstract class BaseFragment extends Fragment
         if (context instanceof UIStateCallback) {
             uiState = (UIStateCallback) context;
         }
-        if (getArguments() == null) {
-            setArguments(new Bundle());
-        }
+        // BUG FIX
+        // setArguments is not allowed when fragment is active,
+        // it is related to the diff in the version of the fragment.
     }
 
     @Override
@@ -125,7 +140,11 @@ abstract class BaseFragment extends Fragment
             return super.onCreateAnimation(transit, enter, nextAnim);
         }
         Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
-        anim.setAnimationListener(new SimpleAnimationListener() {
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
             @Override
             public void onAnimationEnd(Animation animation) {
                 // Closes the fragment when the animation has not finished yet,
@@ -133,6 +152,10 @@ abstract class BaseFragment extends Fragment
                 if (getView() != null) {
                     onViewEnterAnimEnd(getView());
                 }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
             }
         });
         return anim;
@@ -163,10 +186,6 @@ abstract class BaseFragment extends Fragment
         return null;
     }
 
-    protected boolean enableToolbar() {
-        return true;
-    }
-
     protected boolean enableSwipeBack() {
         return true;
     }
@@ -185,6 +204,10 @@ abstract class BaseFragment extends Fragment
 
     }
 
+    protected Toolbar onCreateToolbar() {
+        return new Toolbar(getContext());
+    }
+
     private View installSwipe(View content) {
         SwipeBackLayout swipeBackLayout = new SwipeBackLayout(getContext());
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -197,10 +220,10 @@ abstract class BaseFragment extends Fragment
     }
 
     private View installToolbar(View view) {
-        if (!enableToolbar()) {
+        toolbar = onCreateToolbar();
+        if (toolbar == null) {
             return view;
         }
-        toolbar = new Toolbar(new ContextThemeWrapper(getContext(), R.style.ToolbarTheme));
         toolbar.setId(R.id.pd_toolbar_id);
         toolbar.setTitle(getArguments().getString(PARAM_TITLE, ViewKnife.getString(R.string.pd_lib_name)));
         toolbar.setBackgroundColor(ViewKnife.getColor(R.color.pd_toolbar_bg));

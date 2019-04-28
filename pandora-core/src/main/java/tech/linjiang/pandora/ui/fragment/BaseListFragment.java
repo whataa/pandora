@@ -1,7 +1,9 @@
 package tech.linjiang.pandora.ui.fragment;
 
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
+import android.graphics.drawable.GradientDrawable;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import tech.linjiang.pandora.core.R;
@@ -24,12 +26,21 @@ public class BaseListFragment extends BaseFragment {
         adapter = new UniversalAdapter();
         recyclerView = new MenuRecyclerView(getContext());
         recyclerView.setBackgroundColor(ViewKnife.getColor(R.color.pd_main_bg));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        divider.setDrawable(ViewKnife.getDrawable(R.drawable.pd_divider_horizontal));
-        recyclerView.addItemDecoration(divider);
+        recyclerView.setLayoutManager(onCreateLayoutManager());
+        if (needDefaultDivider()) {
+            DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+            GradientDrawable horizontalDrawable = new GradientDrawable();
+            horizontalDrawable.setColor(0xffE5E5E5);
+            horizontalDrawable.setSize(0, 1);
+            divider.setDrawable(horizontalDrawable);
+            recyclerView.addItemDecoration(divider);
+        }
         recyclerView.setAdapter(adapter);
         return recyclerView;
+    }
+
+    protected boolean needDefaultDivider() {
+        return true;
     }
 
     private MenuRecyclerView recyclerView;
@@ -41,5 +52,9 @@ public class BaseListFragment extends BaseFragment {
 
     public final UniversalAdapter getAdapter() {
         return adapter;
+    }
+
+    protected RecyclerView.LayoutManager onCreateLayoutManager() {
+        return new LinearLayoutManager(getContext());
     }
 }

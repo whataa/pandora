@@ -1,7 +1,10 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.SparseArray;
 import android.view.View;
 
@@ -10,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tech.linjiang.pandora.Pandora;
+import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.sandbox.Sandbox;
 import tech.linjiang.pandora.ui.item.DBItem;
 import tech.linjiang.pandora.ui.item.FileItem;
@@ -17,6 +21,7 @@ import tech.linjiang.pandora.ui.item.SPItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
+import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.SimpleTask;
 
 /**
@@ -25,11 +30,15 @@ import tech.linjiang.pandora.util.SimpleTask;
 
 public class SandboxFragment extends BaseListFragment {
 
+    @Override
+    protected boolean enableSwipeBack() {
+        return false;
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getToolbar().setTitle("Sandbox");
+        getToolbar().setTitle(R.string.pd_name_sandbox);
 
         getAdapter().setListener(new UniversalAdapter.OnItemClickListener() {
             @Override
@@ -44,7 +53,7 @@ public class SandboxFragment extends BaseListFragment {
                 } else if (item instanceof FileItem) {
                     bundle.putSerializable(PARAM1, (File) item.data);
                     if (((File) item.data).isDirectory()) {
-                        launch(FileFragment.class, bundle);
+                        launch(FileFragment.class, bundle, CODE1);
                     } else {
                         launch(FileAttrFragment.class, bundle);
                     }
@@ -55,6 +64,16 @@ public class SandboxFragment extends BaseListFragment {
         loadData();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CODE1) {
+                loadData();
+            }
+        }
+    }
+
     private void loadData() {
         showLoading();
         new SimpleTask<>(new SimpleTask.Callback<Void, List<BaseItem>>() {
@@ -62,22 +81,31 @@ public class SandboxFragment extends BaseListFragment {
             public List<BaseItem> doInBackground(Void[] params) {
                 SparseArray<String> databaseNames = Pandora.get().getDatabases().getDatabaseNames();
                 List<BaseItem> data = new ArrayList<>(databaseNames.size());
-                data.add(new TitleItem("SQLite"));
+                data.add(new TitleItem(getString(R.string.pd_name_database)));
                 for (int i = 0; i < databaseNames.size(); i++) {
                     data.add(new DBItem(databaseNames.valueAt(i), databaseNames.keyAt(i)));
                 }
-                data.add(new TitleItem("SharedPreference"));
+                data.add(new TitleItem(getString(R.string.pd_name_sp)));
                 List<File> spFiles = Pandora.get().getSharedPref().getSharedPrefDescs();
                 for (int i = 0; i < spFiles.size(); i++) {
                     data.add(new SPItem(spFiles.get(i).getName(), spFiles.get(i)));
                 }
 
-                data.add(new TitleItem("File"));
+                data.add(new TitleItem(getString(R.string.pd_name_file)));
 
                 List<File> descriptors = Sandbox.getRootFiles();
                 for (int i = 0; i < descriptors.size(); i++) {
                     data.add(new FileItem(descriptors.get(i)));
                 }
+
+                if (Config.getSANDBOX_DPM() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    data.add(new TitleItem("Device-protect-mode Files"));
+                    List<File> dpm = Sandbox.getDPMFiles();
+                    for (int i = 0; i < dpm.size(); i++) {
+                        data.add(new FileItem(dpm.get(i)));
+                    }
+                }
+
                 return data;
             }
 

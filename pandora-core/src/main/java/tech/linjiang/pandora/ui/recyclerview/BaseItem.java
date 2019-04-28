@@ -1,6 +1,6 @@
 package tech.linjiang.pandora.ui.recyclerview;
 
-import android.support.annotation.LayoutRes;
+import androidx.annotation.LayoutRes;
 
 /**
  * Created by linjiang on 03/06/2018.
@@ -20,8 +20,9 @@ public abstract class BaseItem<T> {
 
     private Object tag;
 
-    public final void setTag(Object tag) {
+    public final BaseItem setTag(Object tag) {
         this.tag = tag;
+        return this;
     }
 
     public final Object getTag() {

@@ -10,7 +10,6 @@
     <color name="pd_item_bg">#F2F2F2</color>
     <color name="pd_item_focus">#C4D7EF</color>
 
-    <color name="pd_green">#3CA23C</color>
     <color name="pd_red">#FF0000</color>
-    <color name="pd_blue">#0080FF</color>
+    <color name="pd_blue">#5F80E3</color>
 </resources>
