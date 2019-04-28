@@ -36,6 +36,8 @@ import tech.linjiang.pandora.util.FileUtil;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
 
+import static tech.linjiang.pandora.util.Utils.getContext;
+
 /**
  * Created by linjiang on 2018/6/24.
  */
@@ -174,7 +176,9 @@ public class NetContentFragment extends BaseFragment {
             }
         });
         InputMethodManager imm = (InputMethodManager) context.getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(200, InputMethodManager.HIDE_NOT_ALWAYS);
+        if (imm != null) {
+            imm.toggleSoftInput(200, InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     private void saveAsFileAndShare(String msg) {
