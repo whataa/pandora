@@ -9,6 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import tech.linjiang.pandora.util.Config;
+import tech.linjiang.pandora.util.Utils;
 
 /**
  * Created by linjiang on 2018/6/22.
@@ -67,7 +68,11 @@ public class Summary {
     }
 
     public static Summary query(long id) {
-        return CacheDatabase.queryList(Summary.class, BaseColumns._ID + " = " + String.valueOf(id), "limit 1").get(0);
+        List<Summary> result = CacheDatabase.queryList(Summary.class, BaseColumns._ID + " = " + String.valueOf(id), "limit 1");
+        if (Utils.isNotEmpty(result)) {
+            return result.get(0);
+        }
+        return null;
     }
 
     public static long insert(Summary summary) {
