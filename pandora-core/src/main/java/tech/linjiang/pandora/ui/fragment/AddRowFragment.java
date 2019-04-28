@@ -1,5 +1,6 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,7 +19,6 @@ import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.database.Column;
 import tech.linjiang.pandora.database.DatabaseResult;
-import tech.linjiang.pandora.ui.connector.EventCallback;
 import tech.linjiang.pandora.ui.item.KeyEditItem;
 import tech.linjiang.pandora.ui.item.KeyValueItem;
 import tech.linjiang.pandora.ui.item.TitleItem;
@@ -34,23 +34,21 @@ public class AddRowFragment extends BaseListFragment {
 
     private int key;
     private String table;
-    private EventCallback callback;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         key = getArguments().getInt(PARAM1);
         table = getArguments().getString(PARAM2);
-        callback = (EventCallback) getArguments().getSerializable(PARAM3);
         getArguments().remove(PARAM3);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getToolbar().setTitle("Add Row");
+        getToolbar().setTitle(R.string.pd_name_add);
 
-        getToolbar().getMenu().findItem(R.id.menu_save).setVisible(true);
+        getToolbar().getMenu().add(-1, -1, 0, R.string.pd_name_save).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -83,7 +81,6 @@ public class AddRowFragment extends BaseListFragment {
     public void onDestroyView() {
         super.onDestroyView();
         closeSoftInput();
-        callback = null;
     }
 
     @Override
@@ -157,11 +154,10 @@ public class AddRowFragment extends BaseListFragment {
                 hideLoading();
                 if (result.sqlError == null) {
                     Utils.toast(R.string.pd_success);
-                    if (callback != null) {
-                        callback.onComplete();
-                    }
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
                 } else {
                     Utils.toast(result.sqlError.message);
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
                 }
             }
         }).execute();

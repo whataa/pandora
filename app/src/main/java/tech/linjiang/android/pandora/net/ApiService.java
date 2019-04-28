@@ -8,6 +8,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -64,6 +65,9 @@ public class ApiService {
         Call<Void> redirectAbsolute(@Path("times") int times);
         @GET("/image")
         Call<Void> image(@Header("Accept") String accept);
+        @Headers({
+                "Accept-Encoding: gzip"
+        })
         @GET("/gzip")
         Call<Void> gzip();
         @GET("/xml")
@@ -84,6 +88,9 @@ public class ApiService {
         Call<Void> cache(@Header("If-Modified-Since") String ifModifiedSince);
         @GET("/cache/{seconds}")
         Call<Void> cache(@Path("seconds") int seconds);
+
+        @GET("http://imtt.dd.qq.com/16891/5734AD8416A77A38134C21EE3D2E1D01.apk?fsname=com.qqgame.hlddz_6.052.001_196.apk&csr=db5e")
+        Call<Void> download();
     }
 
     public static class Data {

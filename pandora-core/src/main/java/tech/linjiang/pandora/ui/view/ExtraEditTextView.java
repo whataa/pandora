@@ -4,9 +4,7 @@ import android.content.Context;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -14,6 +12,9 @@ import java.util.ArrayList;
  */
 
 public class ExtraEditTextView extends EditText {
+    private ArrayList<TextWatcher> mListeners = null;
+
+
     public ExtraEditTextView(Context context) {
         this(context, null);
     }
@@ -24,18 +25,38 @@ public class ExtraEditTextView extends EditText {
 
     public ExtraEditTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        try {
-            Field field = TextView.class.getDeclaredField("mListeners");
-            field.setAccessible(true);
-            field.set(this, listeners);
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
     }
 
-    private ArrayList<TextWatcher> listeners = new ArrayList<>();
+    @Override
+    public void addTextChangedListener(TextWatcher watcher) {
+        if (mListeners == null) {
+            mListeners = new ArrayList<>();
+        }
+        mListeners.add(watcher);
 
-    public final void clearTextChangedListeners() {
-        listeners.clear();
+        super.addTextChangedListener(watcher);
+    }
+
+    @Override
+    public void removeTextChangedListener(TextWatcher watcher) {
+        if (mListeners != null) {
+            int i = mListeners.indexOf(watcher);
+            if (i >= 0) {
+                mListeners.remove(i);
+            }
+        }
+
+        super.removeTextChangedListener(watcher);
+    }
+
+    public void clearTextChangedListeners() {
+        if (mListeners != null) {
+            for (TextWatcher watcher : mListeners) {
+                super.removeTextChangedListener(watcher);
+            }
+
+            mListeners.clear();
+            mListeners = null;
+        }
     }
 }

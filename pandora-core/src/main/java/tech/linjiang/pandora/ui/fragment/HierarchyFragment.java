@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.util.DisplayMetrics;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -23,6 +24,7 @@ import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
 import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.Utils;
+import tech.linjiang.pandora.util.ViewKnife;
 
 /**
  * Created by linjiang on 2018/7/26.
@@ -36,6 +38,15 @@ public class HierarchyFragment extends BaseListFragment
     private int sysLayerCount;
     private View rootView;
 
+    @Override
+    protected boolean needDefaultDivider() {
+        return false;
+    }
+
+    @Override
+    protected boolean enableSwipeBack() {
+        return targetView != null;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,11 +54,13 @@ public class HierarchyFragment extends BaseListFragment
         if (savedInstanceState != null) {
             return;
         }
+        rootView = ViewKnife.tryGetTheFrontView(Pandora.get().getTopActivity());
         if (!Config.getUI_IGNORE_SYS_LAYER()) {
-            rootView = Pandora.get().getBottomActivity().getWindow().peekDecorView();
             sysLayerCount = countSysLayers();
         } else {
-            rootView = Pandora.get().getBottomActivity().getWindow().peekDecorView().findViewById(android.R.id.content);
+            if (rootView != null) {
+                rootView = rootView.findViewById(android.R.id.content);
+            }
             sysLayerCount = 0;
         }
         targetView = findViewByDefaultTag();
@@ -94,15 +107,17 @@ public class HierarchyFragment extends BaseListFragment
         if (savedInstanceState != null) {
             return;
         }
-        getToolbar().setTitle("Hierarchy");
-        getToolbar().getMenu().findItem(R.id.menu_switch).setVisible(true);
+        getToolbar().setTitle(R.string.pd_name_layer);
+
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_1, 0, "")
+                .setActionView(new SwitchCompat(getContext()))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         SwitchCompat switchCompat = ((SwitchCompat) getToolbar()
-                .getMenu().findItem(R.id.menu_switch).getActionView());
+                .getMenu().findItem(R.id.pd_menu_id_1).getActionView());
         switchCompat.setChecked(isExpand);
         switchCompat.setOnCheckedChangeListener(this);
 
         getRecyclerView().setBackgroundColor(Color.WHITE);
-        getRecyclerView().removeItemDecoration(getRecyclerView().getItemDecorationAt(0));
         getAdapter().setListener(new UniversalAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, BaseItem item) {

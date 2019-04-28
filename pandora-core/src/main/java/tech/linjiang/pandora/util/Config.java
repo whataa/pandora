@@ -19,9 +19,6 @@ public class Config {
 
     private static final String KEY_SHAKE_SWITCH            = "key_shake_switch";
     private static final String KEY_SHAKE_THRESHOLD         = "key_shake_threshold";
-    private static final String KEY_COMMON_NETWORK_SWITCH   = "key_common_network_switch";
-    private static final String KEY_COMMON_SANDBOX_SWITCH   = "key_common_sandbox_switch";
-    private static final String KEY_COMMON_UI_SWITCH        = "key_common_ui_switch";
     private static final String KEY_NETWORK_DELAY_REQ       = "key_network_delay_req";
     private static final String KEY_NETWORK_DELAY_RES       = "key_network_delay_res";
     private static final String KEY_SANDBOX_DPM             = "key_sandbox_dpm";
@@ -29,12 +26,11 @@ public class Config {
     private static final String KEY_UI_ACTIVITY_GRAVITY     = "key_ui_activity_gravity";
     private static final String KEY_UI_GRID_INTERVAL        = "key_ui_grid_interval";
     private static final String KEY_UI_IGNORE_SYS_LAYER     = "key_ui_ignore_sys_layer";
+    private static final String KEY_INTERNAL_DRAG_Y         = "key_internal_drag_y";
+    private static final String KEY_PERMISSION              = "key_permission";
 
     private static final boolean DEF_KEY_SHAKE_SWITCH = true;
-    private static final int DEF_KEY_SHAKE_THRESHOLD = 1500;
-    private static final boolean DEF_KEY_COMMON_NETWORK_SWITCH = true;
-    private static final boolean DEF_KEY_COMMON_SANDBOX_SWITCH = true;
-    private static final boolean DEF_KEY_COMMON_UI_SWITCH = true;
+    private static final int DEF_KEY_SHAKE_THRESHOLD = 1000;
     private static final long DEF_KEY_NETWORK_DELAY_REQ = 0;
     private static final long DEF_KEY_NETWORK_DELAY_RES = 0;
     private static final boolean DEF_KEY_SANDBOX_DPM = false;
@@ -42,6 +38,7 @@ public class Config {
     private static final int DEF_UI_ACTIVITY_GRAVITY = Gravity.START | Gravity.BOTTOM;
     private static final int DEF_UI_GRID_INTERVAL = 5;
     private static final boolean DEF_UI_IGNORE_SYS_LAYER = false;
+    private static final int DEF_INTERNAL_DRAG_Y = 0;
 
 
     public static void setNetLogEnable(boolean enable) {
@@ -51,12 +48,33 @@ public class Config {
     }
 
     public static boolean isNetLogEnable() {
-        return getSp().getBoolean(KEY_NET, false);
+        return getSp().getBoolean(KEY_NET, true);
+    }
+
+    public static void setDragY(float y) {
+        getSp().edit()
+                .putFloat(KEY_INTERNAL_DRAG_Y, y)
+                .apply();
+    }
+
+    public static float getDragY() {
+        return getSp().getFloat(KEY_INTERNAL_DRAG_Y, DEF_INTERNAL_DRAG_Y);
+    }
+
+    public static void setPermissionChecked() {
+        getSp().edit()
+                .putBoolean(KEY_PERMISSION, true)
+                .apply();
+    }
+
+    public static boolean ifPermissionChecked() {
+        return getSp().getBoolean(KEY_PERMISSION, false);
     }
 
     private static SharedPreferences getSp() {
         return Utils.getContext().getSharedPreferences(NAME, Context.MODE_PRIVATE);
     }
+
 
 
     // =============================================================================================
@@ -103,39 +121,6 @@ public class Config {
     public static void setUI_GRID_INTERVAL(int value) {
         getSp().edit()
                 .putInt(KEY_UI_GRID_INTERVAL, value)
-                .apply();
-    }
-
-    //
-
-    public static boolean getCOMMON_NETWORK_SWITCH() {
-        return getSp().getBoolean(KEY_COMMON_NETWORK_SWITCH, DEF_KEY_COMMON_NETWORK_SWITCH);
-    }
-    public static void setCOMMON_NETWORK_SWITCH(boolean value) {
-        getSp().edit()
-                .putBoolean(KEY_COMMON_NETWORK_SWITCH, value)
-                .apply();
-    }
-
-    //
-
-    public static boolean getCOMMON_SANDBOX_SWITCH() {
-        return getSp().getBoolean(KEY_COMMON_SANDBOX_SWITCH, DEF_KEY_COMMON_SANDBOX_SWITCH);
-    }
-    public static void setCOMMON_SANDBOX_SWITCH(boolean value) {
-        getSp().edit()
-                .putBoolean(KEY_COMMON_SANDBOX_SWITCH, value)
-                .apply();
-    }
-
-    //
-
-    public static boolean getCOMMON_UI_SWITCH() {
-        return getSp().getBoolean(KEY_COMMON_UI_SWITCH, DEF_KEY_COMMON_UI_SWITCH);
-    }
-    public static void setCOMMON_UI_SWITCH(boolean value) {
-        getSp().edit()
-                .putBoolean(KEY_COMMON_UI_SWITCH, value)
                 .apply();
     }
 

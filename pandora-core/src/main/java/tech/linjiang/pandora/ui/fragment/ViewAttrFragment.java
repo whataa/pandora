@@ -2,8 +2,8 @@ package tech.linjiang.pandora.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -18,7 +18,6 @@ import java.util.List;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.inspector.model.Attribute;
-import tech.linjiang.pandora.ui.connector.EditCallback;
 import tech.linjiang.pandora.ui.item.TitleItem;
 import tech.linjiang.pandora.ui.item.ViewAttrItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
@@ -41,8 +40,11 @@ public class ViewAttrFragment extends BaseListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Pandora.get().getBottomActivity() != null) {
-            targetView = findViewByDefaultTag(Pandora.get().getBottomActivity().getWindow().peekDecorView());
+        if (Pandora.get().getTopActivity() != null) {
+            View decor = ViewKnife.tryGetTheFrontView(Pandora.get().getTopActivity());
+            if (decor != null) {
+                targetView = findViewByDefaultTag(decor);
+            }
             if (targetView != null) {
                 // clear flag
                 targetView.setTag(R.id.pd_view_tag_for_unique, null);
@@ -66,9 +68,8 @@ public class ViewAttrFragment extends BaseListFragment {
                     editType = ((ViewAttrItem) item).data.attrType;
                     if (editType != Attribute.Edit.NORMAL) {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable(PARAM2, callback);
                         bundle.putStringArray(PARAM3, assembleOption(editType));
-                        launch(EditFragment.class, bundle);
+                        launch(EditFragment.class, bundle, CODE1);
                     } else {
                         Utils.toast(R.string.pd_can_not_edit);
                     }
@@ -152,9 +153,11 @@ public class ViewAttrFragment extends BaseListFragment {
         }
     }
 
-    private EditCallback callback = new EditCallback() {
-        @Override
-        public void onValueChanged(String value) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE1 && resultCode == Activity.RESULT_OK) {
+            final String value = data.getStringExtra("value");
             try {
                 switch (editType) {
                     case Attribute.Edit.ALPHA:
@@ -197,12 +200,12 @@ public class ViewAttrFragment extends BaseListFragment {
                                 targetView.getPaddingLeft(),
                                 targetView.getPaddingTop(),
                                 targetView.getPaddingRight(),
-                                pdBottom);
+                                ViewKnife.dip2px(pdBottom));
                         break;
                     case Attribute.Edit.PADDING_LEFT:
                         int pdLeft = Integer.valueOf(value);
                         targetView.setPadding(
-                                pdLeft,
+                                ViewKnife.dip2px(pdLeft),
                                 targetView.getPaddingTop(),
                                 targetView.getPaddingRight(),
                                 targetView.getPaddingBottom());
@@ -212,14 +215,14 @@ public class ViewAttrFragment extends BaseListFragment {
                         targetView.setPadding(
                                 targetView.getPaddingLeft(),
                                 targetView.getPaddingTop(),
-                                pdRight,
+                                ViewKnife.dip2px(pdRight),
                                 targetView.getPaddingBottom());
                         break;
                     case Attribute.Edit.PADDING_TOP:
                         int pdTop = Integer.valueOf(value);
                         targetView.setPadding(
                                 targetView.getPaddingLeft(),
-                                pdTop,
+                                ViewKnife.dip2px(pdTop),
                                 targetView.getPaddingRight(),
                                 targetView.getPaddingBottom());
                         break;
@@ -309,5 +312,6 @@ public class ViewAttrFragment extends BaseListFragment {
                 Utils.toast(t.getMessage());
             }
         }
-    };
+    }
+
 }

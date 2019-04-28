@@ -1,122 +1,124 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
+import tech.linjiang.pandora.cache.Content;
 import tech.linjiang.pandora.core.R;
-import tech.linjiang.pandora.network.CacheDbHelper;
-import tech.linjiang.pandora.network.model.Content;
-import tech.linjiang.pandora.ui.connector.SimpleOnActionExpandListener;
-import tech.linjiang.pandora.ui.connector.SimpleOnQueryTextListener;
-import tech.linjiang.pandora.ui.item.ContentItem;
-import tech.linjiang.pandora.ui.recyclerview.BaseItem;
-import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
-import tech.linjiang.pandora.util.JsonUtil;
+import tech.linjiang.pandora.util.FileUtil;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
-import tech.linjiang.pandora.util.ViewKnife;
 
 /**
  * Created by linjiang on 2018/6/24.
  */
 
-public class NetContentFragment extends BaseListFragment {
+public class NetContentFragment extends BaseFragment {
 
     private boolean showResponse;
     private long id;
+    private String contentType;
     private String originContent;
-    private String filter;
+    private WebView webView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         showResponse = getArguments().getBoolean(PARAM1, true);
         id = getArguments().getLong(PARAM2);
+        contentType = getArguments().getString(PARAM3);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected View getLayoutView() {
-        HorizontalScrollView scrollView = new HorizontalScrollView(getContext());
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        scrollView.setFillViewport(true);
-        scrollView.addView(super.getLayoutView(), params);
-        return scrollView;
+        webView = new WebView(getContext());
+        webView.getSettings().setDefaultTextEncodingName("UTF-8");
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                loadData();
+            }
+        });
+        return webView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getToolbar().setTitle("Content");
-        getRecyclerView().removeItemDecoration(getRecyclerView().getItemDecorationAt(0));
-        setSearchView();
-        getAdapter().setListener(new UniversalAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, BaseItem item) {
-                if (item instanceof ContentItem) {
-                    Utils.copy2ClipBoard((String) item.data);
-                }
-            }
-        });
-        loadData();
+        webView.loadUrl("file:///android_asset/tmp_json.html");
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Utils.cancelTask(filterTask);
         closeSoftInput();
     }
 
+    @Override
+    protected int getLayoutId() {
+        return 0;
+    }
+
     private void setSearchView() {
-        getToolbar().getMenu().findItem(R.id.menu_copy).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_search).setVisible(true);
-        getToolbar().getMenu().findItem(R.id.menu_share).setVisible(true);
+        getToolbar().getMenu().add(-1, 0, 0, R.string.pd_name_copy_value);
+        getToolbar().getMenu().add(-1, 0, 1, R.string.pd_name_share);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.menu_copy) {
+                if (item.getOrder() == 0) {
                     Utils.copy2ClipBoard(originContent);
-                } else if (item.getItemId() == R.id.menu_share) {
-                    Utils.shareText(originContent);
+                } else if (item.getOrder() == 1) {
+                    saveAsFileAndShare(originContent);
                 }
                 return true;
             }
         });
-        MenuItem menuItem = getToolbar().getMenu().findItem(R.id.menu_search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-        searchView.setQueryHint(ViewKnife.getString(R.string.pd_net_search_hint));
-        searchView.setOnQueryTextListener(new SimpleOnQueryTextListener() {
+    }
+
+    private void saveAsFileAndShare(String msg) {
+        showLoading();
+        new SimpleTask<>(new SimpleTask.Callback<String, Intent>() {
             @Override
-            public boolean onQueryTextChange(String newText) {
-                filter = newText;
-                readyFilter();
-                return true;
+            public Intent doInBackground(String[] params) {
+                String path = FileUtil.saveFile(params[0].getBytes(), "json", "txt");
+                String newPath = FileUtil.fileCopy2Tmp(new File(path));
+                if (!TextUtils.isEmpty(newPath)) {
+                    return FileUtil.getFileIntent(newPath);
+                }
+                return null;
             }
 
-        });
-        menuItem.setOnActionExpandListener(new SimpleOnActionExpandListener() {
             @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                filter = null;
-                readyFilter();
-                return true;
+            public void onPostExecute(Intent result) {
+                hideLoading();
+                if (result != null) {
+                    try {
+                        startActivity(result);
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                        Utils.toast(t.getMessage());
+                    }
+                } else {
+                    Utils.toast(R.string.pd_failed);
+                }
+
             }
-        });
+        }).execute(msg);
     }
 
     private void loadData() {
@@ -124,81 +126,54 @@ public class NetContentFragment extends BaseListFragment {
         new SimpleTask<>(new SimpleTask.Callback<Void, String>() {
             @Override
             public String doInBackground(Void[] params) {
-                Content content = CacheDbHelper.getContent(id);
+                Content content = Content.query(id);
+                String result;
                 if (showResponse) {
-                    return content.responseBody;
+                    result = content.responseBody;
                 } else {
-                    return content.requestBody;
+                    result = content.requestBody;
                 }
+
+                return result;
             }
 
             @Override
             public void onPostExecute(String result) {
                 hideLoading();
-                try {
-                    originContent = URLDecoder.decode(result, "utf-8");
-                } catch (UnsupportedEncodingException e) {
-                    originContent = result;
+                if (TextUtils.isEmpty(result)) {
+                    Utils.toast(R.string.pd_error_msg);
+                    return;
                 }
-                tryFormatJson(originContent);
-            }
-        }).execute();
-    }
+                setSearchView();
+                originContent = result;
+                webView.setWebViewClient(null);
 
-    private void tryFormatJson(final String content) {
-        new SimpleTask<>(new SimpleTask.Callback<Void, List<String>>() {
-            @Override
-            public List<String> doInBackground(Void[] params) {
-                return JsonUtil.print(content);
-            }
-
-            @Override
-            public void onPostExecute(List<String> result) {
-                if (Utils.isNotEmpty(result)) {
-                    List<BaseItem> data = new ArrayList<>(result.size());
-                    for (int i = 0; i < result.size(); i++) {
-                        data.add(new ContentItem(result.get(i)));
+                if (contentType != null && contentType.toLowerCase().contains("json")) {
+                    // help me
+                    result = result.replaceAll("\n", "");
+                    result = result.replace("\\", "\\\\");
+                    result = result.replace("'", "\\\'");
+                    // https://issuetracker.google.com/issues/36995865
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                        webView.loadUrl(String.format("javascript:showJson('%s')", result));
+                    } else {
+                        webView.evaluateJavascript(String.format("showJson('%s')", result), null);
                     }
-                    getAdapter().setItems(data);
                 } else {
-                    getToolbar().getMenu().clear();
-                    showError(null);
+                    webView.loadDataWithBaseURL(null, result,  decideMimeType(), "utf-8", null);
                 }
             }
         }).execute();
     }
 
-    private void readyFilter() {
-        Utils.cancelTask(filterTask);
-        Utils.postDelayed(filterTask, 400);
+
+
+    private String decideMimeType() {
+        if (contentType != null && contentType.toLowerCase().contains("xml")) {
+            return "text/xml";
+        } else {
+            return "text/html";
+        }
     }
 
-    private Runnable filterTask = new Runnable() {
-
-        @Override
-        public void run() {
-            if (Utils.isNotEmpty(getAdapter().getItems())) {
-                int targetPos = -1;
-                for (int i = 0; i < getAdapter().getItems().size(); i++) {
-                    BaseItem item = getAdapter().getItems().get(i);
-                    if (item instanceof ContentItem) {
-                        ((ContentItem) item).setFocus(false);
-                        if (!TextUtils.isEmpty(filter)) {
-                            if (((String) item.data).toLowerCase().contains(filter.toLowerCase())) {
-                                ((ContentItem) item).setFocus(true);
-                                if (targetPos == -1) {
-                                    targetPos = i;
-                                }
-                            }
-                        }
-                    }
-                }
-                if (targetPos == -1) {
-                    targetPos = 0;
-                }
-                getAdapter().notifyDataSetChanged();
-                getRecyclerView().scrollToPosition(targetPos);
-            }
-        }
-    };
 }

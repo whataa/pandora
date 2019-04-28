@@ -26,8 +26,8 @@ public final class Databases {
      * key:     databaseId
      * value:   IDriver & IDescriptor
      */
-    private SparseArray<DatabaseHolder> holders = new SparseArray<>();
-    private List<IDriver<? extends IDescriptor>> cacheDrivers = new ArrayList<>();
+    private final SparseArray<DatabaseHolder> holders = new SparseArray<>();
+    private final List<DriverHolder> drivers = new ArrayList<>();
 
     public Databases() {
         addDriver(new DatabaseDriver(new DatabaseProvider(Utils.getContext())));
@@ -38,9 +38,12 @@ public final class Databases {
 
     public boolean addDriver(IDriver<? extends IDescriptor> driver) {
         List<? extends IDescriptor> descriptors = driver.getDatabaseNames();
+        drivers.add(new DriverHolder(driver, descriptors == null ? 0 : descriptors.size()));
+        return bindDriver(driver, descriptors);
+    }
+
+    private boolean bindDriver(IDriver<? extends IDescriptor> driver, List<? extends IDescriptor> descriptors) {
         if (descriptors == null || descriptors.isEmpty()) {
-            // Maybe the database has not been created yet
-            cacheDrivers.add(driver);
             return false;
         }
         for (int i = 0; i < descriptors.size(); i++) {
@@ -50,15 +53,22 @@ public final class Databases {
     }
 
     public SparseArray<String> getDatabaseNames() {
-        SparseArray<String> names = new SparseArray<>();
-        if (!cacheDrivers.isEmpty()) {
-            for (int i = cacheDrivers.size() - 1; i >= 0; i--) {
-                boolean success = addDriver(cacheDrivers.get(i));
-                if (success) {
-                    cacheDrivers.remove(cacheDrivers.get(i));
-                }
+        boolean needRebind = false;
+        for (int i = 0; i < drivers.size(); i++) {
+            List descriptors = drivers.get(i).driver.getDatabaseNames();
+            int latestCount = descriptors == null ? 0 : descriptors.size();
+            if (drivers.get(i).databaseCount != latestCount) {
+                drivers.get(i).databaseCount = latestCount;
+                needRebind = true;
             }
         }
+        if (needRebind) {
+            holders.clear();
+            for (int i = 0; i < drivers.size(); i++) {
+                bindDriver(drivers.get(i).driver, drivers.get(i).driver.getDatabaseNames());
+            }
+        }
+        SparseArray<String> names = new SparseArray<>();
         for (int i = 0; i < holders.size(); i++) {
             if (holders.valueAt(i).descriptor.exist()) {
                 names.put(holders.keyAt(i), holders.valueAt(i).descriptor.name());
@@ -187,5 +197,25 @@ public final class Databases {
             result.sqlError = error;
         }
         return result;
+    }
+
+    private static class DatabaseHolder {
+        IDescriptor descriptor;
+        IDriver<? extends IDescriptor> driver;
+
+        DatabaseHolder(IDescriptor descriptor, IDriver<? extends IDescriptor> driver) {
+            this.descriptor = descriptor;
+            this.driver = driver;
+        }
+    }
+
+    private static class DriverHolder {
+        IDriver<? extends IDescriptor> driver;
+        int databaseCount;
+
+        DriverHolder(IDriver<? extends IDescriptor> driver, int databaseCount) {
+            this.driver = driver;
+            this.databaseCount = databaseCount;
+        }
     }
 }

@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import java.util.List;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.inspector.OperableView;
+import tech.linjiang.pandora.ui.GeneralDialog;
 import tech.linjiang.pandora.ui.item.ViewItem;
 import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.ui.recyclerview.UniversalAdapter;
@@ -28,10 +31,9 @@ import tech.linjiang.pandora.util.ViewKnife;
 
 public class ViewFragment extends BaseFragment implements View.OnClickListener {
 
-
     @Override
-    protected boolean enableToolbar() {
-        return false;
+    protected Toolbar onCreateToolbar() {
+        return null;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
     protected View getLayoutView() {
         View panelView = LayoutInflater.from(getContext()).inflate(R.layout.pd_layout_view_panel, null);
         operableView = new OperableView(getContext());
-        operableView.tryGetFrontView(Pandora.get().getBottomActivity());
+        operableView.tryGetFrontView(Pandora.get().getTopActivity());
         operableView.setOnClickListener(this);
 
         CoordinatorLayout layout = new CoordinatorLayout(getContext());
@@ -59,7 +61,7 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         panelViewParams.setBehavior(behavior = new BottomSheetBehavior());
         // shadow's height is 18dp
-        behavior.setPeekHeight(ViewKnife.dip2px(124));
+        behavior.setPeekHeight(ViewKnife.dip2px(122));
         behavior.setHideable(true);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         layout.addView(panelView, panelViewParams);
@@ -116,15 +118,23 @@ public class ViewFragment extends BaseFragment implements View.OnClickListener {
         tvId = view.findViewById(R.id.view_panel_id);
         tvSize = view.findViewById(R.id.view_panel_size);
         parentRv = view.findViewById(R.id.view_panel_parent);
+        parentRv.setLayoutManager(new LinearLayoutManager(getContext()));
         parentRv.setAdapter(parentAdapter);
         parentAdapter.setListener(clickListener);
         currentRv = view.findViewById(R.id.view_panel_current);
+        currentRv.setLayoutManager(new LinearLayoutManager(getContext()));
         currentRv.setAdapter(currentAdapter);
         currentAdapter.setListener(clickListener);
         childRv = view.findViewById(R.id.view_panel_child);
+        childRv.setLayoutManager(new LinearLayoutManager(getContext()));
         childRv.setAdapter(childAdapter);
         childAdapter.setListener(clickListener);
 
+        GeneralDialog.build(-1)
+                .title(R.string.pd_help_title)
+                .message(R.string.pd_help_operate)
+                .positiveButton(R.string.pd_ok)
+                .show(this);
     }
 
     private void refreshViewInfo(View target) {

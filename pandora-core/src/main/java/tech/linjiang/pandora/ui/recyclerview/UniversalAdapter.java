@@ -42,6 +42,11 @@ public class UniversalAdapter
         notifyDataSetChanged();
     }
 
+    public void insertItem(BaseItem items) {
+        data.add(items);
+        notifyDataSetChanged();
+    }
+
     public void removeItem(int index) {
         data.remove(index);
         notifyItemRemoved(index);
@@ -140,6 +145,12 @@ public class UniversalAdapter
         public ViewPool setText(@IdRes int id, String text) {
             TextView tv = getView(id);
             tv.setText(text);
+            return this;
+        }
+
+        public ViewPool setCompoundDrawableLeft(@IdRes int id, @DrawableRes int left) {
+            TextView tv = getView(id);
+            tv.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
             return this;
         }
 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8>
+    <style type="text/css">
+        .string { color: #3ab54a; }
+        .number { color: #25aae2; }
+        .boolean { color: #f98280; }
+        .null { color: #f1592a; }
+        .key { color: #92278f; }
+    </style>
+</head>
+<script type="text/javascript">
+        function output(content) {
+            document.body.appendChild(document.createElement('pre')).innerHTML = content;
+        }
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+        function showJson(obj) {
+            console.log(obj);
+            try {
+                obj = JSON.parse(obj);
+            } catch(err) {
+                console.log(err);
+                output(obj);
+                return;
+            }
+            var str = JSON.stringify(obj, undefined, 4);
+            output(syntaxHighlight(str));
+        }
+    </script>
+<body>
+</body>
+</html>

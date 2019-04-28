@@ -1,5 +1,6 @@
 package tech.linjiang.pandora.ui.fragment;
 
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,11 +27,20 @@ public class BaseListFragment extends BaseFragment {
         recyclerView = new MenuRecyclerView(getContext());
         recyclerView.setBackgroundColor(ViewKnife.getColor(R.color.pd_main_bg));
         recyclerView.setLayoutManager(onCreateLayoutManager());
-        DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        divider.setDrawable(ViewKnife.getDrawable(R.drawable.pd_divider_horizontal));
-        recyclerView.addItemDecoration(divider);
+        if (needDefaultDivider()) {
+            DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+            GradientDrawable horizontalDrawable = new GradientDrawable();
+            horizontalDrawable.setColor(0xffE5E5E5);
+            horizontalDrawable.setSize(0, 1);
+            divider.setDrawable(horizontalDrawable);
+            recyclerView.addItemDecoration(divider);
+        }
         recyclerView.setAdapter(adapter);
         return recyclerView;
+    }
+
+    protected boolean needDefaultDivider() {
+        return true;
     }
 
     private MenuRecyclerView recyclerView;

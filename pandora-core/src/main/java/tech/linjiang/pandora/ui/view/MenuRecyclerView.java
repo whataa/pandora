@@ -33,6 +33,10 @@ public class MenuRecyclerView extends RecyclerView {
 
     @Override
     public boolean showContextMenuForChild(View originalView) {
+        // only valid for the direct child
+        if (indexOfChild(originalView) == -1) {
+            return false;
+        }
         final int position = getChildAdapterPosition(originalView);
         if (position >= 0) {
             final long itemId = getAdapter().getItemId(position);
