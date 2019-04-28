@@ -2,6 +2,10 @@ package tech.linjiang.pandora.cache;
 
 import android.provider.BaseColumns;
 
+import java.util.List;
+
+import tech.linjiang.pandora.util.Utils;
+
 /**
  * Created by linjiang on 2018/6/22.
  */
@@ -20,7 +24,11 @@ public class Content {
     public String responseBody;
 
     public static Content query(long id) {
-        return CacheDatabase.queryList(Content.class, BaseColumns._ID + " = " + String.valueOf(id), "limit 1").get(0);
+        List<Content> result = CacheDatabase.queryList(Content.class, BaseColumns._ID + " = " + String.valueOf(id), "limit 1");
+        if (Utils.isNotEmpty(result)) {
+            return result.get(0);
+        }
+        return null;
     }
 
     public static long insert(Content content) {
