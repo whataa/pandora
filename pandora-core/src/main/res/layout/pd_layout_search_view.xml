@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:background="@color/pd_toolbar_bg"
         android:padding="5dp"
-        android:text="上一个" />
+        android:text="@string/pd_name_previous" />
 
     <TextView
         android:id="@+id/tv_next"
@@ -37,5 +37,5 @@
         android:layout_marginLeft="5dp"
         android:background="@color/pd_toolbar_bg"
         android:padding="5dp"
-        android:text="下一个" />
+        android:text="@string/pd_name_next" />
 </LinearLayout>
