@@ -36,8 +36,6 @@ import tech.linjiang.pandora.util.FileUtil;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
 
-import static tech.linjiang.pandora.util.Utils.getContext;
-
 /**
  * Created by linjiang on 2018/6/24.
  */
