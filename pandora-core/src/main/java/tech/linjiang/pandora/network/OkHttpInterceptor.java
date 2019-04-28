@@ -33,6 +33,7 @@ import tech.linjiang.pandora.util.Utils;
 public class OkHttpInterceptor implements Interceptor {
 
     private static final String TAG = "OkHttpInterceptor";
+    public static final long MAX_SIZE_BODY = 1024 * 1024 * 2;
 
     public OkHttpInterceptor() {
         OkUrlFactory.init();
@@ -125,6 +126,9 @@ public class OkHttpInterceptor implements Interceptor {
 
     private void updateSummary(long reqId, Response response) {
         Summary summary =Summary.query(reqId);
+        if (summary == null) {
+            return;
+        }
         summary.status = Summary.Status.COMPLETE;
         summary.end_time = System.currentTimeMillis();
         summary.code = response.code();
@@ -151,8 +155,10 @@ public class OkHttpInterceptor implements Interceptor {
                 if (bytes != null) {
                     String path = FileUtil.saveFile(bytes, response.request().url().toString(), null);
                     Content content = Content.query(reqId);
-                    content.responseBody = path;
-                    Content.update(content);
+                    if (content != null) {
+                        content.responseBody = path;
+                        Content.update(content);
+                    }
                 }
                 return;
             }
@@ -162,21 +168,28 @@ public class OkHttpInterceptor implements Interceptor {
             String bodyStr = responseBodyAsStr(response);
             if (!TextUtils.isEmpty(bodyStr)) {
                 Content content = Content.query(reqId);
-                content.responseBody = bodyStr;
-                Content.update(content);
+                if (content != null) {
+                    content.responseBody = bodyStr;
+                    Content.update(content);
+                }
             }
         }
     }
 
     private void markFailed(long id, String err) {
         Summary summary = Summary.query(id);
+        if (summary == null) {
+            return;
+        }
         summary.status = Summary.Status.ERROR;
         summary.end_time = System.currentTimeMillis();
         Summary.update(summary);
 
         Content content = Content.query(id);
-        content.responseBody = err;
-        Content.update(content);
+        if (content != null) {
+            content.responseBody = err;
+            Content.update(content);
+        }
     }
 
     private void notifyStart(final long id) {
@@ -242,6 +255,18 @@ public class OkHttpInterceptor implements Interceptor {
         if (requestBody == null) {
             return null;
         }
+        MediaType contentType = requestBody.contentType();
+        if (contentType != null && !TextUtils.isEmpty(contentType.toString())) {
+            if (contentType.toString().contains("form-data")
+                    || contentType.toString().contains("octet-stream")) {
+                try {
+                    return " (binary " + requestBody.contentLength() + "-byte body omitted)";
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        }
         String contentEncoding = request.header("Content-Encoding");
         boolean gzip = "gzip".equalsIgnoreCase(contentEncoding);
         Buffer buffer = new Buffer();
@@ -258,6 +283,13 @@ public class OkHttpInterceptor implements Interceptor {
                 e.printStackTrace();
                 return null;
             }
+        }
+        try {
+            if (requestBody.contentLength() > MAX_SIZE_BODY) {
+                return "(binary " + requestBody.contentLength() + "-byte body omitted)";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return sourceToStrInternal(buffer, gzip, requestBody.contentType());
     }
@@ -283,6 +315,10 @@ public class OkHttpInterceptor implements Interceptor {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+
+        if (responseBody.contentLength() > MAX_SIZE_BODY) {
+            return "(binary " + responseBody.contentLength() + "-byte body omitted)";
         }
 
         String contentEncoding = response.header("Content-Encoding");
