@@ -57,6 +57,4 @@
     <string name="pd_name_reset">重置</string>
     <string name="pd_name_turn_on">打开</string>
     <string name="pd_name_threshold">摇晃系数</string>
-    <string name="pd_name_previous">上一步</string>
-    <string name="pd_name_next">下一步</string>
 </resources>

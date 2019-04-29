@@ -2,37 +2,35 @@ package tech.linjiang.pandora.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
-import android.widget.PopupWindow;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.io.File;
 
 import tech.linjiang.pandora.cache.Content;
 import tech.linjiang.pandora.core.R;
+import tech.linjiang.pandora.ui.connector.SimpleOnActionExpandListener;
+import tech.linjiang.pandora.ui.connector.SimpleOnQueryTextListener;
 import tech.linjiang.pandora.util.FileUtil;
 import tech.linjiang.pandora.util.SimpleTask;
 import tech.linjiang.pandora.util.Utils;
+import tech.linjiang.pandora.util.ViewKnife;
 
 /**
  * Created by linjiang on 2018/6/24.
@@ -88,20 +86,19 @@ public class NetContentFragment extends BaseFragment {
         return 0;
     }
 
-
-    private void setSearchView() {
-        getToolbar().getMenu().add(-1, 0, 0, R.string.pd_name_search);
+    private void setupMenuView() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            setSearchView();
+        }
         getToolbar().getMenu().add(-1, 0, 1, R.string.pd_name_copy_value);
         getToolbar().getMenu().add(-1, 0, 2, R.string.pd_name_share);
         getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getOrder() == 0) {
-                    showSearchPopup();
-                } else if (item.getOrder() == 1) {
+                if (item.getOrder() == 1) {
                     Utils.copy2ClipBoard(originContent);
-                } else if (item.getOrder() == 3) {
+                } else if (item.getOrder() == 2) {
                     saveAsFileAndShare(originContent);
                 }
                 return true;
@@ -109,75 +106,84 @@ public class NetContentFragment extends BaseFragment {
         });
     }
 
-    private void showSearchPopup() {
-        final Context context = getContext();
-        if (context == null) return;
-        final View view = LayoutInflater.from(context).inflate(R.layout.pd_layout_search_view, null, true);
-        final PopupWindow searchWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        final EditText editText = view.findViewById(R.id.et_search);
-        final TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void setSearchView() {
+        final SearchView searchView;
+        MenuItem searchItem = getToolbar().getMenu().add(-1, 0, 0, R.string.pd_name_search);
+        searchItem.setActionView(searchView = new SearchView(getContext()))
+                .setIcon(R.drawable.pd_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
+        searchView.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        searchView.setOnQueryTextListener(new SimpleOnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                webView.findAllAsync(newText.trim());
+                return true;
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void afterTextChanged(Editable s) {
-                //搜索
-                webView.findAllAsync(s.toString().trim());
-                webView.setFindListener(new WebView.FindListener() {
-                    @Override
-                    public void onFindResultReceived(int position, int all, boolean b) {
-                        //tv.setText("(位置："+(position+1)+"/"+all+")");
-                    }
-                });
-            }
-        };
-        editText.addTextChangedListener(textWatcher);
-        view.findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchWindow.dismiss();
+            public boolean onQueryTextSubmit(String query) {
+                closeSoftInput();
+                return true;
             }
         });
-        view.findViewById(R.id.tv_previous).setOnClickListener(new View.OnClickListener() {
+        SimpleOnActionExpandListener.bind(searchItem, new SimpleOnActionExpandListener() {
             @Override
-            public void onClick(View v) {
-                webView.findNext(false);
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                webView.clearMatches();
+                return true;
             }
         });
-        view.findViewById(R.id.tv_next).setOnClickListener(new View.OnClickListener() {
+
+
+
+        View closeView = searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        if (closeView != null) {
+            ((ViewGroup)closeView.getParent()).removeView(closeView);
+        }
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewKnife.dip2px(32), ViewGroup.LayoutParams.MATCH_PARENT);
+
+        ImageView prevView = new ImageView(getContext());
+        prevView.setImageResource(R.drawable.pd_up_down);
+        prevView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+        ImageView nextView = new ImageView(getContext());
+        nextView.setImageResource(R.drawable.pd_up_down);
+        nextView.setRotation(180);
+        nextView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+        final TextView searchStats = new TextView(getContext());
+        searchStats.setTextSize(10);
+        searchStats.setGravity(Gravity.CENTER_VERTICAL);
+        searchStats.setPadding(ViewKnife.dip2px(8),0,ViewKnife.dip2px(8),0);
+        ((LinearLayout) searchView.getChildAt(0)).addView(searchStats,new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT
+        ));
+        ((LinearLayout) searchView.getChildAt(0)).addView(prevView, params);
+        ((LinearLayout) searchView.getChildAt(0)).addView(nextView, params);
+
+        nextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 webView.findNext(true);
             }
         });
-        searchWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        searchWindow.setContentView(view);
-        searchWindow.setOutsideTouchable(true);
-        searchWindow.setFocusable(true);
-        searchWindow.showAtLocation(webView, Gravity.TOP, 100, 0);
-        editText.requestFocus();
-        searchWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        searchWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        prevView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDismiss() {
-                editText.setText("");
-                editText.removeTextChangedListener(textWatcher);
+            public void onClick(View v) {
+                webView.findNext(false);
             }
         });
-        InputMethodManager imm = (InputMethodManager) context.getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.toggleSoftInput(200, InputMethodManager.HIDE_NOT_ALWAYS);
-        }
+        webView.setFindListener(new WebView.FindListener() {
+            @Override
+            public void onFindResultReceived(int position, int all, boolean b) {
+                searchStats.setText(String.format("%s/%s", position + 1, all));
+                searchStats.setVisibility(all > 0 ? View.VISIBLE : View.GONE);
+            }
+        });
     }
-
 
     private void saveAsFileAndShare(String msg) {
         showLoading();
@@ -233,7 +239,7 @@ public class NetContentFragment extends BaseFragment {
                     Utils.toast(R.string.pd_error_msg);
                     return;
                 }
-                setSearchView();
+                setupMenuView();
                 originContent = result;
                 webView.setWebViewClient(null);
 
