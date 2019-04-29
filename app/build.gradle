@@ -4,7 +4,7 @@ android {
     compileSdkVersion versions.COMPILE_SDK
     defaultConfig {
         applicationId "tech.linjiang.android.pandora"
-        minSdkVersion versions.MIN_SDK
+        minSdkVersion 15 // androidx.browser
         targetSdkVersion versions.TARGET_SDK
         versionCode 1
         versionName "1.0"

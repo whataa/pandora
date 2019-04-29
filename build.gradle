@@ -3,7 +3,7 @@
 buildscript {
     ext.versions = [
             'COMPILE_SDK'    : 28,
-            'MIN_SDK'        : 15,
+            'MIN_SDK'        : 14,
             'TARGET_SDK'     : 28,
             'SUPPORT_LIB'    : '2.0.0-rc01',
             'OKHTTP'         : '3.9.0'
