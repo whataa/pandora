@@ -80,6 +80,10 @@ Pandora 是一款无需ROOT、可以直接在应用内查看和修改包括网�
 
 	```
 	debugImplementation 'com.github.whataa:pandora:v${RELEASE}'
+	// 如果你的项目使用的是AndroidX, 替换为以下方式
+	debugImplementation 'com.github.whataa:pandora:androidx_v${RELEASE}'
+
+	// 不区分android-support和AndroidX
 	releaseImplementation 'com.github.whataa:pandora-no-op:v${RELEASE}'
 	```
 
@@ -191,6 +195,10 @@ Pandora.get().getSharedPref().addProvider(new XXProvider());
 ```
 -keep class tech.linjiang.pandora.cache.**{*;}
 ```
+
+#### 5. android-support还是AndroidX ？
+> 依赖哪种版本取决于你的项目，Pandora提供的两种版本的除了依赖不同，所有逻辑完全一致并保持同步更新；
+> 虽然AndroidX是趋势，但是如果你的项目无法迁移到AndroidX还是请使用android-support的方式
 
 ## 致谢
 

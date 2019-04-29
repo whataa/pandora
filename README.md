@@ -80,8 +80,13 @@ Pandora is a tool box that allows you to inspect and modify what includes networ
 1. Declare [Jitpack](https://jitpack.io/#whataa/pandora) repository and add dependencies：
 
 	```
+	// android-support
 	debugImplementation 'com.github.whataa:pandora:v${RELEASE}'
-	releaseImplementation 'com.github.whataa:pandora-no-op:v${RELEASE}'
+    // or androidX
+    debugImplementation 'com.github.whataa:pandora:androidx_v${RELEASE}'
+
+    // No matter android-support or AndroidX
+    releaseImplementation 'com.github.whataa:pandora-no-op:v${RELEASE}'
 	```
 
     library | version
@@ -102,7 +107,7 @@ Pandora is a tool box that allows you to inspect and modify what includes networ
 ### 1. Add shortcuts to Pandora
 
 Usually, we may hide some debugging switches in some pages to "switch the development environment", "check the Crash log" and so on. If you have similar needs, you can add a shortcut by：
-1. Implement `tech.linjiang.pandora.function.IFunc` , , return the icon, name and the action：
+1. Implement `tech.linjiang.pandora.function.IFunc` , return the icon, name and the action：
 
     ```
     private IFunc customFunc = new IFunc() {
@@ -124,7 +129,7 @@ Usually, we may hide some debugging switches in some pages to "switch the develo
     };
     ```
 
-2. Call `Pandora.get().addFunc()` to add it。
+2. Call `Pandora.get().addFunc()` to add it.
 
 
 ### 2. Let "view properties" support more.
@@ -195,6 +200,10 @@ and call `Pandora.get().open();` to open directly.
 ```
 -keep class tech.linjiang.pandora.cache.**{*;}
 ```
+
+#### 5. android-support or AndroidX ?
+> Which version to implementation depends on your project, The two versions have completely consistent logic and synchronized updates, except for different dependencies.
+> Although AndroidX is the trend, if your project cannot be migrated to AndroidX, please use android-support.
 
 ## Thanks
 
