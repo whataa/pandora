@@ -5,10 +5,6 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -23,6 +19,10 @@ import android.widget.TextView;
 
 import java.io.File;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import tech.linjiang.pandora.cache.Content;
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.ui.connector.SimpleOnActionExpandListener;
@@ -138,7 +138,7 @@ public class NetContentFragment extends BaseFragment {
 
 
 
-        View closeView = searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        View closeView = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
         if (closeView != null) {
             ((ViewGroup)closeView.getParent()).removeView(closeView);
         }
