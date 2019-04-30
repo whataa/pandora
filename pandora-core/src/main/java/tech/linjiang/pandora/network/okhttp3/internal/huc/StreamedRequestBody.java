@@ -16,7 +16,6 @@
 package tech.linjiang.pandora.network.okhttp3.internal.huc;
 
 import java.io.IOException;
-import okhttp3.internal.http.UnrepeatableRequestBody;
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.Okio;
@@ -26,7 +25,7 @@ import okio.Pipe;
  * This request body streams bytes from an application thread to an OkHttp dispatcher thread via a
  * pipe. Because the data is not buffered it can only be transmitted once.
  */
-final class StreamedRequestBody extends OutputStreamRequestBody implements UnrepeatableRequestBody {
+final class StreamedRequestBody extends OutputStreamRequestBody {
   private final Pipe pipe = new Pipe(8192);
 
   StreamedRequestBody(long expectedContentLength) {
@@ -38,5 +37,10 @@ final class StreamedRequestBody extends OutputStreamRequestBody implements Unrep
     while (pipe.source().read(buffer, 8192) != -1L) {
       sink.write(buffer, buffer.size());
     }
+  }
+
+  @Override
+  public boolean isOneShot() {
+    return true;
   }
 }
