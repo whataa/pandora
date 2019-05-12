@@ -62,7 +62,7 @@ public class OkHttpInterceptor implements Interceptor {
         Response response;
         try {
             response = chain.proceed(request);
-        } catch (IOException e) {
+        } catch (Throwable e) {
             if (Config.isNetLogEnable() && id >= 0) {
                 markFailed(id, Utils.collectThrow(e));
                 notifyEnd(id);
