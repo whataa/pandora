@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -228,5 +229,19 @@ public class Utils {
         }
         printWriter.close();
         return writer.toString();
+    }
+
+    public static Context makeContextSafe(Context context) {
+        if (context != null) {
+            return context;
+        }
+        try {
+            Class actThreadClass = Reflect28Util.forName("android.app.ActivityThread");
+            Method method = Reflect28Util.getDeclaredMethod(actThreadClass, "currentApplication");
+            return (Context) method.invoke(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

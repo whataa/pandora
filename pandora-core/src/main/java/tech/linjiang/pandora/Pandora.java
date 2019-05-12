@@ -3,6 +3,7 @@ package tech.linjiang.pandora;
 import android.app.Activity;
 import android.app.Application;
 import androidx.core.content.FileProvider;
+import android.content.Context;
 
 import tech.linjiang.pandora.crash.CrashHandler;
 import tech.linjiang.pandora.database.Databases;
@@ -30,7 +31,8 @@ public final class Pandora extends FileProvider implements SensorDetector.Callba
     @Override
     public boolean onCreate() {
         INSTANCE = this;
-        init(((Application) getContext()));
+        Context context = Utils.makeContextSafe(getContext());
+        init(((Application) context));
         return super.onCreate();
     }
 
