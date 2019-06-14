@@ -36,7 +36,9 @@ public class OkHttpInterceptor implements Interceptor {
     public static final long MAX_SIZE_BODY = 1024 * 1024 * 2;
 
     public OkHttpInterceptor() {
-        OkUrlFactory.init();
+        if (Config.getNETWORK_URL_CONNECTION()) {
+            OkUrlFactory.init();
+        }
     }
 
     private NetStateListener listener;

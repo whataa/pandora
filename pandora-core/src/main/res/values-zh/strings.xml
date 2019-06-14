@@ -59,4 +59,5 @@
     <string name="pd_name_threshold">摇晃系数</string>
     <string name="pd_name_previous">上一个</string>
     <string name="pd_name_next">下一个</string>
+    <string name="pd_relaunch_request">设置成功，重启应用后生效</string>
 </resources>

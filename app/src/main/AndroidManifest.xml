@@ -28,6 +28,9 @@
             android:theme="@style/AppTheme.Translucent" />
         <activity android:name=".ui.PicturesActivity" />
         <activity android:name=".ui.StackViewActivity" />
+
+        <service android:name=".RemoteService"
+            android:process=":second"/>
     </application>
 
 </manifest>

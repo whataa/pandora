@@ -39,7 +39,7 @@ public final class Pandora extends FileProvider implements SensorDetector.Callba
     private void init(Application app) {
         Utils.init(app);
         funcController = new FuncController(app);
-        sensorDetector = new SensorDetector(this);
+        sensorDetector = new SensorDetector(notHostProcess ? null : this);
         interceptor = new OkHttpInterceptor();
         databases = new Databases();
         sharedPref = new SharedPref();
@@ -49,9 +49,16 @@ public final class Pandora extends FileProvider implements SensorDetector.Callba
     }
 
     public static Pandora get() {
+        if (INSTANCE == null) {
+            // Not the host process
+            Pandora pandora = new Pandora();
+            pandora.notHostProcess = true;
+            pandora.onCreate();
+        }
         return INSTANCE;
     }
 
+    private boolean notHostProcess;
     private OkHttpInterceptor interceptor;
     private Databases databases;
     private SharedPref sharedPref;
@@ -98,6 +105,9 @@ public final class Pandora extends FileProvider implements SensorDetector.Callba
      * Open the panel.
      */
     public void open() {
+        if (notHostProcess) {
+            return;
+        }
         funcController.open();
     }
 
