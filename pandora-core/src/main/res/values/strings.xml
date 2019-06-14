@@ -56,4 +56,7 @@
     <string name="pd_name_reset">reset</string>
     <string name="pd_name_turn_on">turn on</string>
     <string name="pd_name_threshold">threshold</string>
+    <string name="pd_name_previous">previous</string>
+    <string name="pd_name_next">next</string>
+    <string name="pd_relaunch_request">success, please restart app</string>
 </resources>

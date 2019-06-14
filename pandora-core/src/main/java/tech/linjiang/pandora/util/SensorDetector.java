@@ -17,8 +17,10 @@ public class SensorDetector implements SensorEventListener {
     private Callback callback;
 
     public SensorDetector(Callback callback) {
-        register();
-        this.callback = callback;
+        if (callback != null) {
+            register();
+            this.callback = callback;
+        }
     }
 
     @Override
