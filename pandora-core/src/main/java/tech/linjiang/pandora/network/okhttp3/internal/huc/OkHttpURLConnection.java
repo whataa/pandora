@@ -52,7 +52,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import tech.linjiang.pandora.network.okhttp3.internal.JavaNetHeaders;
 import okhttp3.internal.Version;
-import okhttp3.internal.http.HttpDate;
 import okhttp3.internal.http.HttpHeaders;
 import okhttp3.internal.http.HttpMethod;
 import okhttp3.internal.http.StatusLine;
@@ -204,7 +203,7 @@ public final class OkHttpURLConnection extends HttpURLConnection implements Call
   @Override public String getHeaderField(String fieldName) {
     try {
       return fieldName == null
-          ? StatusLine.get(getResponse(true)).toString()
+          ? StatusLine.Companion.get(getResponse(true)).toString()
           : getHeaders().get(fieldName);
     } catch (IOException e) {
       return null;
@@ -224,7 +223,7 @@ public final class OkHttpURLConnection extends HttpURLConnection implements Call
   @Override public Map<String, List<String>> getHeaderFields() {
     try {
       return JavaNetHeaders.toMultimap(getHeaders(),
-          StatusLine.get(getResponse(true)).toString());
+          StatusLine.Companion.get(getResponse(true)).toString());
     } catch (IOException e) {
       return Collections.emptyMap();
     }
@@ -406,7 +405,7 @@ public final class OkHttpURLConnection extends HttpURLConnection implements Call
 
   private String defaultUserAgent() {
     String agent = getSystemProperty("http.agent", null);
-    return agent != null ? toHumanReadableAscii(agent) : Version.userAgent();
+    return agent != null ? toHumanReadableAscii(agent) : Version.userAgent;
   }
 
   /**
@@ -537,7 +536,7 @@ public final class OkHttpURLConnection extends HttpURLConnection implements Call
   @Override public void setIfModifiedSince(long newValue) {
     super.setIfModifiedSince(newValue);
     if (ifModifiedSince != 0) {
-      requestHeaders.set("If-Modified-Since", HttpDate.format(new Date(ifModifiedSince)));
+      requestHeaders.set("If-Modified-Since", new Date(ifModifiedSince));
     } else {
       requestHeaders.removeAll("If-Modified-Since");
     }
