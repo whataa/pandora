@@ -20,7 +20,6 @@ import okio.Okio;
 import okio.Source;
 import tech.linjiang.pandora.cache.Content;
 import tech.linjiang.pandora.cache.Summary;
-import tech.linjiang.pandora.network.okhttp3.OkUrlFactory;
 import tech.linjiang.pandora.util.Config;
 import tech.linjiang.pandora.util.FileUtil;
 import tech.linjiang.pandora.util.FormatUtil;
@@ -36,9 +35,6 @@ public class OkHttpInterceptor implements Interceptor {
     public static final long MAX_SIZE_BODY = 1024 * 1024 * 2;
 
     public OkHttpInterceptor() {
-        if (Config.getNETWORK_URL_CONNECTION()) {
-            OkUrlFactory.init();
-        }
     }
 
     private NetStateListener listener;
