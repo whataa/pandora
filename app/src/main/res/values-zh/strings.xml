@@ -4,7 +4,6 @@
     <string name="pandora_shake">摇一摇</string>
     <string name="pandora_open">手动打开</string>
     <string name="pandora_download">文件下载</string>
-    <string name="pandora_load_pic">图片加载</string>
     <string name="pandora_trans_act">透明Activity</string>
     <string name="pandora_stack_view">层叠View</string>
     <string name="pandora_crash">模拟Crash</string>

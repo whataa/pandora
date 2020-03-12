@@ -47,16 +47,9 @@ public class MainActivity extends AppCompatActivity {
             toast(getString(R.string.pandora_open_net));
 
         });
-        findViewById(R.id.btn_net_urlconnection).setOnClickListener(v -> {
-            viewModel.doUrlConnection();
-            toast(getString(R.string.pandora_open_net));
-        });
         findViewById(R.id.btn_net_file).setOnClickListener(v -> {
             viewModel.doFileDownload();
             toast(getString(R.string.pandora_open_net));
-        });
-        findViewById(R.id.btn_net_pic).setOnClickListener(v -> {
-            startActivity(new Intent(this, PicturesActivity.class));
         });
 
         findViewById(R.id.btn_ui_activity).setOnClickListener(v -> {

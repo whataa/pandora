@@ -25,11 +25,6 @@ public class MyApp extends Application {
                 createDeviceProtectedStorageContext().moveDatabaseFrom(mThis, StoreDatabase.NAME);
             });
         }
-
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            Log.w("MyApp", "uncaughtException: " + e);
-            // Testing whether Pandora's CrashHandler works as expected.
-        });
     }
 
     public static Application getContext() {

@@ -6,10 +6,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -45,20 +41,6 @@ public class MainViewModel extends AndroidViewModel {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 t.printStackTrace();
-            }
-        });
-    }
-
-    public void doUrlConnection() {
-        ThreadPool.post(() -> {
-            try {
-                URL url = new URL("https://www.v2ex.com/api/topics/latest.json");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.getInputStream();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         });
     }

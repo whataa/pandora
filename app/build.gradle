@@ -39,5 +39,4 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.2.0"
     implementation "com.squareup.retrofit2:converter-gson:2.2.0"
     implementation 'com.alibaba:fastjson:1.2.45'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
 }
