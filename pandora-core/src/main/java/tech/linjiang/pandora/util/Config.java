@@ -203,7 +203,6 @@ public class Config {
             Type.NETWORK_DELAY_REQ,
             Type.NETWORK_DELAY_RES,
             Type.NETWORK_PAGE_SIZE,
-            Type.NETWORK_URLCONNECTION,
             Type.SANDBOX_DPM,
             Type.UI_ACTIVITY_GRAVITY,
             Type.UI_GRID_INTERVAL,
@@ -221,7 +220,6 @@ public class Config {
         int NETWORK_DELAY_REQ = 0x20;
         int NETWORK_DELAY_RES = 0x21;
         int NETWORK_PAGE_SIZE = 0x22;
-        int NETWORK_URLCONNECTION = 0x23;
 
         int SANDBOX_DPM = 0x30;
 

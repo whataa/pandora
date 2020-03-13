@@ -75,10 +75,6 @@ public class ConfigFragment extends BaseListFragment {
                             }
                             launch(EditFragment.class, bundle, CODE1);
                             break;
-                        case Config.Type.NETWORK_URLCONNECTION:
-                            Config.setNETWORK_URL_CONNECTION(!Config.getNETWORK_URL_CONNECTION());
-                            Utils.toast(R.string.pd_relaunch_request);
-                            break;
                         case Config.Type.SANDBOX_DPM:
                             Config.setSANDBOX_DPM(!Config.getSANDBOX_DPM());
                             break;
@@ -102,7 +98,6 @@ public class ConfigFragment extends BaseListFragment {
         data.add(new NameArrowItem("delay for each request(ms)", "" + Config.getNETWORK_DELAY_REQ()).setTag(Config.Type.NETWORK_DELAY_REQ));
         data.add(new NameArrowItem("delay for each response(ms)", "" + Config.getNETWORK_DELAY_RES()).setTag(Config.Type.NETWORK_DELAY_RES));
         data.add(new NameArrowItem("the maximum number of first loads", "" + Config.getNETWORK_PAGE_SIZE()).setTag(Config.Type.NETWORK_PAGE_SIZE));
-        data.add(new CheckBoxItem("Show urlConnection request", Config.getNETWORK_URL_CONNECTION()).setTag(Config.Type.NETWORK_URLCONNECTION));
 
         data.add(new TitleItem(ViewKnife.getString(R.string.pd_name_sandbox)));
         data.add(new CheckBoxItem("show device-protect-mode file\n(only for api>=24)", Config.getSANDBOX_DPM()).setTag(Config.Type.SANDBOX_DPM));

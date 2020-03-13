@@ -1,1 +1,2 @@
 include ':app', ':pandora-core'
+include ':pandora-plugin'

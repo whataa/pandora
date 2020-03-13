@@ -75,32 +75,18 @@
                 style="@style/AppTheme_TextView"
                 android:text="OKHttp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/btn_net_urlconnection"
+                app:layout_constraintRight_toLeftOf="@id/btn_net_file"
                 app:layout_constraintTop_toBottomOf="@id/title_net" />
 
-            <TextView
-                android:id="@+id/btn_net_urlconnection"
-                style="@style/AppTheme_TextView"
-                android:text="UrlConnection"
-                app:layout_constraintBaseline_toBaselineOf="@id/btn_net_okhttp"
-                app:layout_constraintLeft_toRightOf="@id/btn_net_okhttp"
-                app:layout_constraintRight_toRightOf="parent" />
 
             <TextView
                 android:id="@+id/btn_net_file"
                 style="@style/AppTheme_TextView"
                 android:text="@string/pandora_download"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/btn_net_pic"
-                app:layout_constraintTop_toBottomOf="@id/btn_net_okhttp" />
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title_net"
+                app:layout_constraintLeft_toRightOf="@id/btn_net_okhttp" />
 
-            <TextView
-                android:id="@+id/btn_net_pic"
-                style="@style/AppTheme_TextView"
-                android:text="@string/pandora_load_pic"
-                app:layout_constraintBaseline_toBaselineOf="@id/btn_net_file"
-                app:layout_constraintLeft_toRightOf="@id/btn_net_file"
-                app:layout_constraintRight_toRightOf="parent" />
 
             <!---->
 
