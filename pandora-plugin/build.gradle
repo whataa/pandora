@@ -1,5 +1,4 @@
 apply plugin: 'kotlin'
-apply plugin: 'maven-publish'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -19,21 +18,16 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8
 }
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
 
-            groupId 'com.github.whataa'
-            artifactId 'pandora-plugin'
-            version '1.0.0'
-
-            from components.java
-
-        }
-    }
-    repositories {
-        maven {
-            url "$rootDir/localMaven"
-        }
-    }
+apply plugin: 'com.novoda.bintray-release'
+publish {
+    userOrg = 'yanglssc'
+    groupId = 'com.github.whataa'
+    artifactId = 'pandora-plugin'
+    publishVersion = '1.0.0'
+    desc = 'pandora gradle plugin for injecting interceptor into okHttp'
+    website = 'https://github.com/whataa/pandora'
+}
+tasks.withType(Javadoc) {
+    options.encoding = "utf-8"
 }
