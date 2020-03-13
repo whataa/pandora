@@ -1,1 +1,1 @@
--keep class tech.linjiang.pandora.cache.**{*;}
+-keep class tech.linjiang.pandora.**{*;}
