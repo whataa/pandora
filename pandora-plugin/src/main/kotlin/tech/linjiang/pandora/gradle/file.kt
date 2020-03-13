@@ -14,8 +14,6 @@ internal fun File.touch(): File {
         if (!fileTrue) {
             println("Warn! create transformed file failed: $this")
         }
-    } else {
-        println("Warn! file exists: $this")
     }
     return this
 }

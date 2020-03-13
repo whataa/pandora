@@ -17,9 +17,9 @@ internal class OkHttpTransform : Transformer {
                             .filterIsInstance<FieldInsnNode>()
                             .find { it.name == FIELD_NAME }
                             ?.let { src ->
-                                fun AbstractInsnNode.append(node: AbstractInsnNode): AbstractInsnNode {
-                                    instructions.insert(this, node)
-                                    return node
+                                println("AOP: ${src.owner}, ${src.name}, ${src.desc}")
+                                fun AbstractInsnNode.append(node: AbstractInsnNode) = node.also {
+                                    instructions.insert(this, it)
                                 }
                                 // interceptors.add(tech.linjiang.pandora.Pandora.get().getInterceptor())
                                 src.append(VarInsnNode(ALOAD, 0))
