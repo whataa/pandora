@@ -18,7 +18,8 @@ internal fun File.touch(): File {
     return this
 }
 
-internal fun File.relativeTo(root: File) = this.toURI().relativize(root.toURI()).path
+// this relative to root
+internal fun File.relativeTo(root: File) = root.toURI().relativize(this.toURI()).path
 
 internal fun Collection<Entry>.search(): Collection<Entry> {
     val pool = ForkJoinPool()
@@ -40,7 +41,7 @@ internal class SearchTask(private val entries: Collection<Entry>) : RecursiveTas
             when {
                 entry.input.isDirectory -> {
                     entry.input.listFiles()?.map { child ->
-                        Entry(child, File(entry.output, entry.input.relativeTo(child)))
+                        Entry(child, File(entry.output, child.relativeTo(entry.input)))
                     }?.let {
                         SearchTask(it).also { task ->
                             tasks.add(task)

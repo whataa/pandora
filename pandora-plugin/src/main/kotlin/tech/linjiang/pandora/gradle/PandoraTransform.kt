@@ -45,7 +45,7 @@ class PandoraTransform : Transform() {
         context.inputs
                 .map { it.jarInputs }
                 .flatten()
-                .filter(::filterIncrementalJar)
+                .filter{ filterIncrementalJar(context, it) }
                 .map { JarFile(it.file) to it.outputFile(context, Format.JAR) }
                 .parallelStream()
                 .forEach { it.transform(::asmTransform) }
@@ -92,31 +92,29 @@ class PandoraTransform : Transform() {
 
 }
 
-private fun filterIncrementalJar(it: JarInput) = when (it.status!!) {
+private fun filterIncrementalJar(context: TransformInvocation, jar: JarInput) = when (jar.status!!) {
     REMOVED -> {
-        println("delete jarInputs: ${it.file}")
-        it.file.delete()
+        println("delete jarInputs: ${jar.file}")
+        jar.outputFile(context, Format.JAR).delete()
         false
     }
     NOTCHANGED -> false
     else -> {
-        println("new/Changed jarInputs: ${it.file}")
+        println("new/Changed jarInputs: ${jar.file}")
         true
     }
 }
 
-private fun filterIncrementalDirectory(context: TransformInvocation, it: DirectoryInput) = mutableListOf<Entry>().apply {
-    it.changedFiles.forEach { (file, status) ->
+private fun filterIncrementalDirectory(context: TransformInvocation, dic: DirectoryInput) = mutableListOf<Entry>().apply {
+    dic.changedFiles.forEach { (file, status) ->
+        val output = File(dic.outputFile(context, Format.DIRECTORY), file.relativeTo(dic.file))
         when (status) {
             REMOVED -> {
-                println("delete directoryInputs: $file")
-                file.delete()
+                println("delete directoryInputs: $output")
+                output.deleteRecursively()
             }
             CHANGED, ADDED -> {
                 println("new/Changed directoryInputs: $file")
-                // changedFiles 层级 >= file
-                val root = it.outputFile(context, Format.DIRECTORY)
-                val output = File(root, it.file.relativeTo(file))
                 add(Entry(file, output))
             }
             else -> Unit

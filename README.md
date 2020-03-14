@@ -84,7 +84,7 @@ Pandora is a tool box that allows you to inspect and modify what includes networ
     pandora | [![Release](https://jitpack.io/v/whataa/pandora.svg)](https://jitpack.io/#whataa/pandora)
     pandora-no-op | [![Release](https://jitpack.io/v/whataa/pandora-no-op.svg)](https://jitpack.io/#whataa/pandora-no-op)
 
-2. （Optional）If your project use OKHttp as a network library, interceptor can be injected into OKhttp by `pandora-plugin` [ ![Download](https://api.bintray.com/packages/yanglssc/maven/pandora-plugin/images/download.svg?version=1.0.0) ](https://bintray.com/yanglssc/maven/pandora-plugin/1.0.0/link)：
+2. （Optional）If your project use OKHttp as a network library, interceptor can be injected into OKhttp by `pandora-plugin` [ ![Download](https://api.bintray.com/packages/yanglssc/maven/pandora-plugin/images/download.svg) ](https://bintray.com/yanglssc/maven/pandora-plugin/_latestVersion)：
 	```
 	// in your project's gradle
 	buildscript {

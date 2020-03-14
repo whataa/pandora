@@ -84,7 +84,7 @@ Pandora 是一款无需ROOT、可以直接在应用内查看和修改包括网�
     pandora | [![Release](https://jitpack.io/v/whataa/pandora.svg)](https://jitpack.io/#whataa/pandora)
     pandora-no-op | [![Release](https://jitpack.io/v/whataa/pandora-no-op.svg)](https://jitpack.io/#whataa/pandora-no-op)
 
-2. （可选）如果你的项目使用了OKHttp作为网络库，添加 `pandora-plugin` 可自动将日志拦截注入到所有OKHttp对象中 [ ![Download](https://api.bintray.com/packages/yanglssc/maven/pandora-plugin/images/download.svg?version=1.0.0) ](https://bintray.com/yanglssc/maven/pandora-plugin/1.0.0/link)：
+2. （可选）如果你的项目使用了OKHttp作为网络库，添加 `pandora-plugin` 可自动将日志拦截注入到所有OKHttp对象中 [ ![Download](https://api.bintray.com/packages/yanglssc/maven/pandora-plugin/images/download.svg) ](https://bintray.com/yanglssc/maven/pandora-plugin/_latestVersion)：
 	```
     // project's gradle
     buildscript {
