@@ -3,15 +3,21 @@ package tech.linjiang.pandora.ui.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
+import android.text.InputType;
+import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import tech.linjiang.pandora.core.R;
+import tech.linjiang.pandora.ui.connector.SimpleOnActionExpandListener;
+import tech.linjiang.pandora.ui.connector.SimpleOnQueryTextListener;
 import tech.linjiang.pandora.ui.item.RouteItem;
-import tech.linjiang.pandora.ui.recyclerview.BaseItem;
 import tech.linjiang.pandora.util.Utils;
 
 /**
@@ -25,16 +31,22 @@ public class RouteFragment extends BaseListFragment {
         return false;
     }
 
+    private final ArrayList<RouteItem> routeItemArrayList = new ArrayList<>();
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getToolbar().setTitle(R.string.pd_name_navigate);
+        getToolbar().getMenu().add(-1, R.id.pd_menu_id_2, 0, R.string.pd_name_search)
+                .setActionView(new SearchView(requireContext()))
+                .setIcon(R.drawable.pd_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        initSearchView();
         List<String> activities = Utils.getActivities();
-        List<BaseItem> data = new ArrayList<>();
         for (int i = 0; i < activities.size(); i++) {
-            data.add(new RouteItem(activities.get(i), callback));
+            routeItemArrayList.add(new RouteItem(activities.get(i), callback));
         }
-        getAdapter().setItems(data);
+        getAdapter().setItems(routeItemArrayList);
     }
 
     @Override
@@ -69,4 +81,45 @@ public class RouteFragment extends BaseListFragment {
         getActivity().finish();
     }
 
+    private void initSearchView() {
+        MenuItem menuItem = getToolbar().getMenu().findItem(R.id.pd_menu_id_2);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        searchView.setOnQueryTextListener(new SimpleOnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                closeSoftInput();
+                filter(query);
+                return true;
+            }
+        });
+        SimpleOnActionExpandListener.bind(menuItem, new SimpleOnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                getAdapter().setItems(routeItemArrayList);
+                return true;
+            }
+        });
+    }
+
+    private void filter(String keyWord) {
+        if (TextUtils.isEmpty(keyWord)) {
+            getAdapter().setItems(routeItemArrayList);
+            return;
+        }
+        ArrayList<RouteItem> newList = new ArrayList<>();
+        for (int i = 0; i < routeItemArrayList.size(); i++) {
+            RouteItem routeItem = routeItemArrayList.get(i);
+            if (routeItem.data.toLowerCase().contains(keyWord.toLowerCase())) {
+                newList.add(routeItem);
+            }
+        }
+        getAdapter().setItems(newList);
+    }
 }
