@@ -1,5 +1,10 @@
 EN | [中文](https://github.com/whataa/pandora/blob/master/README_CN.md)
 
+```
+implementation 'com.github.chenyue404:pandora:Tag'
+```
+[![](https://jitpack.io/v/chenyue404/pandora.svg)](https://jitpack.io/#chenyue404/pandora)
+
 <p align=center>
 <img src="https://i.loli.net/2019/03/15/5c8b6158be01e.png" width=40%>
 </p>
