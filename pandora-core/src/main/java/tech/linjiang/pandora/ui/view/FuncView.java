@@ -34,9 +34,11 @@ public class FuncView extends LinearLayout {
 
     private static final String TAG = "PanelView";
 
-    private UniversalAdapter adapter;
+    private final UniversalAdapter adapter;
     private float lastY;
 
+    private final ImageView closeView, foldView;
+    private final RecyclerView recyclerView;
 
     @SuppressLint("ClickableViewAccessibility")
     public FuncView(Context context) {
@@ -44,8 +46,9 @@ public class FuncView extends LinearLayout {
         setOrientation(HORIZONTAL);
         setBackgroundResource(R.drawable.pd_shadow_131124);
         ImageView moveView = new ImageView(context);
-        RecyclerView recyclerView = new RecyclerView(context);
-        ImageView closeView = new ImageView(context);
+        recyclerView = new RecyclerView(context);
+        closeView = new ImageView(context);
+        foldView = new ImageView(context);
 
         moveView.setImageResource(R.drawable.pd_drag);
         moveView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
@@ -58,6 +61,18 @@ public class FuncView extends LinearLayout {
                 close();
             }
         });
+        foldView.setImageResource(R.drawable.baseline_arrow_left_24);
+        foldView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        foldView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (recyclerView.getVisibility() == VISIBLE) {
+                    fold();
+                } else {
+                    unFold();
+                }
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(adapter = new UniversalAdapter());
 
@@ -67,10 +82,12 @@ public class FuncView extends LinearLayout {
         addView(recyclerView, new LayoutParams(
                 0, ViewGroup.LayoutParams.MATCH_PARENT, 1
         ));
+        addView(foldView, new LayoutParams(
+                ViewKnife.dip2px(40), ViewGroup.LayoutParams.MATCH_PARENT
+        ));
         addView(closeView, new LayoutParams(
                 ViewKnife.dip2px(40), ViewGroup.LayoutParams.MATCH_PARENT
         ));
-
     }
 
     @Override
@@ -88,7 +105,7 @@ public class FuncView extends LinearLayout {
         ), heightMeasureSpec);
     }
 
-    private OnTouchListener touchListener = new OnTouchListener() {
+    private final OnTouchListener touchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
@@ -111,7 +128,7 @@ public class FuncView extends LinearLayout {
         }
     };
 
-    private Runnable task = new Runnable() {
+    private final Runnable task = new Runnable() {
         @Override
         public void run() {
             Config.setDragY(lastY);
@@ -142,6 +159,7 @@ public class FuncView extends LinearLayout {
         if (ViewCompat.isAttachedToWindow(this)) {
             return true;
         }
+        unFold();
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.height = ViewKnife.dip2px(62);
@@ -162,6 +180,18 @@ public class FuncView extends LinearLayout {
         if (ViewCompat.isAttachedToWindow(this)) {
             Utils.removeViewFromWindow(this);
         }
+    }
+
+    public void fold() {
+        recyclerView.setVisibility(GONE);
+        closeView.setVisibility(VISIBLE);
+        foldView.setRotation(180f);
+    }
+
+    public void unFold() {
+        recyclerView.setVisibility(VISIBLE);
+        closeView.setVisibility(GONE);
+        foldView.setRotation(0f);
     }
 
     public boolean isVisible() {
