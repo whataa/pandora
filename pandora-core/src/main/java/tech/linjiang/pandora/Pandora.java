@@ -2,8 +2,9 @@ package tech.linjiang.pandora;
 
 import android.app.Activity;
 import android.app.Application;
-import androidx.core.content.FileProvider;
 import android.content.Context;
+
+import androidx.core.content.FileProvider;
 
 import tech.linjiang.pandora.crash.CrashHandler;
 import tech.linjiang.pandora.database.Databases;
@@ -99,6 +100,16 @@ public final class Pandora extends FileProvider implements SensorDetector.Callba
      */
     public void addFunction(IFunc func) {
         funcController.addFunc(func);
+    }
+
+    /**
+     * Add a custom entry to the panel.
+     * also see @{@link tech.linjiang.pandora.function.IFunc}
+     *
+     * @param func
+     */
+    public void addFunction(IFunc func, int position) {
+        funcController.addFunc(func, position);
     }
 
     /**

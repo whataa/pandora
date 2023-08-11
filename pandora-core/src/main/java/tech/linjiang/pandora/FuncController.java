@@ -46,6 +46,14 @@ class FuncController implements Application.ActivityLifecycleCallbacks, FuncView
         }
     }
 
+    void addFunc(IFunc func, int position) {
+        if (!functions.contains(func)) {
+            int functionsInsertPosition = Math.min(Math.max(position, 0), functions.size());
+            functions.add(functionsInsertPosition, func);
+            funcView.addItem(func.getIcon(), func.getName(), position);
+        }
+    }
+
     void open() {
         if (funcView.isVisible()) {
             boolean succeed = funcView.open();

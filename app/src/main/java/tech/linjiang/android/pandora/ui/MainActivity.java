@@ -1,23 +1,25 @@
 package tech.linjiang.android.pandora.ui;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.browser.customtabs.CustomTabsIntent;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import tech.linjiang.android.pandora.R;
 import tech.linjiang.android.pandora.viewmodel.MainViewModel;
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             }.start();
         });
         findViewById(R.id.btn_feature_func).setOnClickListener(v -> {
-            Pandora.get().addFunction(customFunc);
+            Pandora.get().addFunction(customFunc, 1000);
             toast(getString(R.string.pandora_add_success));
         });
 

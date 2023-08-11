@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Build;
-import androidx.annotation.DrawableRes;
-import androidx.core.view.ViewCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +12,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.DrawableRes;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import tech.linjiang.pandora.core.R;
 import tech.linjiang.pandora.ui.item.FuncItem;
@@ -75,7 +76,7 @@ public class FuncView extends LinearLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int maxWidth;
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             // drag + close + 5*func + 0.5*func
             maxWidth = ViewKnife.dip2px(64) + ViewKnife.dip2px(50) * 5 + ViewKnife.dip2px(24);
         } else {
@@ -119,6 +120,11 @@ public class FuncView extends LinearLayout {
 
     public void addItem(@DrawableRes int icon, String name) {
         adapter.insertItem(new FuncItem(icon, name));
+    }
+
+    public void addItem(@DrawableRes int icon, String name, int position) {
+        position = Math.min(Math.max(position, 0), adapter.getItemCount());
+        adapter.insertItem(new FuncItem(icon, name), position);
     }
 
     public void setOnItemClickListener(final OnItemClickListener listener) {
