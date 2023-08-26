@@ -1,15 +1,16 @@
 package tech.linjiang.pandora.ui.fragment;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,7 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
             public void onItemClick(int position, BaseItem item) {
                 if (item instanceof NetItem) {
                     Bundle bundle = new Bundle();
-                    bundle.putLong(PARAM1, ((Summary)item.data).id);
+                    bundle.putLong(PARAM1, ((Summary) item.data).id);
                     launch(NetSummaryFragment.class, bundle);
                 }
             }
@@ -206,8 +207,10 @@ public class NetFragment extends BaseListFragment implements Toolbar.OnMenuItemC
         if (Utils.isNotEmpty(originData)) {
             for (int i = originData.size() - 1; i >= 0; i--) {
                 if (originData.get(i) instanceof NetItem) {
-                    String url = ((Summary)originData.get(i).data).url;
-                    if (url.contains(condition)) {
+                    Summary summary = (Summary) originData.get(i).data;
+                    String url = summary.url;
+                    String host = summary.host;
+                    if (url.contains(condition) || host.contains(condition)) {
                         tmpFilter.add(originData.get(i));
                     }
                 }
