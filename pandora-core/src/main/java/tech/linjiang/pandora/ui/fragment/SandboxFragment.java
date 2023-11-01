@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.util.SparseArray;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -81,6 +82,15 @@ public class SandboxFragment extends BaseListFragment {
             public List<BaseItem> doInBackground(Void[] params) {
                 SparseArray<String> databaseNames = Pandora.get().getDatabases().getDatabaseNames();
                 List<BaseItem> data = new ArrayList<>(databaseNames.size());
+
+                List<File> externalFiles = Sandbox.getExternalFiles();
+                if (externalFiles != null) {
+                    data.add(new TitleItem(getString(R.string.pd_name_external_file)));
+                    for (int i = 0; i < externalFiles.size(); i++) {
+                        data.add(new FileItem(externalFiles.get(i)));
+                    }
+                }
+
                 data.add(new TitleItem(getString(R.string.pd_name_database)));
                 for (int i = 0; i < databaseNames.size(); i++) {
                     data.add(new DBItem(databaseNames.valueAt(i), databaseNames.keyAt(i)));

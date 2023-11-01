@@ -2,9 +2,10 @@ package tech.linjiang.pandora.util;
 
 import android.content.Intent;
 import android.net.Uri;
-import androidx.core.content.FileProvider;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
+
+import androidx.core.content.FileProvider;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -15,6 +16,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -228,4 +231,17 @@ public class FileUtil {
         }
     }
 
+    public static List<File> sortFiles(List<File> files) {
+        Collections.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                if (o1.isDirectory() && o2.isFile())
+                    return -1;
+                if (o1.isFile() && o2.isDirectory())
+                    return 1;
+                return o1.getName().compareToIgnoreCase(o2.getName());
+            }
+        });
+        return files;
+    }
 }

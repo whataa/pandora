@@ -45,6 +45,7 @@
     <string name="pd_name_database">Database</string>
     <string name="pd_name_sp">SharedPreference</string>
     <string name="pd_name_file">Files</string>
+    <string name="pd_name_external_file">External Files</string>
     <string name="pd_name_clear">clear</string>
     <string name="pd_name_share">share to</string>
     <string name="pd_name_open">try open</string>

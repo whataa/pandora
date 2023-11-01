@@ -1,7 +1,11 @@
 package tech.linjiang.pandora.sandbox;
 
+import static tech.linjiang.pandora.util.FileUtil.sortFiles;
+
 import android.annotation.TargetApi;
 import android.os.Build;
+
+import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,15 +20,23 @@ import tech.linjiang.pandora.util.Utils;
 
 public class Sandbox {
 
-    private static String ROOT_PATH = Utils.getContext().getApplicationInfo().dataDir;
-
     public static List<File> getRootFiles() {
-        return getFiles(new File(ROOT_PATH));
+        List<File> files = getFiles(new File(Utils.getContext().getApplicationInfo().dataDir));
+        return sortFiles(files);
+    }
+
+    @Nullable
+    public static List<File> getExternalFiles() {
+        File externalFilesDir = Utils.getContext().getExternalFilesDir("");
+        if (externalFilesDir == null || externalFilesDir.getParentFile() == null) {
+            return null;
+        }
+        return sortFiles(getFiles(externalFilesDir.getParentFile()));
     }
 
     @TargetApi(Build.VERSION_CODES.N)
     public static List<File> getDPMFiles() {
-        return getFiles(new File(Utils.getContext().getApplicationInfo().deviceProtectedDataDir));
+        return sortFiles(getFiles(new File(Utils.getContext().getApplicationInfo().deviceProtectedDataDir)));
     }
 
     public static List<File> getFiles(File curFile) {
@@ -32,6 +44,6 @@ public class Sandbox {
         if (curFile.isDirectory() && curFile.exists()) {
             descriptors.addAll(Arrays.asList(curFile.listFiles()));
         }
-        return descriptors;
+        return sortFiles(descriptors);
     }
 }
